@@ -1,0 +1,68 @@
+project: PSB_paper_results_anchor_drug
+# name: anchor drug test 
+name: anchor drug test_new
+program: anchor_drug_test.py
+command:
+- ${interpreter}
+- ${program}
+- ${args}
+method: grid
+metric:
+  name: rmse
+  goal: minimize
+parameters:
+  cell_line:
+    values:
+      - A375
+      - HA1E
+      - VCAP
+      - A549
+      - PC3
+      - MCF7
+  lr:
+    values:
+      - 0.005
+  top_n:
+    values:
+      - 1
+      - 2
+      - 3
+      - 4
+  subset:
+    values:
+      - 120
+      - 210
+      - 480
+      - 990
+  query_method:
+    values:
+      - random
+      - maxdiag
+      - maxdist
+      - maxdet
+      - lcmd
+      - sosd
+      - bait
+      - kmeanspp
+  batch_size:
+    values:
+      - 30
+      # - 10
+  initial_size:
+    values:
+      - 30
+      # - 10
+  seed:
+    values:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4 
+  kernel:
+    values:
+      - grad
+  dir_anchors:
+    values:
+      # - /localscratch2/han/bmdal_reg/Druglist_LINCS_AL_with_pretrain_multitask/
+      - /localscratch2/han/bmdal_reg/Druglist_LINCS_AL_multitask/
