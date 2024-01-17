@@ -1,4 +1,4 @@
-import sys, os, re, argparse, warnings, datetime, random, math
+import sys, os, re, argparse, warnings, datetime, random, math, pickle
 import numpy as np
 import torch
 from utils import get_dataset, get_net, get_strategy
@@ -17,7 +17,6 @@ NUM_ROUND = int(args_input.quota / args_input.batch)
 DATA_NAME = args_input.dataset_name
 STRATEGY_NAME = args_input.ALstrategy
 
-
 SEED = args_input.seed
 os.environ['TORCH_HOME']='./basicmodel'
 os.environ["CUDA_VISIBLE_DEVICES"] = str(args_input.gpu)
@@ -33,7 +32,7 @@ use_cuda = torch.cuda.is_available()
 device = torch.device("cuda" if use_cuda else "cpu")
 
 #recording
-sys.stdout = Logger(os.path.abspath('') + '/logfile/' + DATA_NAME+ '_'  + STRATEGY_NAME + '_' + str(NUM_QUERY) + '_' + str(NUM_INIT_LB) +  '_' + str(args_input.quota) + '_normal_log.txt')
+sys.stdout = Logger(os.path.abspath('') + '/logfile/' + DATA_NAME + '_' + args_input.cell + '_' + args_input.gene + '_' + STRATEGY_NAME + '_' + str(NUM_QUERY) + '_' + str(NUM_INIT_LB) +  '_' + str(args_input.quota) + '_normal_log.txt')
 warnings.filterwarnings('ignore')
 
 # start experiment
@@ -46,36 +45,24 @@ acq_time = []
 
 # repeate # iteration trials
 while (iteration > 0): 
-	
-	
 	iteration = iteration - 1
-
 	# data, network, strategy
 	args_task = args_pool[DATA_NAME]
+	args_task['cell'] = args_input.cell
+	args_task['gene'] = args_input.gene
 	dataset = get_dataset(args_input.dataset_name, args_task)				# load dataset
-	if args_input.ALstrategy == 'LossPredictionLoss':
-		net = get_net_lpl(args_input.dataset_name, args_task, device)		# load network
-	elif args_input.ALstrategy == 'WAAL':
-		net = get_net_waal(args_input.dataset_name, args_task, device)		# load network
-	else:
-		net = get_net(args_input.dataset_name, args_task, device)			# load network
-		gene = net.params['gene']
-
+	net = get_net(args_input.dataset_name, args_task, device)			# load network
 	strategy = get_strategy(args_input.ALstrategy, dataset, net, args_input, args_task)  # load strategy
 
 	start = datetime.datetime.now()
-
-
 	# generate initial labeled pool
 	dataset.initialize_labels(args_input.initseed)
-
 	#record acc performance
-	acc = np.zeros(NUM_ROUND + 1)
-	f1 = np.zeros(NUM_ROUND + 1)
-
-	# only for special cases that need additional data
-	new_X = torch.empty(0)
-	new_Y = torch.empty(0)
+	acc = np.zeros(NUM_ROUND)
+	f1 = np.zeros(NUM_ROUND)
+	# # only for special cases that need additional data
+	# new_X = torch.empty(0)
+	# new_Y = torch.empty(0)
 		
 	# print info
 	print(DATA_NAME)
@@ -93,10 +80,10 @@ while (iteration > 0):
 	# print('\n')
 	
 	# round 1 to rd
-	for rd in range(1, NUM_ROUND+1):
+	for rd in range(0, NUM_ROUND):
 		print('Round {}'.format(rd))
-		high_confident_idx = []
-		high_confident_pseudo_label = []
+		# high_confident_idx = []
+		# high_confident_pseudo_label = []
 		# query
 		if 'CEALSampling' in args_input.ALstrategy:
 			q_idxs, new_data = strategy.query(NUM_QUERY, rd, option = args_input.ALstrategy[13:])
@@ -120,30 +107,36 @@ while (iteration > 0):
 		print('testing accuracy {}'.format(acc[rd]))
 		f1[rd] = dataset.cal_test_f1(preds)
 		print('testing F1 {}'.format(f1[rd]))
-		print('\n')
+		idx, smiles = dataset.get_labeled_drugs()
+		print(idx)
+		[print(s) for s in smiles]
 
 		#torch.cuda.empty_cache()
 	
 	# print results
 	print('SEED {}'.format(SEED))
 	print(type(strategy).__name__)
-	print(acc, f1)
+	print('acc:', acc)
+	print('f1:', f1)
 	all_acc.append(acc)
 	all_f1.append(f1)
 	
 	#save model
 	timestamp = re.sub('\.[0-9]*','_',str(datetime.datetime.now())).replace(" ", "_").replace("-", "").replace(":","")
-	model_path = './modelpara/'+timestamp + DATA_NAME+ '_'  + STRATEGY_NAME + '_' + str(NUM_QUERY) + '_' + str(NUM_INIT_LB) +  '_' + str(args_input.quota)  +'.params'
+	model_path = './modelpara/'+timestamp + DATA_NAME + '_' + args_input.cell + '_' + args_input.gene + '_' + STRATEGY_NAME + '_' + str(NUM_QUERY) + '_' + str(NUM_INIT_LB) + '_' + str(args_input.quota) + '.params'
 	end = datetime.datetime.now()
 	acq_time.append(round(float((end-start).seconds),3))
 	torch.save(strategy.get_model().state_dict(), model_path)
+
+	drug_path = './druglist/'+ timestamp + DATA_NAME + '_' + args_input.cell + '_' + args_input.gene + '_' + STRATEGY_NAME + '_' + str(NUM_QUERY) + '_' + str(NUM_INIT_LB) +  '_' + str(args_input.quota) + '.pkl'
+	with open(drug_path, 'wb') as f:
+		pickle.dump(smiles, f)
 	
 # cal mean & standard deviation
 acc_m = []
 f1_m = []
-file_name_res_tot = DATA_NAME+ '_'  + STRATEGY_NAME + '_' + str(NUM_QUERY) + '_' + str(NUM_INIT_LB) +  '_' + str(args_input.quota) + '_normal_res_tot.txt'
+file_name_res_tot = DATA_NAME + '_' + args_input.cell + '_' + args_input.gene + '_'  + STRATEGY_NAME + '_' + str(NUM_QUERY) + '_' + str(NUM_INIT_LB) +  '_' + str(args_input.quota) + '_normal_res_tot.txt'
 file_res_tot =  open(os.path.join(os.path.abspath('') + '/results', '%s' % file_name_res_tot),'w')
-
 file_res_tot.writelines('dataset: {}'.format(DATA_NAME) + '\n')
 file_res_tot.writelines('AL strategy: {}'.format(STRATEGY_NAME) + '\n')
 file_res_tot.writelines('number of labeled pool: {}'.format(NUM_INIT_LB) + '\n')
@@ -173,10 +166,8 @@ file_res_tot.writelines('mean time: '+str(mean_time)+'. std dev acc: '+str(stdde
 
 # save result
 
-file_name_res = DATA_NAME+ '_'  + STRATEGY_NAME + '_' + str(NUM_QUERY) + '_' + str(NUM_INIT_LB) +  '_' + str(args_input.quota) + '_normal_res.txt'
+file_name_res = DATA_NAME + '_' + args_input.cell + '_' + args_input.gene + '_' + STRATEGY_NAME + '_' + str(NUM_QUERY) + '_' + str(NUM_INIT_LB) +  '_' + str(args_input.quota) + '_normal_res.txt'
 file_res =  open(os.path.join(os.path.abspath('') + '/results', '%s' % file_name_res),'w')
-
-
 file_res.writelines('dataset: {}'.format(DATA_NAME) + '\n')
 file_res.writelines('AL strategy: {}'.format(STRATEGY_NAME) + '\n')
 file_res.writelines('number of labeled pool: {}'.format(NUM_INIT_LB) + '\n')

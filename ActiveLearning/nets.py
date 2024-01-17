@@ -26,7 +26,8 @@ class Net:
         dim = data.X.shape[1:]
         self.clf = self.net(dim = dim, pretrained = self.params['pretrained'], num_classes = self.params['num_class']).to(self.device)
         gene =self.params['gene']
-        self.clf.load_state_dict(torch.load(f'/egr/research-aidd/menghan1/AnchorDrug/base_model/pretrain_universal_gene_{gene}_seed_10_199_final.pth').state_dict())
+        self.clf.load_state_dict(
+			torch.load(f'/egr/research-aidd/menghan1/AnchorDrug/base_model/pretrain_universal_gene_{gene}_seed_10_199_final.pth').state_dict())
         self.clf.train()
         if self.params['optimizer'] == 'Adam':
             optimizer = optim.Adam(self.clf.parameters(), **self.params['optimizer_args'])
@@ -36,14 +37,17 @@ class Net:
             raise NotImplementedError
 
         loader = DataLoader(data, shuffle=True, **self.params['loader_tr_args'])
+        loss_record = []
         for epoch in tqdm(range(1, n_epoch+1), ncols=100):
             for batch_idx, (x, y, idxs) in enumerate(loader):
                 x, y = x.to(self.device), y.to(self.device)
                 optimizer.zero_grad()
                 out, e1 = self.clf(x)
                 loss = F.cross_entropy(out, y)
+                loss_record.append(loss.cpu().item())
                 loss.backward()
                 optimizer.step()
+        print(loss_record)
 
     def predict(self, data):
         self.clf.eval()
@@ -231,6 +235,7 @@ class waterbirds_Net(nn.Module):
 class MLP(nn.Module):
     def __init__(self, dim=(1152,), embSize=32, pretrained=False, num_classes=3, dropout_rate=0.5):
         super(MLP, self).__init__()
+        self.dim = embSize
         self.dropout_rate = dropout_rate
         self.fc1 = nn.Linear(dim[0], 128)
         self.fc2 = nn.Linear(128, 64)
@@ -253,8 +258,9 @@ class MLP(nn.Module):
         h = F.leaky_relu(h, negative_slope=0.01)
         logit = self.fc4(h)
         return logit, h
+	
     def get_embedding_dim(self):
-        return self.embSize
+        return self.dim
 		
 # VAE for VAAL method
 

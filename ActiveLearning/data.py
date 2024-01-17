@@ -46,6 +46,10 @@ class Data:
         labeled_idxs = np.arange(self.n_pool)[self.labeled_idxs]
         return labeled_idxs, self.handler(self.X_train[labeled_idxs], self.Y_train[labeled_idxs], self.args_task['transform_train'])
     
+    def get_labeled_drugs(self):
+        labeled_idxs = np.arange(self.n_pool)[self.labeled_idxs]
+        return labeled_idxs, [self.train_smiles[i] for i in labeled_idxs]
+    
     def get_unlabeled_data(self):
         unlabeled_idxs = np.arange(self.n_pool)[~self.labeled_idxs]
         return unlabeled_idxs, self.handler(self.X_train[unlabeled_idxs], self.Y_train[unlabeled_idxs], self.args_task['transform_train'])
@@ -78,40 +82,49 @@ def get_morgan_fingerprint(mol, radius, nBits, FCFP=False):
     finger_print = np.fromstring(fp_bits, 'u1') - ord('0')
     return finger_print
 
-
 class DrugCellline(data.Dataset):
     def __init__(self, df, type = 'train', fn_file = None, down_sample=True, random_seed=0):
-        fn = fn_file
-        use_cellline_map = pd.read_csv(fn)
-        use_cellline_map = use_cellline_map.rename(columns = {'Unnamed: 0':'cellline'})
-        self.cellline_name = use_cellline_map['cellline']
-        use_cellline_map = use_cellline_map.drop(columns='cellline', axis=1)
-        #-------------------------------------------------
-        #Opt: normalize the cell line embeddings:
-        transformer = Normalizer().fit(use_cellline_map)
-        use_cellline_map = pd.DataFrame(transformer.transform(use_cellline_map), index = use_cellline_map.index, columns = use_cellline_map.columns)
-        #-------------------------------------------------
-        self.use_cellline_map = use_cellline_map.to_numpy()
+        cell_map = pd.read_csv(fn_file, index_col=0)
+        self.cell_name = cell_map.index
+        transformer = Normalizer().fit(cell_map)
+        cell_map = pd.DataFrame(transformer.transform(cell_map), index = cell_map.index, columns = cell_map.columns)
+        self.cell_map = cell_map.to_numpy()
+
         fn = '/egr/research-aidd/menghan1/AnchorDrug/data/drug_fingerprints-1024.csv'
         fp_map = pd.read_csv(fn, header=None, index_col=0)
         self.fp_name = fp_map.index
         self.fp_map = fp_map.to_numpy()
+
+
+        # fn = fn_file
+        # use_cellline_map = pd.read_csv(fn)
+        # use_cellline_map = use_cellline_map.rename(columns = {'Unnamed: 0':'cellline'})
+        # self.cellline_name = use_cellline_map['cellline']
+        # use_cellline_map = use_cellline_map.drop(columns='cellline', axis=1)
+        # #-------------------------------------------------
+        # #Opt: normalize the cell line embeddings:
+        # transformer = Normalizer().fit(use_cellline_map)
+        # use_cellline_map = pd.DataFrame(transformer.transform(use_cellline_map), index = use_cellline_map.index, columns = use_cellline_map.columns)
+        # #-------------------------------------------------
+        # self.use_cellline_map = use_cellline_map.to_numpy()
+        # fn = '/egr/research-aidd/menghan1/AnchorDrug/data/drug_fingerprints-1024.csv'
+        # fp_map = pd.read_csv(fn, header=None, index_col=0)
+        # self.fp_name = fp_map.index
+        # self.fp_map = fp_map.to_numpy()
         self.df = df
         self.random_seed = random_seed
         self.down_sample = down_sample  # training set or test.txt set
         print(df.shape)
         labels = np.asarray(df['label'])
-        smiles = df['smiles']
-        celllines = df['cellline'] 
-        # # be careful, label index need to be reset using np.array
-        # quality = np.asarray(df['quality'])
+        smiles = df['smiles'].to_list()
+        celllines = df['cellline'].to_list()
   
         print("get drug features")
         smiles_feature = self.get_drug_fp_batch(smiles).astype(np.float32)
         print("get cell line features")
         cellline_feature = self.get_cellline_ft_batch(celllines).astype(np.float32)
         data = np.concatenate([smiles_feature, cellline_feature], axis=1)
-        # self.data, self.labels, self.quality = data, labels, quality
+        
         self.data, self.labels = torch.from_numpy(data), torch.from_numpy(labels)
         self.celllines, self.smiles = celllines, smiles
         unique, counts = np.unique(self.labels, return_counts=True)
@@ -132,8 +145,8 @@ class DrugCellline(data.Dataset):
     def get_cellline_ft_batch(self, cellline):
         cellline_features = []
         for g in tqdm(cellline):
-            idx = np.where(self.cellline_name == g)[0][0]
-            cellline_features.append(self.use_cellline_map[idx])
+            idx = np.where(self.cell_name == g)[0][0]
+            cellline_features.append(self.cell_map[idx])
         cellline_features = np.array(cellline_features)
         # print(cellline_features.shape)
         return cellline_features
@@ -155,18 +168,8 @@ class DrugCellline(data.Dataset):
         #-------------------------------------------
         return fp_features
 
-
 def get_LINCS(handler, args_task):
     fn = '/egr/research-aidd/menghan1/AnchorDrug/data/CellLineEncode/test_cell_line_expression_features_128_encoded_20240111.csv'
-    # cell_map = pd.read_csv(fn, index_col=0)
-    # cell_name = cell_map.index
-    # cell_map = cell_map.to_numpy()
-
-    # fn = '../data/drug_fingerprints-1024.csv'
-    # fp_map = pd.read_csv(fn, header=None, index_col=0)
-    # fp_name = fp_map.index
-    # fp_map = fp_map.to_numpy()
-
     cell = args_task['cell']
     g = args_task['gene']
     
@@ -188,7 +191,11 @@ def get_LINCS(handler, args_task):
     raw_train = DrugCellline(df=df_train, type = 'train', fn_file =fn, down_sample=False)
     raw_test = DrugCellline(df=df_test, type = 'test', fn_file = fn, down_sample=False)
 
-    return Data(raw_train.data, raw_train.labels, raw_test.data, raw_test.labels, handler, args_task)
+    lincsData = Data(raw_train.data, raw_train.labels, raw_test.data, raw_test.labels, handler, args_task)
+    lincsData.test_smiles = raw_test.smiles
+    lincsData.train_smiles = raw_train.smiles
+
+    return lincsData
     
 def get_MNIST(handler, args_task):
     raw_train = datasets.MNIST('./data/MNIST', train=True, download=True)
@@ -428,7 +435,6 @@ def get_PneumoniaMNIST(handler, args_task):
     Y_te = torch.from_numpy(np.array(Y_te)).long()
 
     return Data(X_tr, Y_tr, X_te, Y_te, handler, args_task)
-
 
 def get_waterbirds(handler, args_task):
     import wilds

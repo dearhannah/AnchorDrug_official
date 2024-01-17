@@ -3,8 +3,8 @@ from handlers import LINCS_Handler, MNIST_Handler, SVHN_Handler, CIFAR10_Handler
 from data import get_LINCS, get_MNIST, get_FashionMNIST, get_EMNIST, get_SVHN, get_CIFAR10, get_CIFAR10_imb, get_CIFAR100,  \
 								get_TinyImageNet, get_openml, get_BreakHis, get_PneumoniaMNIST, get_waterbirds
 from nets import Net, MLP, MNIST_Net, CIFAR10_Net, openml_Net, PneumoniaMNIST_Net, waterbirds_Net, get_net_vae
-from nets_lossprediction import Net_LPL, MNIST_Net_LPL, CIFAR10_Net_LPL, PneumoniaMNIST_Net_LPL, waterbirds_Net_LPL, get_lossnet
-from nets_waal import Net_WAAL, MNIST_Net_WAAL, CIFAR10_Net_WAAL, waterbirds_Net_WAAL, CLF_WAAL, Discriminator
+# from nets_lossprediction import Net_LPL, MNIST_Net_LPL, CIFAR10_Net_LPL, PneumoniaMNIST_Net_LPL, waterbirds_Net_LPL, get_lossnet
+# from nets_waal import Net_WAAL, MNIST_Net_WAAL, CIFAR10_Net_WAAL, waterbirds_Net_WAAL, CLF_WAAL, Discriminator
 from query_strategies import RandomSampling, LeastConfidence, MarginSampling, EntropySampling, \
 								LeastConfidenceDropout, MarginSamplingDropout, EntropySamplingDropout, \
 								KMeansSampling, KMeansSamplingGPU, KCenterGreedy, KCenterGreedyPCA, BALDDropout,  \
@@ -157,73 +157,73 @@ def get_net(name, args_task, device):
 	else:
 		raise NotImplementedError
 
-def get_net_lpl(name, args_task, device):
-	loss_net = get_lossnet(args_task['name'])
-	if name == 'MNIST':
-		return Net_LPL(MNIST_Net_LPL, args_task, device, loss_net)
-	elif name == 'MNIST_pretrain':
-		return Net_LPL(MNIST_Net_LPL, args_task, device, loss_net)
-	elif name == 'FashionMNIST':
-		return Net_LPL(MNIST_Net_LPL, args_task, device, loss_net)
-	elif name == 'EMNIST':
-		return Net_LPL(MNIST_Net_LPL, args_task, device, loss_net)
-	elif name == 'SVHN':
-		return Net_LPL(CIFAR10_Net_LPL, args_task, device, loss_net)
-	elif name == 'CIFAR10':
-		return Net_LPL(CIFAR10_Net_LPL, args_task, device, loss_net)
-	elif name == 'CIFAR10_imb':
-		return Net_LPL(CIFAR10_Net_LPL, args_task, device, loss_net)
-	elif name == 'CIFAR100':
-		return Net_LPL(CIFAR10_Net_LPL, args_task, device, loss_net)
-	elif name == 'TinyImageNet':
-		return Net_LPL(CIFAR10_Net_LPL, args_task, device, loss_net)
-	elif name == 'openml':
-		raise NotImplementedError
-	elif name == 'BreakHis':
-		return Net_LPL(CIFAR10_Net_LPL, args_task, device, loss_net)
-	elif name == 'PneumoniaMNIST':
-		return Net_LPL(PneumoniaMNIST_Net_LPL, args_task, device, loss_net)
-	elif name == 'waterbirds':
-		return Net_LPL(waterbirds_Net_LPL, args_task, device, loss_net)
-	elif name == 'waterbirds_pretrain':
-		return Net_LPL(waterbirds_Net_LPL, args_task, device, loss_net)
-	else:
-		raise NotImplementedError
+# def get_net_lpl(name, args_task, device):
+# 	loss_net = get_lossnet(args_task['name'])
+# 	if name == 'MNIST':
+# 		return Net_LPL(MNIST_Net_LPL, args_task, device, loss_net)
+# 	elif name == 'MNIST_pretrain':
+# 		return Net_LPL(MNIST_Net_LPL, args_task, device, loss_net)
+# 	elif name == 'FashionMNIST':
+# 		return Net_LPL(MNIST_Net_LPL, args_task, device, loss_net)
+# 	elif name == 'EMNIST':
+# 		return Net_LPL(MNIST_Net_LPL, args_task, device, loss_net)
+# 	elif name == 'SVHN':
+# 		return Net_LPL(CIFAR10_Net_LPL, args_task, device, loss_net)
+# 	elif name == 'CIFAR10':
+# 		return Net_LPL(CIFAR10_Net_LPL, args_task, device, loss_net)
+# 	elif name == 'CIFAR10_imb':
+# 		return Net_LPL(CIFAR10_Net_LPL, args_task, device, loss_net)
+# 	elif name == 'CIFAR100':
+# 		return Net_LPL(CIFAR10_Net_LPL, args_task, device, loss_net)
+# 	elif name == 'TinyImageNet':
+# 		return Net_LPL(CIFAR10_Net_LPL, args_task, device, loss_net)
+# 	elif name == 'openml':
+# 		raise NotImplementedError
+# 	elif name == 'BreakHis':
+# 		return Net_LPL(CIFAR10_Net_LPL, args_task, device, loss_net)
+# 	elif name == 'PneumoniaMNIST':
+# 		return Net_LPL(PneumoniaMNIST_Net_LPL, args_task, device, loss_net)
+# 	elif name == 'waterbirds':
+# 		return Net_LPL(waterbirds_Net_LPL, args_task, device, loss_net)
+# 	elif name == 'waterbirds_pretrain':
+# 		return Net_LPL(waterbirds_Net_LPL, args_task, device, loss_net)
+# 	else:
+# 		raise NotImplementedError
 
-def get_net_waal(name, args_task, device):
-	handler_joint = get_handler_joint(args_task['name'])
-	# note that the first function parameter (net) in Net_WAAL is useless
-	if name == 'MNIST':
-		return Net_WAAL(MNIST_Net_WAAL, args_task, device, MNIST_Net_WAAL, CLF_WAAL, Discriminator, handler_joint)
-	elif name == 'MNIST_pretrain':
-		return Net_WAAL(MNIST_Net_WAAL, args_task, device, MNIST_Net_WAAL, CLF_WAAL, Discriminator, handler_joint)
-	elif name == 'FashionMNIST':
-		return Net_WAAL(MNIST_Net_WAAL, args_task, device, MNIST_Net_WAAL, CLF_WAAL, Discriminator, handler_joint)
-	elif name == 'EMNIST':
-		return Net_WAAL(MNIST_Net_WAAL, args_task, device, MNIST_Net_WAAL, CLF_WAAL, Discriminator, handler_joint)
-	elif name == 'SVHN':
-		return Net_WAAL(MNIST_Net_WAAL, args_task, device, MNIST_Net_WAAL, CLF_WAAL, Discriminator, handler_joint)
-	elif name == 'CIFAR10':
-		return Net_WAAL(CIFAR10_Net_WAAL, args_task, device, CIFAR10_Net_WAAL, CLF_WAAL, Discriminator, handler_joint)
-	elif name == 'CIFAR10_imb':
-		return Net_WAAL(CIFAR10_Net_WAAL, args_task, device, CIFAR10_Net_WAAL, CLF_WAAL, Discriminator, handler_joint)
-	elif name == 'CIFAR100':
-		return Net_WAAL(CIFAR10_Net_WAAL, args_task, device, CIFAR10_Net_WAAL, CLF_WAAL, Discriminator, handler_joint)
-	elif name == 'TinyImageNet':
-		return Net_WAAL(CIFAR10_Net_WAAL, args_task, device, CIFAR10_Net_WAAL, CLF_WAAL, Discriminator, handler_joint)
-	elif name == 'openml':
-		raise NotImplementedError
-	elif name == 'BreakHis':
-		return Net_WAAL(CIFAR10_Net_WAAL, args_task, device, CIFAR10_Net_WAAL, CLF_WAAL, Discriminator, handler_joint)
-	elif name == 'PneumoniaMNIST':
-		return Net_WAAL(MNIST_Net_WAAL, args_task, device, MNIST_Net_WAAL, CLF_WAAL, Discriminator, handler_joint)
-	elif name == 'waterbirds':
-		return Net_WAAL(waterbirds_Net_WAAL, args_task, device, waterbirds_Net_WAAL, CLF_WAAL, Discriminator, handler_joint)
-	elif name == 'waterbirds_pretrain':
-		return Net_WAAL(waterbirds_Net_WAAL, args_task, device, waterbirds_Net_WAAL, CLF_WAAL, Discriminator, handler_joint)
-	else:
-		raise NotImplementedError	
-#params
+# def get_net_waal(name, args_task, device):
+# 	handler_joint = get_handler_joint(args_task['name'])
+# 	# note that the first function parameter (net) in Net_WAAL is useless
+# 	if name == 'MNIST':
+# 		return Net_WAAL(MNIST_Net_WAAL, args_task, device, MNIST_Net_WAAL, CLF_WAAL, Discriminator, handler_joint)
+# 	elif name == 'MNIST_pretrain':
+# 		return Net_WAAL(MNIST_Net_WAAL, args_task, device, MNIST_Net_WAAL, CLF_WAAL, Discriminator, handler_joint)
+# 	elif name == 'FashionMNIST':
+# 		return Net_WAAL(MNIST_Net_WAAL, args_task, device, MNIST_Net_WAAL, CLF_WAAL, Discriminator, handler_joint)
+# 	elif name == 'EMNIST':
+# 		return Net_WAAL(MNIST_Net_WAAL, args_task, device, MNIST_Net_WAAL, CLF_WAAL, Discriminator, handler_joint)
+# 	elif name == 'SVHN':
+# 		return Net_WAAL(MNIST_Net_WAAL, args_task, device, MNIST_Net_WAAL, CLF_WAAL, Discriminator, handler_joint)
+# 	elif name == 'CIFAR10':
+# 		return Net_WAAL(CIFAR10_Net_WAAL, args_task, device, CIFAR10_Net_WAAL, CLF_WAAL, Discriminator, handler_joint)
+# 	elif name == 'CIFAR10_imb':
+# 		return Net_WAAL(CIFAR10_Net_WAAL, args_task, device, CIFAR10_Net_WAAL, CLF_WAAL, Discriminator, handler_joint)
+# 	elif name == 'CIFAR100':
+# 		return Net_WAAL(CIFAR10_Net_WAAL, args_task, device, CIFAR10_Net_WAAL, CLF_WAAL, Discriminator, handler_joint)
+# 	elif name == 'TinyImageNet':
+# 		return Net_WAAL(CIFAR10_Net_WAAL, args_task, device, CIFAR10_Net_WAAL, CLF_WAAL, Discriminator, handler_joint)
+# 	elif name == 'openml':
+# 		raise NotImplementedError
+# 	elif name == 'BreakHis':
+# 		return Net_WAAL(CIFAR10_Net_WAAL, args_task, device, CIFAR10_Net_WAAL, CLF_WAAL, Discriminator, handler_joint)
+# 	elif name == 'PneumoniaMNIST':
+# 		return Net_WAAL(MNIST_Net_WAAL, args_task, device, MNIST_Net_WAAL, CLF_WAAL, Discriminator, handler_joint)
+# 	elif name == 'waterbirds':
+# 		return Net_WAAL(waterbirds_Net_WAAL, args_task, device, waterbirds_Net_WAAL, CLF_WAAL, Discriminator, handler_joint)
+# 	elif name == 'waterbirds_pretrain':
+# 		return Net_WAAL(waterbirds_Net_WAAL, args_task, device, waterbirds_Net_WAAL, CLF_WAAL, Discriminator, handler_joint)
+# 	else:
+# 		raise NotImplementedError	
+# #params
 
 def get_params(name):
 	return args_pool[name]
