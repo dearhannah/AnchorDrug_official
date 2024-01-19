@@ -14,18 +14,18 @@ class Net:
     def __init__(self, net, params, device):
         self.net = net
         self.params = params
+        self.gene = self.params['gene']
         self.device = device
         dim = (1152,)
         self.clf = self.net(dim = dim, pretrained = self.params['pretrained'], num_classes = self.params['num_class']).to(self.device)
-        gene =self.params['gene']
-        self.clf.load_state_dict(torch.load(f'/egr/research-aidd/menghan1/AnchorDrug/base_model/pretrain_universal_gene_{gene}_seed_10_199_final.pth').state_dict())
+        self.clf.load_state_dict(torch.load(f'/egr/research-aidd/menghan1/AnchorDrug/base_model/pretrain_universal_gene_{self.gene}_seed_10_199_final.pth').state_dict())
         
     def train(self, data):
         n_epoch = self.params['n_epoch']
 
         dim = data.X.shape[1:]
         self.clf = self.net(dim = dim, pretrained = self.params['pretrained'], num_classes = self.params['num_class']).to(self.device)
-        gene =self.params['gene']
+        gene = self.gene
         self.clf.load_state_dict(
 			torch.load(f'/egr/research-aidd/menghan1/AnchorDrug/base_model/pretrain_universal_gene_{gene}_seed_10_199_final.pth').state_dict())
         self.clf.train()

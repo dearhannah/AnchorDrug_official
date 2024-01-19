@@ -6,10 +6,10 @@ SEED = 4666
 
 
 args_pool = {'LINCS':
-				{'n_epoch': 20, 
+				{'n_epoch': 30, 
 				 'name': 'LINCS',
-                 'cell': 'MCF7',
-                 'gene': 'TOP2A',
+                 'cell': 'MCF7', # not using
+                 'gene': 'TOP2A', # wrong value
                  'transform_train': 'no',
 				 'transform': 'no',
 				 'loader_tr_args':{'batch_size': 100, 'num_workers': 4},

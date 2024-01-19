@@ -1,12 +1,18 @@
 import numpy as np
-from .strategy import Strategy
+import torch
+from .strategy import Strategy, jointStrategy
 
-class LeastConfidence(Strategy):
+class LeastConfidence(jointStrategy):
     def __init__(self, dataset, net, args_input, args_task):
         super(LeastConfidence, self).__init__(dataset, net, args_input, args_task)
 
     def query(self, n):
-        unlabeled_idxs, unlabeled_data = self.dataset.get_unlabeled_data()
-        probs = self.predict_prob(unlabeled_data)
-        uncertainties = probs.max(1)[0]
+        unlabeled_idxs, unlabeled_drugs = self.dataset.get_unlabeled_drugs()
+        probs = self.predict_prob()
+
+        # 1 max and then mean
+        probs = [p.max(1)[0] for p in probs]
+        uncertainties = torch.mean(torch.stack(probs), dim=0)
+        # uncertainties = probs.max(1)[0]
+
         return unlabeled_idxs[uncertainties.sort()[1][:n]]

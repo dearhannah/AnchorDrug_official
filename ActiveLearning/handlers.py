@@ -5,7 +5,7 @@ from PIL import Image
 
 
 class LINCS_Handler(Dataset):
-    def __init__(self, X, Y, transform):
+    def __init__(self, X, Y):
         self.X = X
         self.Y = Y
 
