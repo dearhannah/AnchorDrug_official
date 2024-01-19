@@ -106,12 +106,12 @@ while (iteration > 0):
 	all_acc.append(acc)
 	all_f1.append(f1)
 	
-	#save model
+	# #save model
 	timestamp = re.sub('\.[0-9]*','_',str(datetime.datetime.now())).replace(" ", "_").replace("-", "").replace(":","")
-	model_path = './modelpara/'+timestamp + DATA_NAME + '_' + args_input.cell + '_' + STRATEGY_NAME + '_' + str(NUM_QUERY) + '_' + str(NUM_INIT_LB) + '_' + str(args_input.quota) + '.params'
-	end = datetime.datetime.now()
-	acq_time.append(round(float((end-start).seconds),3))
-	torch.save(strategy.get_model().state_dict(), model_path)
+	# model_path = './modelpara/'+timestamp + DATA_NAME + '_' + args_input.cell + '_' + STRATEGY_NAME + '_' + str(NUM_QUERY) + '_' + str(NUM_INIT_LB) + '_' + str(args_input.quota) + '.params'
+	# end = datetime.datetime.now()
+	# acq_time.append(round(float((end-start).seconds),3))
+	# torch.save(strategy.get_model().state_dict(), model_path)
 	#save drug
 	drug_path = './druglist/'+ timestamp + DATA_NAME + '_' + args_input.cell + '_' + STRATEGY_NAME + '_' + str(NUM_QUERY) + '_' + str(NUM_INIT_LB) +  '_' + str(args_input.quota) + '.pkl'
 	with open(drug_path, 'wb') as f:

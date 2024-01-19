@@ -6,7 +6,7 @@ SEED = 4666
 
 
 args_pool = {'LINCS':
-				{'n_epoch': 30, 
+				{'n_epoch': 40, 
 				 'name': 'LINCS',
                  'cell': 'MCF7', # not using
                  'gene': 'TOP2A', # wrong value
