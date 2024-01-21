@@ -1,15 +1,19 @@
 import numpy as np
-from .strategy import Strategy
+import torch
+from .strategy import jointStrategy
 from sklearn.cluster import KMeans
 
-class KMeansSampling(Strategy):
+class KMeansSampling(jointStrategy):
     def __init__(self, dataset, net, args_input, args_task):
         super(KMeansSampling, self).__init__(dataset, net, args_input, args_task)
 
     def query(self, n):
-        unlabeled_idxs, unlabeled_data = self.dataset.get_unlabeled_data()
-        embeddings = self.get_embeddings(unlabeled_data)
-        embeddings = embeddings.numpy()
+        # unlabeled_idxs, unlabeled_data = self.dataset.get_unlabeled_data()
+        # embeddings = self.get_embeddings(unlabeled_data).numpy()
+        unlabeled_idxs, unlabeled_drugs = self.dataset.get_unlabeled_drugs()
+        embeddings = self.get_embeddings()
+        embeddings = torch.concatenate(embeddings, 1).numpy()
+
         cluster_learner = KMeans(n_clusters=n)
         cluster_learner.fit(embeddings)
         

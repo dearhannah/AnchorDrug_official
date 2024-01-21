@@ -1,19 +1,24 @@
 import numpy as np
-from .strategy import Strategy
+import torch
+from .strategy import jointStrategy
 from sklearn.cluster import KMeans
 import faiss
 
-class KMeansSamplingGPU(Strategy):
+class KMeansSamplingGPU(jointStrategy):
     def __init__(self, dataset, net, args_input, args_task):
         super(KMeansSamplingGPU, self).__init__(dataset, net, args_input, args_task)
 
     def query(self, n):
-        unlabeled_idxs, unlabeled_data = self.dataset.get_unlabeled_data()
-        embeddings = self.get_embeddings(unlabeled_data).numpy()
+        # unlabeled_idxs, unlabeled_data = self.dataset.get_unlabeled_data()
+        # embeddings = self.get_embeddings(unlabeled_data).numpy()
+        unlabeled_idxs, unlabeled_drugs = self.dataset.get_unlabeled_drugs()
+        embeddings = self.get_embeddings()
+        embeddings = torch.concatenate(embeddings, 1).numpy()
+
         cluster_learner = FaissKmeans(n_clusters = n, gpu = True)
         cluster_learner.fit(embeddings)
-        dis, q_idxs = cluster_learner.predict(embeddings)
-        q_idxs = q_idxs.T[0]
+        dis, cluster_idxs = cluster_learner.predict(embeddings)
+        q_idxs = np.array([np.arange(embeddings.shape[0])[cluster_idxs==i][dis[cluster_idxs==i].argmin()] for i in range(n)])
         
         return unlabeled_idxs[q_idxs]
 
@@ -40,4 +45,4 @@ class FaissKmeans:
 
     def predict(self, X):
         D, I = self.kmeans.index.search(X.astype(np.float32), 1)
-        return D, I
+        return D, I.T[0]

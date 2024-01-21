@@ -25,7 +25,7 @@ def get_args():
 	#parser.add_argument('--help', '-h', default=False, action='store_true', help='verbose')
 	parser.add_argument('--cuda', action='store_true', help='If training is to be done on a GPU')
 	#parser.add_argument('--model', '-m', default='ResNet18', type=str, help='model name')
-	parser.add_argument('--initseed', '-s', default = 10, type = int, help = 'Initial pool of labeled data')
+	parser.add_argument('--initseed', '-s', default = 0, type = int, help = 'Initial pool of labeled data')
 	parser.add_argument('--gpu', '-g', default = 0, type = str, help = 'which gpu')
 	parser.add_argument('--seed', default=4666, type=int, help='random seed')
 	
