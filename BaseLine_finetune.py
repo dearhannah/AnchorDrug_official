@@ -275,7 +275,7 @@ def main(args):
             'query':args.querymethod,
             'finetune': args.finetune,
             'pretrain': args.pretrain,
-            'epoch': args.epoch,
+            'epoch': args.n_epoch,
             'lr': args.lr,
         },
         )
@@ -330,7 +330,7 @@ if __name__ == '__main__':
     argparser = argparse.ArgumentParser()    
     argparser.add_argument('--cell', '-c', type=str, help='cell line', default='MCF7')
     argparser.add_argument('--querymethod', '-q', type=str, help='query method', default='none')
-    argparser.add_argument('--lr', type=float, help='task-level inner update learning rate', default=0.005)
+    argparser.add_argument('--lr', type=float, help='task-level inner update learning rate', default=0.001)
     argparser.add_argument('--n_epoch', type=int, help='number of epoch', default=20)
     argparser.add_argument('--pretrain', action='store_true', help='use pretrained model or not')
     argparser.add_argument('--finetune', action='store_true', help='Finetune or not')
