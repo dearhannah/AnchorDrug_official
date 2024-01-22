@@ -67,7 +67,19 @@
             "console": "integratedTerminal",
             "justMyCode": false,
             "args":["-a=LeastConfidence", "-s=0", "-q=30", "-b=10", "-d=LINCS", "--seed=4666", "-t=1", "-g=0"],
+        },
+        {
+            "name": "BaseLine",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "args":["-c=MCF7", "--pretrain"],
+            // "args":["-c=MCF7", "--pretrain", "--finetune"],
+            // "args":["-c=MCF7", "-q=naiveUncertainty1", "--pretrain", "--finetune"],
         }
+
         
     ]
 }
