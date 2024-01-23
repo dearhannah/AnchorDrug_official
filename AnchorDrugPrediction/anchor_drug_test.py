@@ -1,5 +1,5 @@
-# import wandb
-# wandb.login()
+import wandb
+wandb.login()
 
 import argparse, os, pickle, yaml, random, copy
 import datetime
@@ -128,7 +128,20 @@ def eval_metrics(labels_list, preds_list):
     labels_flatten = labels_list
     preds_flatten = preds_list
     # cm = confusion_matrix(labels_flatten, preds_flatten)
-    f1 = f1_score(labels_flatten, preds_flatten, average='macro')
+    f1 = f1_score(labels_flatten, preds_flatten, average='macro', zero_division=0)
+    precision = precision_score(labels_flatten, preds_flatten, average=None, zero_division=0)
+    recall = recall_score(labels_flatten, preds_flatten, average=None, zero_division=0)
+    return f1, precision, recall
+
+
+def _eval_metrics(labels_list, preds_list):
+    """list of batch labels and batch preds"""
+    labels_flatten = [item for sublist in labels_list for item in sublist]
+    preds_flatten = [item for sublist in preds_list for item in sublist]
+    # labels_flatten = labels_list
+    # preds_flatten = preds_list
+    # cm = confusion_matrix(labels_flatten, preds_flatten)
+    f1 = f1_score(labels_flatten, preds_flatten, average='macro', zero_division=0)
     precision = precision_score(labels_flatten, preds_flatten, average=None, zero_division=0)
     recall = recall_score(labels_flatten, preds_flatten, average=None, zero_division=0)
     return f1, precision, recall
@@ -162,7 +175,7 @@ def train(model, optimizer, loader):
         labels_list.append(labels.cpu().numpy())
         # avg_loss.extend(loss.detach().numpy().flatten())
     acc = float(correct) / float(total)
-    f1, precision, recall = eval_metrics(labels_list, pred_list)
+    f1, precision, recall = _eval_metrics(labels_list, pred_list)
     # avg_loss = np.mean(avg_loss)
     # print(f"avg_loss:{avg_loss}")
     return acc, f1, precision, recall
@@ -277,26 +290,27 @@ class model_finder():
 
 
 def main(args):
+    print(args)
     cell = args.cell_line
     gene = args.gene
     seed = args.seed
     np.random.seed(seed)
 
-    # ## Wandb
-    # wandb.init(
-    #     project='Anchor Drug Project',
-    #     tags = ['AnchorDrugEnsemble'],
-    #     name=f'{args.cell}_{args.gene}',
-    #     config={
-    #         'cellline': args.cell_line,
-    #         'gene': args.gene,
-    #         'query':args.querymethod,
-    #         'top_n': args.top_n,
-    #         'seed': args.seed,
-    #         'epoch': args.n_epoch,
-    #         'lr': args.lr,
-    #     },
-    #     )
+    ## Wandb
+    wandb.init(
+        project='Anchor Drug Project',
+        tags = ['AnchorDrugEnsemble'],
+        name=f'{cell}_{gene}',
+        config={
+            'cellline': args.cell_line,
+            'gene': args.gene,
+            'query':args.querymethod,
+            'top_n': args.top_n,
+            'seed': args.seed,
+            'epoch': args.n_epoch,
+            'lr': args.lr,
+        },
+        )
     ## load test dataset
     tmp = pd.read_csv('/egr/research-aidd/menghan1/AnchorDrug/data/newTestData/' + args.cell_line + '_test.csv', index_col = 'Unnamed: 0')
     median = tmp[['SMILES', args.gene]].groupby(by='SMILES').median().reset_index()
@@ -315,10 +329,10 @@ def main(args):
     df_train = median
     df_train[args.gene] = df_train[args.gene].apply(lambda x: (x > 1.5) * 1 + (x >= -1.5) * 1)
     df_train = df_train.rename(columns={'SMILES': 'smiles'})
-    ####----------------------------------place to change format of anchor drug list, want it to be a list of smiles
+    ## anchor drug list loading
     with open(args.path_anchors, 'rb') as f:
         druglist = pickle.load(f)
-    ####----------------------------------
+    ##------------------------------------##
     df_train_anchor = df_train[df_train['smiles'].isin(druglist)]
     train_dataset = DrugCellline(df=df_train_anchor, labelname=gene)
     train_loader = torch.utils.data.DataLoader(
@@ -331,7 +345,6 @@ def main(args):
     resouce_cell_list = ['OCILY3', 'AN3CA', 'HS578T', 'NOMO1', 'SKBR3', 'HCC515', 'NCIH596', 'U2OS', 'HELA', 'THP1', 'HL60', 'YAPC', 'NCIH1563', 'OC314', '22RV1', 'NCIH1781', 'U937', 'J82', 'MINO', 'NCIH1975', 'K562', 'SNU1040', 'MFE319', 'HCC827', 'MDAMB231', 'BT474', 'VCAP', 'HT29', 'BT20', 'NALM6', 'SUDHL4', 'SKMEL5', 'HCT116', 'JURKAT', 'NCIH2073', 'HA1E', '5637', 'HUH7', 'CW2', 'DV90', 'A375', 'OVCAR8', 'U266B1', 'OCILY19', 'SKNSH', 'NCIH508', 'VMCUB1', 'LN229', 'KMS34', 'HEPG2', 'NCIH2110']
     source_models = {}
     for c in resouce_cell_list:
-        ####----------------------------------place to change format of model path
         model_str = f'/egr/research-aidd/menghan1/AnchorDrug/AnchorDrugPrediction/finetune_step1_models/pretrain_universal_gene_{gene}_cellline_{c}_seed_10_19_final.pth'
         model = MLP(input_size=1152, n_outputs=3).cuda()
         model.load_state_dict(torch.load(model_str).state_dict())
@@ -361,40 +374,53 @@ def main(args):
         logits = torch.stack(logits).mean(0)
         _, pred = torch.max(logits.data, 0)
         pred_list.append(pred.item())
-    
     f1, precision, recall = eval_metrics(y_pool.tolist(), pred_list)
     print(f1)
     print(precision)
     print(recall)
-    # wandb.log({
-    #     f"test f1": f1,
-    #     f"test precision label 0": precision[0],
-    #     f"test precision label 1": precision[1],
-    #     f"test precision label 2": precision[2],
-    #     f"test recall label 0": recall[0],
-    #     f"test recall label 1": recall[1],
-    #     f"test recall label 2": recall[2],
-    #     })
-    # wandb.finish()
+    wandb.log({
+        f"test f1": f1,
+        f"test precision label 0": precision[0],
+        f"test precision label 1": precision[1],
+        f"test precision label 2": precision[2],
+        f"test recall label 0": recall[0],
+        f"test recall label 1": recall[1],
+        f"test recall label 2": recall[2],
+        })
+    wandb.finish()
+    return f1, precision, recall
 
 
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser()
     argparser.add_argument('--out_dir', type=str, help='dir to output',
-                           default='/localscratch2/han/bmdal_reg/cell_base_model/')
+                           default='/egr/research-aidd/menghan1/AnchorDrug/AnchorDrugPrediction/results/')
     argparser.add_argument('--path_anchors', type=str, help='dir to load anchor drug list',
-                           default='/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning/druglist/KMeans/20240120_223459_LINCS_MCF7_KMeansSampling_10_0_30.pkl') 
-    argparser.add_argument('--querymethod', type=str, help='query strategy used, for recording, value not used in code',
-                           default='Kmeans') 
-    argparser.add_argument('--cell_line', type=str, help='cell line', default='MCF7')
+                           default='/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning/druglist/') 
+    argparser.add_argument('--querymethod', '-q', type=str, help='query strategy used, for recording, value not used in code',
+                           default='KMeans') 
+    argparser.add_argument('--cell_line', '-c', type=str, help='cell line', default='MCF7')
     argparser.add_argument('--gene', type=str, help='gene', default='TOP2A')
     argparser.add_argument('--top_n', type=int, help='number of cell lines for ensemble', default=3)
     argparser.add_argument('--seed', type=int, help='random seed', default=0)
     argparser.add_argument('--n_epoch', type=int, help='epoch', default=10)
     argparser.add_argument('--lr', type=float, help='task-level inner update learning rate', default=0.005)
     args = argparser.parse_args()
-    # # potential needed code: loop for randomnes or anything
-    # for gene in genelist:
-    #     args.gene = gene
-    #     main(args)
-    main(args)
+    # # # potential needed code: loop for randomnes or anything
+    genelist = ['HMGCS1', 'TOP2A', 'DNAJB1', 'PCNA', 'HMOX1']
+    default_path = args.path_anchors
+    filelist = [f for f in os.listdir(default_path+args.querymethod) if args.cell_line in f]
+    filelist = [f for f in filelist if '_5_0_30' in f]
+    [print(f) for f in filelist]
+    data = []
+    for gene in genelist:
+        dg = []
+        args.gene = gene
+        for f in filelist:
+            args.path_anchors = f"{default_path}{args.querymethod}/{f}"
+            f1, precision, recall = main(args)
+            dg.append(np.array([f1] + precision.tolist() + recall.tolist()))
+            print(f1, precision, recall)
+        data.append(dg)
+    with open(f'{args.out_dir}{args.cell_line}_{args.querymethod}.pkl', 'wb') as f:
+        pickle.dump(data, f)

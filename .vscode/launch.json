@@ -5,12 +5,16 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Current File",
+            "name": "anchordrugPrediction",
             "type": "python",
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "justMyCode": false
+            "justMyCode": false,
+            "args": [
+                "-q=KMeans",
+                "-c=MCF7",
+            ],
         },
         {
             "name": "RandomSampling",
