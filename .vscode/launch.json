@@ -4,7 +4,14 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false
+        },
         {
             "name": "RandomSampling",
             "type": "python",
@@ -12,7 +19,16 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "justMyCode": false,
-            "args":["-a=RandomSampling", "-s=0", "-q=30", "-b=10", "-d=LINCS", "--seed=4666", "-t=1", "-g=0"],
+            "args": [
+                "-a=RandomSampling",
+                "-s=0",
+                "-q=30",
+                "-b=10",
+                "-d=LINCS",
+                "--seed=4666",
+                "-t=1",
+                "-g=0"
+            ],
         },
         {
             "name": "BadgeSampling",
@@ -21,7 +37,16 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "justMyCode": false,
-            "args":["-a=BadgeSampling", "-s=0", "-q=30", "-b=10", "-d=LINCS", "--seed=4666", "-t=1", "-g=0"],
+            "args": [
+                "-a=BadgeSampling",
+                "-s=0",
+                "-q=30",
+                "-b=10",
+                "-d=LINCS",
+                "--seed=4666",
+                "-t=1",
+                "-g=0"
+            ],
         },
         {
             "name": "KCenterGreedy",
@@ -30,7 +55,16 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "justMyCode": false,
-            "args":["-a=KCenterGreedy", "-s=0", "-q=30", "-b=10", "-d=LINCS", "--seed=4666", "-t=1", "-g=0"],
+            "args": [
+                "-a=KCenterGreedy",
+                "-s=0",
+                "-q=30",
+                "-b=10",
+                "-d=LINCS",
+                "--seed=4666",
+                "-t=1",
+                "-g=0"
+            ],
         },
         {
             "name": "margin",
@@ -39,7 +73,16 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "justMyCode": false,
-            "args":["-a=MarginSampling", "-s=0", "-q=30", "-b=10", "-d=LINCS", "--seed=4666", "-t=1", "-g=0"],
+            "args": [
+                "-a=MarginSampling",
+                "-s=0",
+                "-q=30",
+                "-b=10",
+                "-d=LINCS",
+                "--seed=4666",
+                "-t=1",
+                "-g=0"
+            ],
         },
         {
             "name": "kmeans",
@@ -48,7 +91,16 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "justMyCode": false,
-            "args":["-a=KMeansSampling", "-s=0", "-q=30", "-b=10", "-d=LINCS", "--seed=4666", "-t=1", "-g=0"],
+            "args": [
+                "-a=KMeansSampling",
+                "-s=0",
+                "-q=30",
+                "-b=10",
+                "-d=LINCS",
+                "--seed=4666",
+                "-t=1",
+                "-g=0"
+            ],
         },
         {
             "name": "BALDDropout",
@@ -57,7 +109,16 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "justMyCode": false,
-            "args":["-a=BALDDropout", "-s=0", "-q=30", "-b=10", "-d=LINCS", "--seed=4666", "-t=1", "-g=0"],
+            "args": [
+                "-a=BALDDropout",
+                "-s=0",
+                "-q=30",
+                "-b=10",
+                "-d=LINCS",
+                "--seed=4666",
+                "-t=1",
+                "-g=0"
+            ],
         },
         {
             "name": "LeastConfidence",
@@ -66,7 +127,16 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "justMyCode": false,
-            "args":["-a=LeastConfidence", "-s=0", "-q=30", "-b=10", "-d=LINCS", "--seed=4666", "-t=1", "-g=0"],
+            "args": [
+                "-a=LeastConfidence",
+                "-s=0",
+                "-q=30",
+                "-b=10",
+                "-d=LINCS",
+                "--seed=4666",
+                "-t=1",
+                "-g=0"
+            ],
         },
         {
             "name": "BaseLine",
@@ -75,11 +145,12 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "justMyCode": false,
-            "args":["-c=MCF7", "--pretrain"],
+            "args": [
+                "-c=MCF7",
+                "--pretrain"
+            ],
             // "args":["-c=MCF7", "--pretrain", "--finetune"],
             // "args":["-c=MCF7", "-q=naiveUncertainty1", "--pretrain", "--finetune"],
         }
-
-        
     ]
 }
