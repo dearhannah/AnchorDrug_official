@@ -330,7 +330,7 @@ def main(args):
     ## prepare ensemble model
     resouce_cell_list = ['OCILY3', 'AN3CA', 'HS578T', 'NOMO1', 'SKBR3', 'HCC515', 'NCIH596', 'U2OS', 'HELA', 'THP1', 'HL60', 'YAPC', 'NCIH1563', 'OC314', '22RV1', 'NCIH1781', 'U937', 'J82', 'MINO', 'NCIH1975', 'K562', 'SNU1040', 'MFE319', 'HCC827', 'MDAMB231', 'BT474', 'VCAP', 'HT29', 'BT20', 'NALM6', 'SUDHL4', 'SKMEL5', 'HCT116', 'JURKAT', 'NCIH2073', 'HA1E', '5637', 'HUH7', 'CW2', 'DV90', 'A375', 'OVCAR8', 'U266B1', 'OCILY19', 'SKNSH', 'NCIH508', 'VMCUB1', 'LN229', 'KMS34', 'HEPG2', 'NCIH2110']
     source_models = {}
-    for c in resouce_cell_list[:5]:
+    for c in resouce_cell_list:
         ####----------------------------------place to change format of model path
         model_str = f'/egr/research-aidd/menghan1/AnchorDrug/AnchorDrugPrediction/finetune_step1_models/pretrain_universal_gene_{gene}_cellline_{c}_seed_10_19_final.pth'
         model = MLP(input_size=1152, n_outputs=3).cuda()
@@ -390,7 +390,7 @@ if __name__ == '__main__':
     argparser.add_argument('--gene', type=str, help='gene', default='TOP2A')
     argparser.add_argument('--top_n', type=int, help='number of cell lines for ensemble', default=3)
     argparser.add_argument('--seed', type=int, help='random seed', default=0)
-    argparser.add_argument('--n_epoch', type=int, help='epoch', default=3)
+    argparser.add_argument('--n_epoch', type=int, help='epoch', default=10)
     argparser.add_argument('--lr', type=float, help='task-level inner update learning rate', default=0.005)
     args = argparser.parse_args()
     # # potential needed code: loop for randomnes or anything
