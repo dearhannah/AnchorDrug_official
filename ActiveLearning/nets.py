@@ -14,20 +14,20 @@ class Net:
     def __init__(self, net, params, device):
         self.net = net
         self.params = params
-        self.gene = self.params['gene']
+        self.cell = self.params['cell']
         self.device = device
         dim = (1152,)
         self.clf = self.net(dim = dim, pretrained = self.params['pretrained'], num_classes = self.params['num_class']).to(self.device)
-        self.clf.load_state_dict(torch.load(f'/egr/research-aidd/menghan1/AnchorDrug/base_model/pretrain_universal_gene_{self.gene}_seed_10_199_final.pth').state_dict())
+        self.clf.load_state_dict(torch.load('/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/pretrain_GPS_predictable_307_genes_seed_10_31_final.pth').state_dict())
         
     def train(self, data):
         n_epoch = self.params['n_epoch']
 
         dim = data.X.shape[1:]
         self.clf = self.net(dim = dim, pretrained = self.params['pretrained'], num_classes = self.params['num_class']).to(self.device)
-        gene = self.gene
+        # cell = self.cell
         self.clf.load_state_dict(
-			torch.load(f'/egr/research-aidd/menghan1/AnchorDrug/base_model/pretrain_universal_gene_{gene}_seed_10_199_final.pth').state_dict())
+			torch.load('/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/pretrain_GPS_predictable_307_genes_seed_10_31_final.pth').state_dict())
         self.clf.train()
         if self.params['optimizer'] == 'Adam':
             optimizer = optim.Adam(self.clf.parameters(), **self.params['optimizer_args'])
@@ -38,7 +38,7 @@ class Net:
 
         loader = DataLoader(data, shuffle=True, **self.params['loader_tr_args'])
         loss_record = []
-        for epoch in tqdm(range(1, n_epoch+1), ncols=100):
+        for epoch in tqdm(range(1, n_epoch+1)):
             for batch_idx, (x, y, idxs) in enumerate(loader):
                 x, y = x.to(self.device), y.to(self.device)
                 optimizer.zero_grad()
@@ -61,81 +61,81 @@ class Net:
                 preds[idxs] = pred.cpu()
         return preds
     
-    def predict_prob(self, data):
-        self.clf.eval()
-        probs = torch.zeros([len(data), len(np.unique(data.Y))])
-        loader = DataLoader(data, shuffle=False, **self.params['loader_te_args'])
-        with torch.no_grad():
-            for x, y, idxs in loader:
-                x, y = x.to(self.device), y.to(self.device)
-                out, e1 = self.clf(x)
-                prob = F.softmax(out, dim=1)
-                probs[idxs] = prob.cpu()
-        return probs
+    # def predict_prob(self, data):
+    #     self.clf.eval()
+    #     probs = torch.zeros([len(data), len(np.unique(data.Y))])
+    #     loader = DataLoader(data, shuffle=False, **self.params['loader_te_args'])
+    #     with torch.no_grad():
+    #         for x, y, idxs in loader:
+    #             x, y = x.to(self.device), y.to(self.device)
+    #             out, e1 = self.clf(x)
+    #             prob = F.softmax(out, dim=1)
+    #             probs[idxs] = prob.cpu()
+    #     return probs
     
-    def predict_prob_dropout(self, data, n_drop=10):
-        self.clf.train()
-        probs = torch.zeros([len(data), len(np.unique(data.Y))])
-        loader = DataLoader(data, shuffle=False, **self.params['loader_te_args'])
-        for i in range(n_drop):
-            with torch.no_grad():
-                for x, y, idxs in loader:
-                    x, y = x.to(self.device), y.to(self.device)
-                    out, e1 = self.clf(x)
-                    prob = F.softmax(out, dim=1)
-                    probs[idxs] += prob.cpu()
-        probs /= n_drop
-        return probs
+    # def predict_prob_dropout(self, data, n_drop=10):
+    #     self.clf.train()
+    #     probs = torch.zeros([len(data), len(np.unique(data.Y))])
+    #     loader = DataLoader(data, shuffle=False, **self.params['loader_te_args'])
+    #     for i in range(n_drop):
+    #         with torch.no_grad():
+    #             for x, y, idxs in loader:
+    #                 x, y = x.to(self.device), y.to(self.device)
+    #                 out, e1 = self.clf(x)
+    #                 prob = F.softmax(out, dim=1)
+    #                 probs[idxs] += prob.cpu()
+    #     probs /= n_drop
+    #     return probs
     
-    def predict_prob_dropout_split(self, data, n_drop=10):
-        self.clf.train()
-        probs = torch.zeros([n_drop, len(data), len(np.unique(data.Y))])
-        loader = DataLoader(data, shuffle=False, **self.params['loader_te_args'])
-        for i in range(n_drop):
-            with torch.no_grad():
-                for x, y, idxs in loader:
-                    x, y = x.to(self.device), y.to(self.device)
-                    out, e1 = self.clf(x)
-                    prob = F.softmax(out, dim=1)
-                    probs[i][idxs] += F.softmax(out, dim=1).cpu()
-        return probs
+    # def predict_prob_dropout_split(self, data, n_drop=10):
+    #     self.clf.train()
+    #     probs = torch.zeros([n_drop, len(data), len(np.unique(data.Y))])
+    #     loader = DataLoader(data, shuffle=False, **self.params['loader_te_args'])
+    #     for i in range(n_drop):
+    #         with torch.no_grad():
+    #             for x, y, idxs in loader:
+    #                 x, y = x.to(self.device), y.to(self.device)
+    #                 out, e1 = self.clf(x)
+    #                 prob = F.softmax(out, dim=1)
+    #                 probs[i][idxs] += F.softmax(out, dim=1).cpu()
+    #     return probs
     
-    def get_model(self):
-        return self.clf
+    # def get_model(self):
+    #     return self.clf
 
-    def get_embeddings(self, data):
-        self.clf.eval()
-        embeddings = torch.zeros([len(data), self.clf.get_embedding_dim()])
-        loader = DataLoader(data, shuffle=False, **self.params['loader_te_args'])
-        with torch.no_grad():
-            for x, y, idxs in loader:
-                x, y = x.to(self.device), y.to(self.device)
-                out, e1 = self.clf(x)
-                embeddings[idxs] = e1.cpu()
-        return embeddings
+    # def get_embeddings(self, data):
+    #     self.clf.eval()
+    #     embeddings = torch.zeros([len(data), self.clf.get_embedding_dim()])
+    #     loader = DataLoader(data, shuffle=False, **self.params['loader_te_args'])
+    #     with torch.no_grad():
+    #         for x, y, idxs in loader:
+    #             x, y = x.to(self.device), y.to(self.device)
+    #             out, e1 = self.clf(x)
+    #             embeddings[idxs] = e1.cpu()
+    #     return embeddings
     
-    def get_grad_embeddings(self, data):
-        self.clf.eval()
-        embDim = self.clf.get_embedding_dim()
-        nLab = self.params['num_class']
-        embeddings = np.zeros([len(data), embDim * nLab])
+    # def get_grad_embeddings(self, data):
+    #     self.clf.eval()
+    #     embDim = self.clf.get_embedding_dim()
+    #     nLab = self.params['num_class']
+    #     embeddings = np.zeros([len(data), embDim * nLab])
 
-        loader = DataLoader(data, shuffle=False, **self.params['loader_te_args'])
-        with torch.no_grad():
-            for x, y, idxs in loader:
-                x, y = Variable(x.to(self.device)), Variable(y.to(self.device))
-                cout, out = self.clf(x)
-                out = out.data.cpu().numpy()
-                batchProbs = F.softmax(cout, dim=1).data.cpu().numpy()
-                maxInds = np.argmax(batchProbs,1)
-                for j in range(len(y)):
-                    for c in range(nLab):
-                        if c == maxInds[j]:
-                            embeddings[idxs[j]][embDim * c : embDim * (c+1)] = deepcopy(out[j]) * (1 - batchProbs[j][c]) * -1.0
-                        else:
-                            embeddings[idxs[j]][embDim * c : embDim * (c+1)] = deepcopy(out[j]) * (-1 * batchProbs[j][c]) * -1.0
+    #     loader = DataLoader(data, shuffle=False, **self.params['loader_te_args'])
+    #     with torch.no_grad():
+    #         for x, y, idxs in loader:
+    #             x, y = Variable(x.to(self.device)), Variable(y.to(self.device))
+    #             cout, out = self.clf(x)
+    #             out = out.data.cpu().numpy()
+    #             batchProbs = F.softmax(cout, dim=1).data.cpu().numpy()
+    #             maxInds = np.argmax(batchProbs,1)
+    #             for j in range(len(y)):
+    #                 for c in range(nLab):
+    #                     if c == maxInds[j]:
+    #                         embeddings[idxs[j]][embDim * c : embDim * (c+1)] = deepcopy(out[j]) * (1 - batchProbs[j][c]) * -1.0
+    #                     else:
+    #                         embeddings[idxs[j]][embDim * c : embDim * (c+1)] = deepcopy(out[j]) * (-1 * batchProbs[j][c]) * -1.0
 
-        return embeddings
+    #     return embeddings
         
 class MNIST_Net(nn.Module):
 	def __init__(self, dim = 28 * 28, pretrained=False, num_classes = 10):

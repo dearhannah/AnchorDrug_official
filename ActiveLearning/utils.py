@@ -24,7 +24,7 @@ import torch
 def get_handler(name):
 	if name == 'LINCS':
 		return LINCS_Handler
-	if name == 'MNIST':
+	elif name == 'MNIST':
 		return MNIST_Handler
 	elif name == 'MNIST_pretrain':
 		return MNIST_Handler

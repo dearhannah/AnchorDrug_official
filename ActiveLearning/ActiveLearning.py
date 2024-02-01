@@ -31,7 +31,7 @@ use_cuda = torch.cuda.is_available()
 device = torch.device("cuda" if use_cuda else "cpu")
 
 #recording
-sys.stdout = Logger(os.path.abspath('') + '/logfile/' + DATA_NAME + '_' + args_input.cell + '_' + STRATEGY_NAME + '_' + str(NUM_QUERY) + '_' + str(NUM_INIT_LB) +  '_' + str(args_input.quota) + '_normal_log.txt')
+sys.stdout = Logger(os.path.abspath('') + '/logfile/' + DATA_NAME + '_' + STRATEGY_NAME + '_' + str(NUM_QUERY) + '_' + str(NUM_INIT_LB) +  '_' + str(args_input.quota) + '_log.txt')
 warnings.filterwarnings('ignore')
 
 # start experiment
@@ -47,13 +47,14 @@ while (iteration > 0):
 	iteration = iteration - 1
 	# data, network, strategy
 	args_task = args_pool[DATA_NAME]
-	args_task['cell'] = args_input.cell
+	# args_task['cell'] = args_input.cell
 	dataset = get_dataset(args_input.dataset_name, args_task)				# load dataset
 	net_all = []
-	for gene in dataset.genelist:
-		args_task['gene'] = gene
+	for cell in dataset.cell_list:
+		args_task['cell'] = cell
 		net = get_net(args_input.dataset_name, args_task, device)			# load network
 		net_all.append(net)
+	args_task['cell'] = dataset.cell_list
 	strategy = get_strategy(args_input.ALstrategy, dataset, net_all, args_input, args_task)  # load strategy
 
 	start = datetime.datetime.now()
@@ -69,8 +70,8 @@ while (iteration > 0):
 	print(type(strategy).__name__)
 
 	print('Round 0:')
-	for i in range(5):
-		print(dataset.genelist[i])
+	for i in range(len(dataset.cell_list)):
+		print(dataset.cell_list[i])
 		preds = strategy.predict(i, dataset.get_test_data(dataID=i))
 		acc[0][i] = dataset.cal_test_acc(preds, i)
 		print('testing accuracy {}'.format(acc[0][i]))
@@ -87,8 +88,8 @@ while (iteration > 0):
 		#train
 		strategy.train()
 		# round rd accuracy
-		for i in range(5):
-			print(dataset.genelist[i])
+		for i in range(len(dataset.cell_list)):
+			print(dataset.cell_list[i])
 			preds = strategy.predict(i, dataset.get_test_data(dataID=i))
 			acc[rd][i] = dataset.cal_test_acc(preds, i)
 			print('testing accuracy {}'.format(acc[rd][i]))
@@ -113,11 +114,11 @@ while (iteration > 0):
 	# acq_time.append(round(float((end-start).seconds),3))
 	# torch.save(strategy.get_model().state_dict(), model_path)
 	#save drug
-	drug_path = './druglist/'+ timestamp + DATA_NAME + '_' + args_input.cell + '_' + STRATEGY_NAME + '_' + str(NUM_QUERY) + '_' + str(NUM_INIT_LB) +  '_' + str(args_input.quota) + '.pkl'
+	drug_path = './druglist/'+ timestamp + DATA_NAME + '_' + STRATEGY_NAME + '_' + str(NUM_QUERY) + '_' + str(NUM_INIT_LB) +  '_' + str(args_input.quota) + '.pkl'
 	with open(drug_path, 'wb') as f:
 		pickle.dump(smiles, f)
 		
 #save F1,acc
-res_path = './results/'+ DATA_NAME + '_' + args_input.cell + '_' + STRATEGY_NAME + '_' + str(NUM_QUERY) + '_' + str(NUM_INIT_LB) +  '_' + str(args_input.quota) + '.pkl'
+res_path = './results/'+ DATA_NAME + '_' + STRATEGY_NAME + '_' + str(NUM_QUERY) + '_' + str(NUM_INIT_LB) +  '_' + str(args_input.quota) + '.pkl'
 with open(res_path, 'wb') as f:
 	pickle.dump((all_acc,all_f1), f)

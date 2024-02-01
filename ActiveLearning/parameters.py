@@ -8,8 +8,7 @@ SEED = 4666
 args_pool = {'LINCS':
 				{'n_epoch': 40, 
 				 'name': 'LINCS',
-                 'cell': 'MCF7', # not using
-                 'gene': 'TOP2A', # wrong value
+                 'cell': ['MCF7', 'A549', 'PC3'], # not using
                  'transform_train': 'no',
 				 'transform': 'no',
 				 'loader_tr_args':{'batch_size': 100, 'num_workers': 4},

@@ -6,4 +6,4 @@ class RandomSampling(jointStrategy):
         super(RandomSampling, self).__init__(dataset, net, args_input, args_task)
 
     def query(self, n):
-        return np.random.choice(np.where(self.dataset.labeled_idxs==0)[0], n, replace=False)
+        return np.random.choice(np.where(self.dataset.labeled_drug_idxs==0)[0], n, replace=False)
