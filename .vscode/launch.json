@@ -155,6 +155,19 @@
             ],
             // "args":["-c=MCF7", "--pretrain", "--finetune"],
             // "args":["-c=MCF7", "-q=naiveUncertainty1", "--pretrain", "--finetune"],
+        },
+        {
+            "name": "PreTrain",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "args": [
+                // "--lr=0.001",
+                // "--n_epoch=3",
+                "--test",
+            ],
         }
     ]
 }
