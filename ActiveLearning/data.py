@@ -164,8 +164,11 @@ class lincsData:
         unlabeled_idxs = np.arange(self.n_pool)[~self.labeled_drug_idxs]
         return unlabeled_idxs, [self.SMILE_train[i] for i in unlabeled_idxs]
     
-    # def get_train_data(self, dataID):
-    #     return self.labeled_idxs.copy(), self.handler(self.X_train, self.Y_train[dataID])
+    def get_train_data(self, dataID):
+        return self.labeled_data_idxs.copy(), self.handler(self.X_train[dataID], self.Y_train[dataID], self.cell_list[dataID])
+    
+    def get_train_drugs(self):
+        return self.labeled_drug_idxs.copy(), self.SMILE_train
 
     def get_test_data(self, dataID):
         return self.handler(self.X_val[dataID], self.Y_val[dataID], self.cell_list[dataID])

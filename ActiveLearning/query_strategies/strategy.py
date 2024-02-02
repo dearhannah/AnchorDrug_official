@@ -142,12 +142,16 @@ class jointStrategy:
     #         probs_all.append(probs)
     #     return probs_all
     
-    def get_embeddings(self):
+    def get_embeddings(self, type='unlabeled'):
         get_embeddings_all = []
         for i in range(len(self.net)):
             tmp_net = self.net[i]
-            unlabeled_idxs, unlabeled_data = self.dataset.get_unlabeled_data(dataID=i)
-            embeddings = tmp_net.get_embeddings(unlabeled_data)
+            if type == 'unlabeled':
+                _, unlabeled_data = self.dataset.get_unlabeled_data(dataID=i)
+                embeddings = tmp_net.get_embeddings(unlabeled_data)
+            elif type == 'all':
+                _, data = self.dataset.get_train_data(dataID=i)
+                embeddings = tmp_net.get_embeddings(data)
             get_embeddings_all.append(embeddings)
         return get_embeddings_all
     
