@@ -103,16 +103,16 @@ class Net:
     # def get_model(self):
     #     return self.clf
 
-    # def get_embeddings(self, data):
-    #     self.clf.eval()
-    #     embeddings = torch.zeros([len(data), self.clf.get_embedding_dim()])
-    #     loader = DataLoader(data, shuffle=False, **self.params['loader_te_args'])
-    #     with torch.no_grad():
-    #         for x, y, idxs in loader:
-    #             x, y = x.to(self.device), y.to(self.device)
-    #             out, e1 = self.clf(x)
-    #             embeddings[idxs] = e1.cpu()
-    #     return embeddings
+    def get_embeddings(self, data):
+        self.clf.eval()
+        embeddings = torch.zeros([len(data), self.clf.get_embedding_dim()])
+        loader = DataLoader(data, shuffle=False, **self.params['loader_te_args'])
+        with torch.no_grad():
+            for x, y, idxs in loader:
+                x, y = x.to(self.device), y.to(self.device)
+                out, e1 = self.clf(x)
+                embeddings[idxs] = e1.cpu()
+        return embeddings
     
     # def get_grad_embeddings(self, data):
     #     self.clf.eval()

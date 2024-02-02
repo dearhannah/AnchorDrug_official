@@ -238,6 +238,8 @@ def get_strategy(STRATEGY_NAME, dataset, net, args_input, args_task):
 		return LeastConfidence(dataset, net, args_input, args_task)
 	elif STRATEGY_NAME == 'MarginSampling':
 		return MarginSampling(dataset, net, args_input, args_task)
+	elif STRATEGY_NAME == 'KMeansSampling':
+		return KMeansSampling(dataset, net, args_input, args_task)
 	# elif STRATEGY_NAME == 'EntropySampling':
 	# 	return EntropySampling(dataset, net, args_input, args_task)
 	# elif STRATEGY_NAME == 'LeastConfidenceDropout':
@@ -246,8 +248,6 @@ def get_strategy(STRATEGY_NAME, dataset, net, args_input, args_task):
 	# 	return MarginSamplingDropout(dataset, net, args_input, args_task)
 	# elif STRATEGY_NAME == 'EntropySamplingDropout':
 	# 	return EntropySamplingDropout(dataset, net, args_input, args_task)
-	# elif STRATEGY_NAME == 'KMeansSampling':
-	# 	return KMeansSampling(dataset, net, args_input, args_task)
 	# elif STRATEGY_NAME == 'KMeansSamplingGPU':
 	# 	return KMeansSamplingGPU(dataset, net, args_input, args_task)
 	# elif STRATEGY_NAME == 'KCenterGreedy':

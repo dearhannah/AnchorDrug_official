@@ -143,6 +143,24 @@
             ],
         },
         {
+            "name": "Margin",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "args": [
+                "-a=MarginSampling",
+                "-s=0",
+                "-q=30",
+                "-b=5",
+                "-d=LINCS",
+                "--seed=4666",
+                "-t=1",
+                "-g=0"
+            ],
+        },
+        {
             "name": "BaseLine",
             "type": "python",
             "request": "launch",
