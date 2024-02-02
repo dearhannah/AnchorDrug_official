@@ -1,16 +1,18 @@
 import numpy as np
 import torch
-from .strategy import Strategy, jointStrategy
+from .strategy import jointStrategy
 
-class LeastConfidence(jointStrategy):
+class MarginSampling(jointStrategy):
     def __init__(self, dataset, net, args_input, args_task):
-        super(LeastConfidence, self).__init__(dataset, net, args_input, args_task)
+        super(MarginSampling, self).__init__(dataset, net, args_input, args_task)
 
     def query(self, n):
         unlabeled_idxs, unlabeled_drugs = self.dataset.get_unlabeled_drugs()
         probs = self.predict_prob()
 
-        probs = [p.max(1)[0].reshape(len(unlabeled_idxs),-1) for p in probs]
+        probs = [p.sort(descending=True)[0] for p in probs]
+        probs = [p[:, 0] - p[:,1] for p in probs]
+        probs = [p.reshape(len(unlabeled_idxs),-1) for p in probs]
 
         # # 1 max among all genes, max from all nets
         # probs = [p.max(1)[0] for p in probs]
