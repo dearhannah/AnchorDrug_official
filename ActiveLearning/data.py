@@ -82,7 +82,7 @@ class lincsData:
         self.handler = handler
         # self.args_task = args_task
         tmp = pd.read_csv('/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/GPS_predictable_genes.csv')
-        self.genelist = tmp.x.to_list()#[:10]
+        self.genelist = tmp.x.to_list()#[:3]
         with open('HQ_pool_drug.pkl', 'rb') as f:
             trainDrugs = pickle.load(f)
         df_data = pd.read_csv('/egr/research-aidd/menghan1/AnchorDrug/data/level5_beta_trt_cp_24h_10uM.csv')
@@ -247,6 +247,11 @@ class DrugCelllineGene():
             idx = np.where(self.gene_name == g)[0][0]
             gene_features.append(self.gene_map[idx])
         gene_features = np.array(gene_features)
+        #-------------------------------------------
+        #Opt: normalize the GO term features:
+        transformer = Normalizer().fit(gene_features)
+        gene_features = transformer.transform(gene_features)
+        #-------------------------------------------
         # print(gene_features.shape)
         return gene_features
     def get_cellline_ft_batch(self, cellline):
