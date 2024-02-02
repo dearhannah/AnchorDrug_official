@@ -61,8 +61,8 @@ while (iteration > 0):
 	# generate initial labeled pool
 	dataset.initialize_labels(args_input.initseed)
 	#record acc performance
-	acc = np.zeros((NUM_ROUND+1, 5))
-	f1 = np.zeros((NUM_ROUND+1, 5))
+	acc = np.zeros((NUM_ROUND+1, 3))
+	f1 = np.zeros((NUM_ROUND+1, 3))
 		
 	# print info
 	print(DATA_NAME)

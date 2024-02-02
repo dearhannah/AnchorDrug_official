@@ -6,13 +6,13 @@ SEED = 4666
 
 
 args_pool = {'LINCS':
-				{'n_epoch': 40, 
+				{'n_epoch': 5, 
 				 'name': 'LINCS',
-                 'cell': ['MCF7', 'A549', 'PC3'], # not using
+                 'cell': ['MCF7', 'A549', 'PC3'],
                  'transform_train': 'no',
 				 'transform': 'no',
-				 'loader_tr_args':{'batch_size': 100, 'num_workers': 4},
-				 'loader_te_args':{'batch_size': 100, 'num_workers': 4},
+				 'loader_tr_args':{'batch_size': 256, 'num_workers': 4},
+				 'loader_te_args':{'batch_size': 256, 'num_workers': 4},
 				 'num_class':3,
 				 'optimizer':'Adam',
 				 'pretrained': False,

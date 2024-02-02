@@ -5,7 +5,8 @@ from PIL import Image
 
 
 class LINCS_Handler(Dataset):
-    def __init__(self, X, Y):
+    def __init__(self, X, Y, cell):
+        self.cell = cell
         self.X = X
         self.Y = Y
 

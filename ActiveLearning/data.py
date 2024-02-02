@@ -77,11 +77,12 @@ class Data:
 
 class lincsData:
     def __init__(self, handler, args_task):
-        cell_list = [args_task['cell']]
+        cell_list = args_task['cell']
+        self.cell_list = cell_list
         self.handler = handler
         # self.args_task = args_task
         tmp = pd.read_csv('/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/GPS_predictable_genes.csv')
-        self.genelist = tmp.x.to_list()
+        self.genelist = tmp.x.to_list()#[:10]
         with open('HQ_pool_drug.pkl', 'rb') as f:
             trainDrugs = pickle.load(f)
         df_data = pd.read_csv('/egr/research-aidd/menghan1/AnchorDrug/data/level5_beta_trt_cp_24h_10uM.csv')
@@ -89,6 +90,7 @@ class lincsData:
         self.SMILE_train, self.X_train, self.Y_train = trainDrugs,[],[]
         self.SMILE_val, self.X_val, self.Y_val = [],[],[]
         for cell in cell_list:
+            print(cell)
             use_HQ_sample_id = pd.read_csv(f'/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/revise_use_LINCS_HQ_data_target_cellline_{cell}_sample_id.csv')['x']
             df_target = df_data[df_data['sig_id'].isin(use_HQ_sample_id)]
             median = df_target[['SMILES']+self.genelist].groupby(by='SMILES').median()
@@ -107,32 +109,34 @@ class lincsData:
             raw_train = DrugCelllineGene(df=df_train, cell=cell)
             raw_val = DrugCelllineGene(df=df_val, cell=cell)
 
-        # TODO: add checking the gene_list and the smile_list
+            # TODO: add checking the gene_list and the smile_list
             
-        self.X_train.append(raw_train.data)
-        self.Y_train.append(raw_train.labels)
+            self.X_train.append(raw_train.data)
+            self.Y_train.append(raw_train.labels)
 
-        self.X_val.append(raw_val.data)
-        self.Y_val.append(raw_val.labels)
-        self.SMILE_val.append(raw_val.smiles)
+            self.X_val.append(raw_val.data)
+            self.Y_val.append(raw_val.labels)
+            self.SMILE_val.append(raw_val.smiles)
 
         self.n_pool = len(self.SMILE_train)
-        self.n_val = len(self.SMILE_val)
         self.labeled_data_idxs = np.zeros(self.n_pool*len(self.genelist), dtype=bool)
         self.labeled_drug_idxs = np.zeros(self.n_pool, dtype=bool)
         
     def drugIdx2dataIdx(self, drugidx):
         dataidx = []
         for i in drugidx:
-            dataidx.extend([i*len(self.genelist)+n for n in range(len(self.genelist))])
+            dataidx.extend([int(i*len(self.genelist)+n) for n in range(len(self.genelist))])
         return np.array(dataidx)
     
     def initialize_labels(self, num):
         # generate initial labeled pool
-        tmp_idxs = np.arange(self.n_pool)
-        np.random.shuffle(tmp_idxs)
-        self.labeled_drug_idxs[tmp_idxs] = True
-        self.labeled_data_idxs[self.drugIdx2dataIdx(tmp_idxs[:num])] = True
+        if num == 0:
+            pass
+        else:
+            tmp_idxs = np.arange(self.n_pool)
+            np.random.shuffle(tmp_idxs)
+            self.labeled_drug_idxs[tmp_idxs[:num]] = True
+            self.labeled_data_idxs[self.drugIdx2dataIdx(tmp_idxs[:num])] = True
     
     # def get_unlabeled_data_by_idx(self, dataID, idx):
     #     unlabeled_idxs = np.arange(self.n_pool)[~self.labeled_idxs]
@@ -146,25 +150,25 @@ class lincsData:
 
     def get_labeled_data(self, dataID):
         labeled_idxs = np.arange(self.n_pool*len(self.genelist))[self.labeled_data_idxs]
-        return labeled_idxs, self.handler(self.X_train[dataID][labeled_idxs], self.Y_train[dataID][labeled_idxs])
+        return labeled_idxs, self.handler(self.X_train[dataID][labeled_idxs], self.Y_train[dataID][labeled_idxs], self.cell_list[dataID])
     
     def get_labeled_drugs(self):
         labeled_idxs = np.arange(self.n_pool)[self.labeled_drug_idxs]
         return labeled_idxs, [self.SMILE_train[i] for i in labeled_idxs]
     
-    # def get_unlabeled_data(self, dataID):
-    #     unlabeled_idxs = np.arange(self.n_pool)[~self.labeled_idxs]
-    #     return unlabeled_idxs, self.handler(self.X_train[unlabeled_idxs], self.Y_train[dataID][unlabeled_idxs])
+    def get_unlabeled_data(self, dataID):
+        unlabeled_idxs = np.arange(self.n_pool*len(self.genelist))[~self.labeled_data_idxs]
+        return unlabeled_idxs, self.handler(self.X_train[dataID][unlabeled_idxs], self.Y_train[dataID][unlabeled_idxs], self.cell_list[dataID])
     
-    # def get_unlabeled_drugs(self):
-    #     unlabeled_idxs = np.arange(self.n_pool)[~self.labeled_idxs]
-    #     return unlabeled_idxs, [self.SMILE_train[i] for i in unlabeled_idxs]
+    def get_unlabeled_drugs(self):
+        unlabeled_idxs = np.arange(self.n_pool)[~self.labeled_drug_idxs]
+        return unlabeled_idxs, [self.SMILE_train[i] for i in unlabeled_idxs]
     
     # def get_train_data(self, dataID):
     #     return self.labeled_idxs.copy(), self.handler(self.X_train, self.Y_train[dataID])
 
-    # def get_test_data(self, dataID):
-    #     return self.handler(self.X_test, self.Y_test[dataID])
+    def get_test_data(self, dataID):
+        return self.handler(self.X_val[dataID], self.Y_val[dataID], self.cell_list[dataID])
     
     # def get_partial_labeled_data(self, dataID):
     #     labeled_idxs = np.arange(self.n_pool)[self.labeled_idxs]
@@ -174,11 +178,11 @@ class lincsData:
     #     unlabeled_idxs = np.arange(self.n_pool)[~self.labeled_idxs]
     #     return self.X_train[unlabeled_idxs], self.Y_train[dataID][unlabeled_idxs]
 
-    # def cal_test_acc(self, preds, dataID):
-    #     return 1.0 * (self.Y_test[dataID]==preds).sum().item() / self.n_test
+    def cal_test_acc(self, preds, dataID):
+        return 1.0 * (self.Y_val[dataID]==preds).sum().item() / len(preds)
     
-    # def cal_test_f1(self, preds, dataID):
-    #     return f1_score(self.Y_test[dataID], preds, average='macro')
+    def cal_test_f1(self, preds, dataID):
+        return f1_score(self.Y_val[dataID], preds, average='macro')
 
 
 def get_morgan_fingerprint(mol, radius, nBits, FCFP=False):
@@ -232,11 +236,11 @@ class DrugCelllineGene():
         gene_feature = self.get_gene_ft_batch(genes).astype(np.float32)
         data = np.concatenate([smiles_feature, cellline_feature, gene_feature], axis=1)
         
-        self.data, self.labels, self.smiles = torch.from_numpy(data), labels, smiles_id, genelist
+        self.data, self.labels, self.smiles, self.genelist = torch.from_numpy(data), labels, smiles_id, genelist
         unique, counts = np.unique(self.labels, return_counts=True)
         print(f"label count: {counts}")
         print('data shape:')
-        print(self.labels[0].shape, self.data.shape)
+        print(self.labels.shape, self.data.shape)
     def get_gene_ft_batch(self, gene):
         gene_features = []
         for g in tqdm(gene):

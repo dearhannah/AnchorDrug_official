@@ -135,7 +135,7 @@
                 "-a=LeastConfidence",
                 "-s=0",
                 "-q=30",
-                "-b=10",
+                "-b=5",
                 "-d=LINCS",
                 "--seed=4666",
                 "-t=1",

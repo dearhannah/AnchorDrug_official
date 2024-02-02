@@ -115,14 +115,14 @@ class jointStrategy:
         preds = self.net[id].predict(data)
         return preds
 
-    # def predict_prob(self):
-    #     probs_all = []
-    #     for i in range(len(self.net)):
-    #         tmp_net = self.net[i]
-    #         unlabeled_idxs, unlabeled_data = self.dataset.get_unlabeled_data(dataID=i)
-    #         probs = tmp_net.predict_prob(unlabeled_data)
-    #         probs_all.append(probs)
-    #     return probs_all
+    def predict_prob(self):
+        probs_all = []
+        for i in range(len(self.net)):
+            tmp_net = self.net[i]
+            _, unlabeled_data = self.dataset.get_unlabeled_data(dataID=i)
+            probs = tmp_net.predict_prob(unlabeled_data)
+            probs_all.append(probs)
+        return probs_all
 
     # def predict_prob_dropout(self, n_drop=5):
     #     probs_all = []
@@ -159,4 +159,5 @@ class jointStrategy:
     #         embeddings = tmp_net.get_grad_embeddings(unlabeled_data)
     #         get_embeddings_all.append(embeddings)
     #     return get_embeddings_all
+
 

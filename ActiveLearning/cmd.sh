@@ -1,0 +1,1 @@
+python ActiveLearning.py -a=LeastConfidence -b=5 -g=3

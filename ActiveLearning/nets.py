@@ -16,7 +16,7 @@ class Net:
         self.params = params
         self.cell = self.params['cell']
         self.device = device
-        dim = (1152,)
+        dim = (2259,)
         self.clf = self.net(dim = dim, pretrained = self.params['pretrained'], num_classes = self.params['num_class']).to(self.device)
         self.clf.load_state_dict(torch.load('/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/pretrain_GPS_predictable_307_genes_seed_10_31_final.pth').state_dict())
         
@@ -61,17 +61,17 @@ class Net:
                 preds[idxs] = pred.cpu()
         return preds
     
-    # def predict_prob(self, data):
-    #     self.clf.eval()
-    #     probs = torch.zeros([len(data), len(np.unique(data.Y))])
-    #     loader = DataLoader(data, shuffle=False, **self.params['loader_te_args'])
-    #     with torch.no_grad():
-    #         for x, y, idxs in loader:
-    #             x, y = x.to(self.device), y.to(self.device)
-    #             out, e1 = self.clf(x)
-    #             prob = F.softmax(out, dim=1)
-    #             probs[idxs] = prob.cpu()
-    #     return probs
+    def predict_prob(self, data):
+        self.clf.eval()
+        probs = torch.zeros([len(data), len(np.unique(data.Y))])
+        loader = DataLoader(data, shuffle=False, **self.params['loader_te_args'])
+        with torch.no_grad():
+            for x, y, idxs in loader:
+                x, y = x.to(self.device), y.to(self.device)
+                out, e1 = self.clf(x)
+                prob = F.softmax(out, dim=1)
+                probs[idxs] = prob.cpu()
+        return probs
     
     # def predict_prob_dropout(self, data, n_drop=10):
     #     self.clf.train()
@@ -233,13 +233,13 @@ class waterbirds_Net(nn.Module):
 		return self.dim
 
 class MLP(nn.Module):
-    def __init__(self, dim=(1152,), embSize=32, pretrained=False, num_classes=3, dropout_rate=0.5):
+    def __init__(self, dim=(2259,), embSize=64, pretrained=False, num_classes=3, dropout_rate=0.5):
         super(MLP, self).__init__()
         self.dim = embSize
         self.dropout_rate = dropout_rate
-        self.fc1 = nn.Linear(dim[0], 128)
-        self.fc2 = nn.Linear(128, 64)
-        self.fc3 = nn.Linear(64, embSize)
+        self.fc1 = nn.Linear(dim[0], 1000)
+        self.fc2 = nn.Linear(1000, 128)
+        self.fc3 = nn.Linear(128, embSize)
         self.fc4 = nn.Linear(embSize, num_classes)
         #
     def initial_kaiming_normal(self):
@@ -616,6 +616,7 @@ class View(nn.Module):
 		def forward(self, tensor):
 				return tensor.view(self.size)
 
+
 def kaiming_init(m):
 		if isinstance(m, (nn.Linear, nn.Conv2d)):
 				init.kaiming_normal(m.weight)
@@ -625,6 +626,7 @@ def kaiming_init(m):
 				m.weight.data.fill_(1)
 				if m.bias is not None:
 						m.bias.data.fill_(0)
+
 
 def normal_init(m, mean, std):
 		if isinstance(m, (nn.Linear, nn.Conv2d)):
