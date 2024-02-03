@@ -4,6 +4,7 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
         {
             "name": "anchordrugPrediction",
             "type": "python",
@@ -25,6 +26,24 @@
             "justMyCode": false,
             "args": [
                 "-a=RandomSampling",
+                "-s=0",
+                "-q=30",
+                "-b=10",
+                "-d=LINCS",
+                "--seed=4666",
+                "-t=1",
+                "-g=0"
+            ],
+        },
+        {
+            "name": "AdversarialBIM",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "args": [
+                "-a=AdversarialBIM",
                 "-s=0",
                 "-q=30",
                 "-b=10",
