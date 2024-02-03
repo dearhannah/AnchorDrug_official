@@ -17,7 +17,7 @@ from .kmeans_sampling import KMeansSampling
 from ..kcenter_greedy import KCenterGreedy
 from .kcenter_greedy_pca import KCenterGreedyPCA
 from .bayesian_active_learning_disagreement_dropout import BALDDropout
-from .badge_sampling import BadgeSampling
+from ..badge_sampling import BadgeSampling
 from .var_ratio import VarRatio
 from .mean_std import MeanSTD
 

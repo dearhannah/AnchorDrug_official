@@ -1,6 +1,6 @@
 import numpy as np
 import torch
-from .strategy import Strategy
+from .strategy import jointStrategy
 from scipy import stats
 from sklearn.metrics import pairwise_distances
 import pdb
@@ -22,13 +22,15 @@ Please cite the original paper if you use this method.
 }
 '''
 
-class BadgeSampling(Strategy):
+class BadgeSampling(jointStrategy):
     def __init__(self, dataset, net, args_input, args_task):
         super(BadgeSampling, self).__init__(dataset, net, args_input, args_task)
 
     def query(self, n):
-        unlabeled_idxs, unlabeled_data = self.dataset.get_unlabeled_data()
-        gradEmbedding = self.get_grad_embeddings(unlabeled_data)
+        unlabeled_idxs, unlabeled_drugs = self.dataset.get_unlabeled_drugs()
+        gradEmbedding = self.get_grad_embeddings()
+        gradEmbedding = torch.concatenate(gradEmbedding, 1)
+        gradEmbedding = gradEmbedding.reshape(len(unlabeled_idxs),-1).numpy()
         chosen = init_centers(gradEmbedding, n)
         return unlabeled_idxs[chosen]
 

@@ -5,11 +5,11 @@ from data import get_LINCS, get_MNIST, get_FashionMNIST, get_EMNIST, get_SVHN, g
 from nets import Net, MLP, MNIST_Net, CIFAR10_Net, openml_Net, PneumoniaMNIST_Net, waterbirds_Net, get_net_vae
 # from nets_lossprediction import Net_LPL, MNIST_Net_LPL, CIFAR10_Net_LPL, PneumoniaMNIST_Net_LPL, waterbirds_Net_LPL, get_lossnet
 # from nets_waal import Net_WAAL, MNIST_Net_WAAL, CIFAR10_Net_WAAL, waterbirds_Net_WAAL, CLF_WAAL, Discriminator
-from query_strategies import RandomSampling, LeastConfidence, MarginSampling, KMeansSampling, KCenterGreedy
+from query_strategies import RandomSampling, LeastConfidence, MarginSampling, KMeansSampling, KCenterGreedy, BadgeSampling
 # EntropySampling, \
 # 								LeastConfidenceDropout, MarginSamplingDropout, EntropySamplingDropout, \
 # 								KMeansSampling, KMeansSamplingGPU, KCenterGreedy, KCenterGreedyPCA, BALDDropout,  \
-# 								AdversarialBIM, AdversarialDeepFool, VarRatio, MeanSTD, BadgeSampling, CEALSampling, \
+# 								AdversarialBIM, AdversarialDeepFool, VarRatio, MeanSTD, CEALSampling, \
 # 								LossPredictionLoss, VAAL, WAAL
 from parameters import *
 from torchvision import transforms
@@ -242,6 +242,8 @@ def get_strategy(STRATEGY_NAME, dataset, net, args_input, args_task):
 		return KMeansSampling(dataset, net, args_input, args_task)
 	elif STRATEGY_NAME == 'KCenterGreedy':
 		return KCenterGreedy(dataset, net, args_input, args_task)
+	elif STRATEGY_NAME == 'BadgeSampling':
+		return BadgeSampling(dataset, net, args_input, args_task)
 	# elif STRATEGY_NAME == 'EntropySampling':
 	# 	return EntropySampling(dataset, net, args_input, args_task)
 	# elif STRATEGY_NAME == 'LeastConfidenceDropout':
@@ -260,8 +262,6 @@ def get_strategy(STRATEGY_NAME, dataset, net, args_input, args_task):
 	# 	return VarRatio(dataset, net, args_input, args_task)
 	# elif STRATEGY_NAME == 'MeanSTD':
 	# 	return MeanSTD(dataset, net, args_input, args_task)
-	# elif STRATEGY_NAME == 'BadgeSampling':
-	# 	return BadgeSampling(dataset, net, args_input, args_task)
 	# elif STRATEGY_NAME == 'LossPredictionLoss':		
 	# 	return LossPredictionLoss(dataset, net, args_input, args_task)
 	# elif STRATEGY_NAME == 'AdversarialBIM':

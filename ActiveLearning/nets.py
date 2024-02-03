@@ -114,28 +114,27 @@ class Net:
                 embeddings[idxs] = e1.cpu()
         return embeddings
     
-    # def get_grad_embeddings(self, data):
-    #     self.clf.eval()
-    #     embDim = self.clf.get_embedding_dim()
-    #     nLab = self.params['num_class']
-    #     embeddings = np.zeros([len(data), embDim * nLab])
+    def get_grad_embeddings(self, data):
+        self.clf.eval()
+        embDim = self.clf.get_embedding_dim()
+        nLab = self.params['num_class']
+        embeddings = torch.zeros([len(data), embDim * nLab])
 
-    #     loader = DataLoader(data, shuffle=False, **self.params['loader_te_args'])
-    #     with torch.no_grad():
-    #         for x, y, idxs in loader:
-    #             x, y = Variable(x.to(self.device)), Variable(y.to(self.device))
-    #             cout, out = self.clf(x)
-    #             out = out.data.cpu().numpy()
-    #             batchProbs = F.softmax(cout, dim=1).data.cpu().numpy()
-    #             maxInds = np.argmax(batchProbs,1)
-    #             for j in range(len(y)):
-    #                 for c in range(nLab):
-    #                     if c == maxInds[j]:
-    #                         embeddings[idxs[j]][embDim * c : embDim * (c+1)] = deepcopy(out[j]) * (1 - batchProbs[j][c]) * -1.0
-    #                     else:
-    #                         embeddings[idxs[j]][embDim * c : embDim * (c+1)] = deepcopy(out[j]) * (-1 * batchProbs[j][c]) * -1.0
-
-    #     return embeddings
+        loader = DataLoader(data, shuffle=False, **self.params['loader_te_args'])
+        with torch.no_grad():
+            for x, y, idxs in loader:
+                x, y = Variable(x.to(self.device)), Variable(y.to(self.device))
+                cout, out = self.clf(x)
+                out = out.data.cpu()#.numpy()
+                batchProbs = F.softmax(cout, dim=1).data.cpu()#.numpy()
+                maxInds = np.argmax(batchProbs,1)
+                for j in range(len(y)):
+                    for c in range(nLab):
+                        if c == maxInds[j]:
+                            embeddings[idxs[j]][embDim * c : embDim * (c+1)] = deepcopy(out[j]) * (1 - batchProbs[j][c]) * -1.0
+                        else:
+                            embeddings[idxs[j]][embDim * c : embDim * (c+1)] = deepcopy(out[j]) * (-1 * batchProbs[j][c]) * -1.0
+        return embeddings
         
 class MNIST_Net(nn.Module):
 	def __init__(self, dim = 28 * 28, pretrained=False, num_classes = 10):

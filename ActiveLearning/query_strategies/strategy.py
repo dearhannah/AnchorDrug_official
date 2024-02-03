@@ -155,13 +155,16 @@ class jointStrategy:
             get_embeddings_all.append(embeddings)
         return get_embeddings_all
     
-    # def get_grad_embeddings(self):
-    #     get_embeddings_all = []
-    #     for i in range(len(self.net)):
-    #         tmp_net = self.net[i]
-    #         unlabeled_idxs, unlabeled_data = self.dataset.get_unlabeled_data(dataID=i)
-    #         embeddings = tmp_net.get_grad_embeddings(unlabeled_data)
-    #         get_embeddings_all.append(embeddings)
-    #     return get_embeddings_all
+    def get_grad_embeddings(self, type='unlabeled'):
+        get_embeddings_all = []
+        for i in range(len(self.net)):
+            tmp_net = self.net[i]
+            if type == 'unlabeled':
+                _, data = self.dataset.get_unlabeled_data(dataID=i)
+            elif type == 'all':
+                _, data = self.dataset.get_train_data(dataID=i)
+            embeddings = tmp_net.get_grad_embeddings(data)
+            get_embeddings_all.append(embeddings)
+        return get_embeddings_all
 
 
