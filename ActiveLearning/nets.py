@@ -87,18 +87,18 @@ class Net:
     #     probs /= n_drop
     #     return probs
     
-    # def predict_prob_dropout_split(self, data, n_drop=10):
-    #     self.clf.train()
-    #     probs = torch.zeros([n_drop, len(data), len(np.unique(data.Y))])
-    #     loader = DataLoader(data, shuffle=False, **self.params['loader_te_args'])
-    #     for i in range(n_drop):
-    #         with torch.no_grad():
-    #             for x, y, idxs in loader:
-    #                 x, y = x.to(self.device), y.to(self.device)
-    #                 out, e1 = self.clf(x)
-    #                 prob = F.softmax(out, dim=1)
-    #                 probs[i][idxs] += F.softmax(out, dim=1).cpu()
-    #     return probs
+    def predict_prob_dropout_split(self, data, n_drop=10):
+        self.clf.train()
+        probs = torch.zeros([n_drop, len(data), len(np.unique(data.Y))])
+        loader = DataLoader(data, shuffle=False, **self.params['loader_te_args'])
+        for i in range(n_drop):
+            with torch.no_grad():
+                for x, y, idxs in loader:
+                    x, y = x.to(self.device), y.to(self.device)
+                    out, e1 = self.clf(x)
+                    prob = F.softmax(out, dim=1)
+                    probs[i][idxs] += F.softmax(out, dim=1).cpu()
+        return probs
     
     # def get_model(self):
     #     return self.clf

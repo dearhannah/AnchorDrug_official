@@ -133,14 +133,14 @@ class jointStrategy:
     #         probs_all.append(probs)
     #     return probs_all
 
-    # def predict_prob_dropout_split(self, n_drop=5):
-    #     probs_all = []
-    #     for i in range(len(self.net)):
-    #         tmp_net = self.net[i]
-    #         unlabeled_idxs, unlabeled_data = self.dataset.get_unlabeled_data(dataID=i)
-    #         probs = tmp_net.predict_prob_dropout_split(unlabeled_data, n_drop=n_drop)
-    #         probs_all.append(probs)
-    #     return probs_all
+    def predict_prob_dropout_split(self, n_drop=5):
+        probs_all = []
+        for i in range(len(self.net)):
+            tmp_net = self.net[i]
+            unlabeled_idxs, unlabeled_data = self.dataset.get_unlabeled_data(dataID=i)
+            probs = tmp_net.predict_prob_dropout_split(unlabeled_data, n_drop=n_drop)
+            probs_all.append(probs)
+        return probs_all
     
     def get_embeddings(self, type='unlabeled'):
         get_embeddings_all = []
