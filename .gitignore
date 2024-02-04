@@ -1,7 +1,12 @@
 data
 *.pyc
 *.txt
-*.pkl
+# *.pkl
 *.params
 wandb
 AnchorDrugPrediction/finetune_step1_models/
+ActiveLearning/logfile/
+ActiveLearning/results/
+ActiveLearning/deprecated/
+AnchorDrugPrediction/results/
+resultBaseLine/
