@@ -83,11 +83,11 @@ class lincsData:
         # self.args_task = args_task
         tmp = pd.read_csv('/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/GPS_predictable_genes.csv')
         self.genelist = tmp.x.to_list()
-        with open('HQ_pool_drug.pkl', 'rb') as f:
-            trainDrugs = pickle.load(f)
+        # with open('HQ_pool_drug.pkl', 'rb') as f:
+        #     trainDrugs = pickle.load(f)
         df_data = pd.read_csv('/egr/research-aidd/menghan1/AnchorDrug/data/level5_beta_trt_cp_24h_10uM.csv')
 
-        self.SMILE_train, self.X_train, self.Y_train = trainDrugs,[],[]
+        self.SMILE_train, self.X_train, self.Y_train = [],[],[]
         self.SMILE_val, self.X_val, self.Y_val = [],[],[]
         for cell in cell_list:
             print(cell)
@@ -95,6 +95,10 @@ class lincsData:
             df_target = df_data[df_data['sig_id'].isin(use_HQ_sample_id)]
             median = df_target[['SMILES']+self.genelist].groupby(by='SMILES').median()
             df_target = median
+
+            # load cellline_specific_drug_pool
+            df = pd.read_csv(f'/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/cellline_specific_drug_pool_{cell}.csv')
+            trainDrugs = df['0'].to_list()
 
             tmp = pd.read_csv(f'/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/{cell}_internal_val2_data.csv')
             valDrugs = tmp.SMILES.to_list()
@@ -117,6 +121,7 @@ class lincsData:
             self.X_val.append(raw_val.data)
             self.Y_val.append(raw_val.labels)
             self.SMILE_val.append(raw_val.smiles)
+            self.SMILE_train = trainDrugs
 
         self.n_pool = len(self.SMILE_train)
         self.labeled_data_idxs = np.zeros(self.n_pool*len(self.genelist), dtype=bool)
