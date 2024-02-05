@@ -17,7 +17,7 @@ def get_args():
 	parser.add_argument('--batch', '-b', default=10, type=int, help='batch size in one active learning iteration')
 	parser.add_argument('--dataset_name', '-d', default='LINCS', type=str, help='dataset name')
 	# parser.add_argument('--gene', '-j', default='TOP2A', type=str, help='gene name')
-	# parser.add_argument('--cell', '-c', default=['MCF7'], type=str, help='cell line name')
+	parser.add_argument('--cell', '-c', default='MCF7', type=str, help='cell line name')
 	parser.add_argument('--iteration', '-t', default=3, type=int, help='time of repeat the experiment')
 	# parser.add_argument('--data_path', type=str, default='./../data', help='Path to where the data is')
 	# parser.add_argument('--out_path', type=str, default='./../results', help='Path to where the output log will be')

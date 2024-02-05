@@ -32,7 +32,7 @@ device = torch.device("cuda" if use_cuda else "cpu")
 
 #recording
 timestamp = re.sub('\.[0-9]*','_',str(datetime.datetime.now())).replace(" ", "_").replace("-", "").replace(":","")
-sys.stdout = Logger(f'./logfile/{DATA_NAME}_{STRATEGY_NAME}_{str(NUM_QUERY)}_{str(NUM_INIT_LB)}_{str(args_input.quota)}_{timestamp}.txt')
+sys.stdout = Logger(f'./logfile/{DATA_NAME}_{args_input.cell}_{STRATEGY_NAME}_{str(NUM_QUERY)}_{str(NUM_INIT_LB)}_{str(args_input.quota)}_{timestamp}.txt')
 warnings.filterwarnings('ignore')
 
 # start experiment
@@ -48,7 +48,7 @@ while (iteration > 0):
 	iteration = iteration - 1
 	# data, network, strategy
 	args_task = args_pool[DATA_NAME]
-	# args_task['cell'] = args_input.cell
+	args_task['cell'] = [args_input.cell]
 	dataset = get_dataset(args_input.dataset_name, args_task)				# load dataset
 	net_all = []
 	for cell in dataset.cell_list:
@@ -62,8 +62,8 @@ while (iteration > 0):
 	# generate initial labeled pool
 	dataset.initialize_labels(args_input.initseed)
 	#record acc performance
-	acc = np.zeros((NUM_ROUND+1, 3))
-	f1 = np.zeros((NUM_ROUND+1, 3))
+	acc = np.zeros((NUM_ROUND+1, 1))
+	f1 = np.zeros((NUM_ROUND+1, 1))
 		
 	# print info
 	print(DATA_NAME)
@@ -109,11 +109,11 @@ while (iteration > 0):
 	all_f1.append(f1)
 
 	#save drug
-	drug_path = f'./druglist/{DATA_NAME}_{STRATEGY_NAME}_{str(NUM_QUERY)}_{str(NUM_INIT_LB)}_{str(args_input.quota)}_{timestamp}_{iteration}.pkl'
+	drug_path = f'./druglist/{DATA_NAME}_{args_input.cell}_{STRATEGY_NAME}_{str(NUM_QUERY)}_{str(NUM_INIT_LB)}_{str(args_input.quota)}_{timestamp}_{iteration}.pkl'
 	with open(drug_path, 'wb') as f:
 		pickle.dump(smiles, f)
 		
 #save F1,acc
-res_path = f'./results/{DATA_NAME}_{STRATEGY_NAME}_{str(NUM_QUERY)}_{str(NUM_INIT_LB)}_{str(args_input.quota)}_{timestamp}.pkl'
+res_path = f'./results/{DATA_NAME}_{args_input.cell}_{STRATEGY_NAME}_{str(NUM_QUERY)}_{str(NUM_INIT_LB)}_{str(args_input.quota)}_{timestamp}.pkl'
 with open(res_path, 'wb') as f:
 	pickle.dump((all_acc,all_f1), f)
