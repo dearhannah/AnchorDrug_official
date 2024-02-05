@@ -1,0 +1,6 @@
+,drug,MOAs
+2,CCC(C)[C@H]1O[C@]2(CC[C@@H]1C)C[C@@H]1C[C@@H](CC=C(C)[C@@H](OC3C[C@H](OC)C(O[C@H]4C[C@H](OC)[C@@H](O)[C@H](C)O4)[C@H](C)O3)[C@@H](C)C=CC=C3CO[C@@H]4[C@H](O)C(C)=C[C@@H](C(=O)O1)[C@]34O)O2,benzodiazepine receptor agonist
+1,O=C(O)C[C@H](O)C[C@H](O)C=Cc1c(C2CC2)nc2ccccc2c1-c1ccc(F)cc1,None
+75,COc1cc2nc(N3CCCN(C)CC3)nc(NC3CCN(Cc4ccccc4)CC3)c2cc1OC,histone lysine methyltransferase inhibitor
+9,CC=CCC(C)C(O)C1C(=O)NC(CC)C(=O)N(C)CC(=O)N(C)C(CC(C)C)C(=O)NC(C(C)C)C(=O)N(C)C(CC(C)C)C(=O)NC(C)C(=O)NC(C)C(=O)N(C)C(CC(C)C)C(=O)N(C)C(CC(C)C)C(=O)N(C)C(C(C)C)C(=O)N1C,calcineurin inhibitor
+100,Nc1nc(Cl)nc2c1ncn2[C@H]1C[C@H](O)[C@@H](CO)O1,adenosine deaminase inhibitor|ribonucleotide reductase inhibitor
