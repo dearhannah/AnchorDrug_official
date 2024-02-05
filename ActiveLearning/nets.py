@@ -232,7 +232,7 @@ class waterbirds_Net(nn.Module):
 		return self.dim
 
 class MLP(nn.Module):
-    def __init__(self, dim=(2259,), embSize=64, pretrained=False, num_classes=3, dropout_rate=0.5):
+    def __init__(self, dim=(2259,), embSize=64, pretrained=False, num_classes=3, dropout_rate=0.2):
         super(MLP, self).__init__()
         self.dim = embSize
         self.dropout_rate = dropout_rate
@@ -251,10 +251,13 @@ class MLP(nn.Module):
         h = x
         h = self.fc1(h)
         h = F.leaky_relu(h, negative_slope=0.01)
+        # h = F.dropout(h, p=self.dropout_rate)
         h = self.fc2(h)
         h = F.leaky_relu(h, negative_slope=0.01)
+        # h = F.dropout(h, p=self.dropout_rate)
         h = self.fc3(h)
         h = F.leaky_relu(h, negative_slope=0.01)
+        # h = F.dropout(h, p=self.dropout_rate)
         logit = self.fc4(h)
         return logit, h
 	

@@ -1,3 +1,2 @@
-python ActiveLearning.py -a=LeastConfidence -b=5 -c MCF7 -g=1
-python ActiveLearning.py -a=LeastConfidence -b=5 -c A549 -g=2
-python ActiveLearning.py -a=LeastConfidence -b=5 -c PC3 -g=3
+python ActiveLearning.py -a=AdversarialBIM -b=5 -q=100 -g=6
+python ActiveLearning.py -a=RandomSampling -b=5 -q=100 -g=7

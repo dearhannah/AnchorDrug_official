@@ -1,3 +1,2 @@
-python ActiveLearning.py -a=LeastConfidence -b=10 -c MCF7 -g=1
-python ActiveLearning.py -a=LeastConfidence -b=10 -c A549 -g=2
-python ActiveLearning.py -a=LeastConfidence -b=10 -c PC3 -g=3
+python ActiveLearning.py -a=BadgeSampling -b=5 -q=100 -g=4
+# python ActiveLearning.py -a=BALDDropout -b=5 -q=100 -g=5
