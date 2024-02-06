@@ -1,0 +1,6 @@
+,common_drugs
+216,O=c1[nH]c(=O)n([C@H]2C[C@H](O)C(CO)O2)cc1I
+283,CO[C@H]1CN(C)C(=O)c2cc(NC(=O)NC(C)C)ccc2OC[C@H](C)N(Cc2ccc(-c3ccccn3)cc2)C[C@@H]1C
+570,CS(=O)(=O)c1cccc(CNc2nc(Nc3ccc4c(c3)CCC(=O)N4)ncc2C(F)(F)F)c1
+268,C=CCNc1oc(-c2ccc(Cl)cc2)nc1C#N
+261,Nc1nc(Nc2ccc(S(N)(=O)=O)cc2)nn1C(=O)c1c(F)cccc1F
