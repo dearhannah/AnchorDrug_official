@@ -44,7 +44,6 @@ df_data = x[x['cell_iname'].isin(cell_list)] #7258 * 982
 #Import drug pool data:
 gene = pd.read_csv('/egr/research-aidd/chenruo4/AnchorDrug/GPS_predictable_genes.csv')['x'].tolist()
 c = ['A549', 'MCF7', 'PC3'] #The tested cell line
-n_drug = 100 #number of anchor drugs
 
 
 #----------------------------------------------------------------------------------------------------------------
@@ -106,7 +105,9 @@ for g in gene:
 df_test_GO.index = range(0, df_test_GO.shape[0]) #This is the internal val set 2
 df_ext_test_GO.index = range(0, df_ext_test_GO.shape[0]) #This is the test set
 #----------------------------------------------------------------------------------------------------------------  
-n_drug_list = [30, 60, 100, 130, 160, 190, 220, 250, 279]
+#n_drug_list = [30, 60, 100, 130, 160, 190, 220, 250, 279]
+n_drug_list = [100]
+
 anchor_drug_seed_list = [10, 20, 30] 
 
 
@@ -127,9 +128,17 @@ for n_drug in n_drug_list:
                 median['test_gene'] = g
                 median = median.rename(columns={g: 'label', 'SMILES': 'smiles'})
                 #----------------------------------------------------------------------------------------------------------------
-                anchor_drugs = pd.read_csv('/egr/research-aidd/chenruo4/AnchorDrug/anchor_drug_selection_HQ_LINCS/common_' + str(n_drug) + '_drugs_random_seed' + str(anchor_drug_seed) + '.csv')['common_drugs'].tolist()
-                #anchor_drugs = pd.read_csv('/egr/research-aidd/chenruo4/AnchorDrug/anchor_drug_selection_HQ_LINCS/common_' + str(n_drug) + '_drugs_kmode_clustering_random_seed30.csv')['drug'].tolist()
-                #anchor_drugs = pd.read_csv('/egr/research-aidd/chenruo4/AnchorDrug/anchor_drug_selection_HQ_LINCS/common_' + str(n_drug) + '_drugs_MOA_random_seed30.csv')['drug'].tolist()
+                #anchor_drugs = pd.read_csv('/egr/research-aidd/chenruo4/AnchorDrug/anchor_drug_selection_HQ_LINCS/common_' + str(n_drug) + '_drugs_random_seed' + str(anchor_drug_seed) + '.csv')['common_drugs'].tolist()
+                #anchor_drugs = pd.read_csv('/egr/research-aidd/chenruo4/AnchorDrug/anchor_drug_selection_HQ_LINCS/common_' + str(n_drug) + '_drugs_kmode_clustering_random_seed' + str(anchor_drug_seed) + '.csv')['drug'].tolist()
+                #anchor_drugs = pd.read_csv('/egr/research-aidd/chenruo4/AnchorDrug/anchor_drug_selection_HQ_LINCS/common_' + str(n_drug) + '_drugs_MOA_random_seed' + str(anchor_drug_seed) + '.csv')['drug'].tolist()
+                #with open('/egr/research-aidd/chenruo4/AnchorDrug/anchor_drug_selection_HQ_LINCS/active_learning_base/LINCS_MarginSampling_' + str(n_drug) + '_' + str(anchor_drug_seed) + '.pkl', 'rb') as f:
+                #with open('/egr/research-aidd/chenruo4/AnchorDrug/anchor_drug_selection_HQ_LINCS/active_learning_base/LINCS_BALDDropout_' + str(n_drug) + '_' + str(anchor_drug_seed) + '.pkl', 'rb') as f:
+                #with open('/egr/research-aidd/chenruo4/AnchorDrug/anchor_drug_selection_HQ_LINCS/active_learning_base/LINCS_LeastConfidence_' + str(n_drug) + '_' + str(anchor_drug_seed) + '.pkl', 'rb') as f:
+                with open('/egr/research-aidd/chenruo4/AnchorDrug/anchor_drug_selection_HQ_LINCS/active_learning_base/LINCS_KMeansSampling_' + str(n_drug) + '_' + str(anchor_drug_seed) + '.pkl', 'rb') as f:
+                #with open('/egr/research-aidd/chenruo4/AnchorDrug/anchor_drug_selection_HQ_LINCS/active_learning_base/LINCS_KCenterGreedy_' + str(n_drug) + '_' + str(anchor_drug_seed) + '.pkl', 'rb') as f:
+                #with open('/egr/research-aidd/chenruo4/AnchorDrug/anchor_drug_selection_HQ_LINCS/active_learning_base/LINCS_BadgeSampling_' + str(n_drug) + '_' + str(anchor_drug_seed) + '.pkl', 'rb') as f:
+                #with open('/egr/research-aidd/chenruo4/AnchorDrug/anchor_drug_selection_HQ_LINCS/active_learning_base/LINCS_AdversarialBIM_' + str(n_drug) + '_' + str(anchor_drug_seed) + '.pkl', 'rb') as f:
+                    anchor_drugs = pickle.load(f)
                 median.index = median['smiles']
         #----------------------------------------------------------------------------------------------------------------
                 #Opt: Fine-tune using all drugs as anchor drugs:
@@ -465,17 +474,20 @@ for n_drug in n_drug_list:
                     # out setting
                     model_str = 'pretrain_GPS_predictable_307_genes_cellline_' + cell + '_seed_' + str(rdseed)
                     txtfile = out_dir + model_str + ".txt"
+                    #txtfile = out_dir + model_str + '_drug_' + str(n_drug) + '_selection_seed_'+ str(anchor_drug_seed) + ".txt"
                     # rename exsist file for collison
                     nowTime = datetime.datetime.now().strftime('%Y-%m-%d-%H:%M:%S')
                     if os.path.exists(txtfile):
                         os.system('mv %s %s' % (txtfile, txtfile + ".bak-%s" % nowTime))
                     with open(txtfile, "a") as f:
                         f.write('epoch,train_acc,train_f1,val_acc,val_f1,test_acc,test_f1\n')
-                    print('epoch,train_acc,train_f1,test_acc,test_f1')
+                    print('epoch,train_acc, train_f1, val_acc, val_f1, test_acc,test_f1')
                     #
                     #freeze some layers:
                     net.fc1.weight.requires_grad = False
                     net.fc1.bias.requires_grad = False
+                    net.fc2.weight.requires_grad = False
+                    net.fc2.bias.requires_grad = False
                     #
                     net.load_state_dict(torch.load('/egr/research-aidd/chenruo4/AnchorDrug/base_model/revise_downsampling_MLP_1000_128_64_normalized_cell_line_embeddings_ECFP_GO_terms_GPS_predictable_307_genes_HQ_LINCS/internal_val_10%_random_holdout_earlystop/pretrain_GPS_predictable_307_genes_seed_10_31_final.pth').state_dict())
                     optimizer = torch.optim.Adam(filter(lambda m: m.requires_grad, net.parameters()), lr=args.lr, amsgrad=True, weight_decay=0.001)
@@ -493,11 +505,15 @@ for n_drug in n_drug_list:
                             f.write(str(int(e)) + ',' + str(train_acc) + ',' + str(train_f1) + ','
                                     + str(val_acc) + ',' + str(val_f1) + ','
                                    + str(test_acc) + ',' + str(test_f1) + '\n')
+                            #f.write(str(int(e)) + ',' 
+                             #      + str(val_acc) + ',' + str(val_f1) + ','
+                              #     + str(test_acc) + ',' + str(test_f1) + '\n')
                         summary_train_loss.extend([train_loss])
                         with open(txtfile, "a") as f:
                             f.write(str(int(e)) + ',' 
                                     + str(val_acc) + ',' + str(val_f1) + ','
                                     + str(test_acc) + ',' + str(test_f1) + '\n')
+                        torch.save(net, out_dir + model_str + '_%s_.pth' % str(e))
                     print("fine-tuning loss:")
                     print(summary_train_loss)
                     pd.DataFrame({'training_loss': summary_train_loss}, index = range(0, e+1)).to_csv(out_dir + cell + '_finetune_loss_per_epoch.csv')
@@ -507,14 +523,15 @@ for n_drug in n_drug_list:
         #----------------------------------------------------------------------------------------------------------------
             if __name__ == '__main__':
                 argparser = argparse.ArgumentParser()
-                argparser.add_argument('--out_dir', type=str, help='dir to output', default='/egr/research-aidd/chenruo4/AnchorDrug/base_model/MLP_downsampling_1000_128_64_normalized_cellline_embeddings_ECFP_GO_terms_GPS_predictable_307_genes_finetune_baseline_anchor_drugs_epoch20/internal_val_set2/random_selection/drugs_' + str(n_drug) + '_seed_' + str(anchor_drug_seed) + '/')   
-                #argparser.add_argument('--out_dir', type=str, help='dir to output', default='/egr/research-aidd/chenruo4/AnchorDrug/base_model/MLP_downsampling_1000_128_64_normalized_cellline_embeddings_ECFP_GO_terms_GPS_predictable_307_genes_finetune_baseline_anchor_drugs_epoch20/internal_val_set2/pretrained_base_model/')   
+                #argparser.add_argument('--out_dir', type=str, help='dir to output', default='/egr/research-aidd/chenruo4/AnchorDrug/base_model/MLP_downsampling_1000_128_64_normalized_cellline_embeddings_ECFP_GO_terms_GPS_predictable_307_genes_finetune_baseline_anchor_drugs_epoch5/internal_val_set2_freeze_layer_1_2/random_selection/drugs_' + str(n_drug) + '_seed_' + str(anchor_drug_seed) + '/')   
+                argparser.add_argument('--out_dir', type=str, help='dir to output', default='/egr/research-aidd/chenruo4/AnchorDrug/base_model/MLP_downsampling_1000_128_64_normalized_cellline_embeddings_ECFP_GO_terms_GPS_predictable_307_genes_finetune_baseline_anchor_drugs_epoch5/internal_val_set2_freeze_layer_1_2/active_learning_based/KMeansSampling/drugs_' + str(n_drug) + '_seed_' + str(anchor_drug_seed) + '/')   
+                #argparser.add_argument('--out_dir', type=str, help='dir to output', default='/egr/research-aidd/chenruo4/AnchorDrug/base_model/MLP_downsampling_1000_128_64_normalized_cellline_embeddings_ECFP_GO_terms_GPS_predictable_307_genes_finetune_baseline_anchor_drugs_epoch5_20230204/internal_val_set2_freeze_layer_1_2/random_selection/drugs_' + str(n_drug) + '_seed_' + str(anchor_drug_seed) + '/')   
+                #argparser.add_argument('--out_dir', type=str, help='dir to output', default='/egr/research-aidd/chenruo4/AnchorDrug/base_model/MLP_downsampling_1000_128_64_normalized_cellline_embeddings_ECFP_GO_terms_GPS_predictable_307_genes_finetune_baseline_anchor_drugs_epoch5/internal_val_set2_freeze_layer_1_2/pretrained_base_model/')   
                 argparser.add_argument('--input', type=str, help='input dataset', default='drugcellline')
                 argparser.add_argument('--lr', type=float, help='task-level inner update learning rate', default=0.001)
-                argparser.add_argument('--n_epoch', type=int, help='update steps for finetunning', default=20)
+                argparser.add_argument('--n_epoch', type=int, help='update steps for finetunning', default=5)
                 args = argparser.parse_args()
                 main(args)
-
 
 
 
