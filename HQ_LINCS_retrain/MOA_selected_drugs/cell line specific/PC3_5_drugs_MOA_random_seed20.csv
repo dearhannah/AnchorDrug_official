@@ -1,0 +1,6 @@
+,drug,MOAs
+78,CSc1nc2cc(Cl)c(Oc3cccc(Cl)c3Cl)cc2[nH]1,microtubule inhibitor
+202,COc1ccccc1OCCNCC(O)COc1cccc2[nH]c3ccccc3c12,adrenergic receptor antagonist
+162,CNC(=O)c1cc(Oc2ccc(NC(=O)Nc3ccc(Cl)c(C(F)(F)F)c3)cc2)ccn1,FLT3 inhibitor|KIT inhibitor|PDGFR tyrosine kinase receptor inhibitor|RAF inhibitor|RET tyrosine kinase inhibitor|VEGFR inhibitor
+199,COCCn1c2c([n+](Cc3cnccn3)c1C)C(=O)c1ccccc1C2=O,survivin inhibitor
+216,CCC(=O)N(c1ccccc1)C1CCN(CCc2ccc(N=C=S)cc2)CC1,opioid receptor agonist

@@ -1,0 +1,31 @@
+,drug,MOAs
+119,CC(C)C[C@@H](C(=O)N[C@H](C(=O)OC1CCCC1)c1ccccc1)[C@H](O)C(=O)NO,peptidase inhibitor
+68,O=C(NCCCNc1nc(Nc2cccc(NC(=O)N3CCCC3)c2)ncc1I)c1cccs1,IKK inhibitor
+39,CC12CCC3c4ccc(O)cc4CC(CCCCCCCCCS(=O)CCCC(F)(F)C(F)(F)F)C3C1CCC2O,estrogen receptor antagonist
+22,O=C1NCCN1CCN1CCC(c2cn(-c3ccc(F)cc3)c3ccc(Cl)cc23)CC1,dopamine receptor antagonist|serotonin receptor antagonist
+165,CC1=CC(=O)c2ccccc2C1=O,mitochondrial DNA polymerase inhibitor|phosphatase inhibitor
+145,CC(=O)Oc1ccccc1C(=O)Nc1ncc([N+](=O)[O-])s1,pyruvate ferredoxin oxidoreductase inhibitor
+90,O=C1NC(=O)c2cc(Nc3ccc(F)cc3)c(Nc3ccc(F)cc3)cc21,EGFR inhibitor|PKC inhibitor
+25,CO[C@H]1C[C@@H]2CC[C@@H](C)[C@@](O)(O2)C(=O)C(=O)N2CCCC[C@H]2C(=O)O[C@H]([C@H](C)C[C@@H]2CC[C@@H](O)[C@H](OC)C2)CC(=O)[C@H](C)C=C(C)[C@@H](O)[C@@H](OC)C(=O)[C@H](C)C[C@H](C)C=CC=CC=C1C,mTOR inhibitor
+86,CC(C)C[C@H](NC(=O)[C@H](Cc1ccccc1)NC(=O)c1cnccn1)B(O)O,NFkB pathway inhibitor|proteasome inhibitor
+1,Cc1ccc2cc3c(ccc4ccccc43)c3c2c1CC3,None
+115,CC(C)C1(NC(=O)C2CC3c4cccc5[nH]cc(c45)CC3N(C)C2)OC2(O)C3CCCN3C(=O)C(Cc3ccccc3)N2C1=O,adrenergic receptor antagonist|prolactin inhibitor
+130,CC[C@@H](C(=O)C(C)[C@@H](O)[C@H](C)CCc1ccc(C)c(O)c1C(=O)O)C1OC(CC)(C2CC[C@](O)(CC)[C@H](C)O2)C[C@@H]1C,bacterial permeability inducer
+67,CC1CC(C)C(=O)C(C(O)CC2CC(=O)NC(=O)C2)C1,protein synthesis inhibitor
+4,COc1ccc(C2Sc3ccccc3N(CCN(C)C)C(=O)C2OC(C)=O)cc1,calcium channel blocker
+2,CCC(C)[C@H]1O[C@]2(CC[C@@H]1C)C[C@@H]1C[C@@H](CC=C(C)[C@@H](OC3C[C@H](OC)C(O[C@H]4C[C@H](OC)[C@@H](O)[C@H](C)O4)[C@H](C)O3)[C@@H](C)C=CC=C3CO[C@@H]4[C@H](O)C(C)=C[C@@H](C(=O)O1)[C@]34O)O2,benzodiazepine receptor agonist
+83,Clc1ccc(CON=C(Cn2ccnc2)c2ccc(Cl)cc2Cl)c(Cl)c1,bacterial cell wall synthesis inhibitor
+21,C[C@]12C[C@H](O)[C@@]3(F)C(CCC4=CC(=O)C=C[C@@]43C)C1C[C@@H](O)[C@]2(O)C(=O)CO,glucocorticoid receptor agonist
+155,C=CC(=O)N1CCCC(n2nc(-c3ccc(Oc4ccccc4)cc3)c3c(N)ncnc32)C1,Bruton's tyrosine kinase (BTK) inhibitor
+71,Cc1cccc(N(C)C(=S)Oc2ccc3ccccc3c2)c1,fungal squalene epoxidase inhibitor
+41,O=c1[nH]c(=O)n([C@H]2C[C@H](O)[C@@H](CO)O2)cc1C(F)(F)F,DNA directed DNA polymerase inhibitor|thymidylate synthase inhibitor
+58,C#CCOC(=O)C1=CCCN(C)C1,acetylcholine receptor agonist
+6,Cc1ccc2c(c1)C1(CCN(CCc3nc(-c4ccccc4)oc3C)CC1)OC(=O)N2,CC chemokine receptor antagonist
+9,C=C1C[C@@H]2[C@H](CC[C@]3(C)C(=O)CC[C@@H]23)[C@@]2(C)C=CC(=O)C=C12,aromatase inhibitor
+112,OCc1cc(C(O)CNCCCCCCOCCCCc2ccccc2)ccc1O,adrenergic receptor agonist
+110,COc1cc(C=CC(=O)CC(=O)C=Cc2ccc(O)c(OC)c2)ccc1O,cyclooxygenase inhibitor|histone acetyltransferase inhibitor|lipoxygenase inhibitor|NFkB pathway inhibitor
+73,COCC(=O)O[C@]1(CCN(C)CCCc2nc3ccccc3[nH]2)CCc2cc(F)ccc2[C@@H]1C(C)C,T-type calcium channel blocker
+97,CCN(CC)C(C)CN1c2ccccc2Sc2ccccc21,butyrylcholinesterase inhibitor|cholinergic receptor antagonist
+43,COc1cc(Nc2ncc(F)c(Nc3ccc4c(n3)NC(=O)C(C)(C)O4)n2)cc(OC)c1OC,SYK inhibitor
+98,Cn1cncc1[C@](N)(c1ccc(Cl)cc1)c1ccc2c(c1)c(-c1cccc(Cl)c1)cc(=O)n2C,farnesyltransferase inhibitor
+37,CCCCCCNC(=O)n1cc(F)c(=O)[nH]c1=O,thymidylate synthase inhibitor

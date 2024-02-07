@@ -1,0 +1,101 @@
+,drug,MOAs
+119,CC(C)C[C@@H](C(=O)N[C@H](C(=O)OC1CCCC1)c1ccccc1)[C@H](O)C(=O)NO,peptidase inhibitor
+68,O=C(NCCCNc1nc(Nc2cccc(NC(=O)N3CCCC3)c2)ncc1I)c1cccs1,IKK inhibitor
+39,CC12CCC3c4ccc(O)cc4CC(CCCCCCCCCS(=O)CCCC(F)(F)C(F)(F)F)C3C1CCC2O,estrogen receptor antagonist
+22,O=C1NCCN1CCN1CCC(c2cn(-c3ccc(F)cc3)c3ccc(Cl)cc23)CC1,dopamine receptor antagonist|serotonin receptor antagonist
+165,CC1=CC(=O)c2ccccc2C1=O,mitochondrial DNA polymerase inhibitor|phosphatase inhibitor
+145,CC(=O)Oc1ccccc1C(=O)Nc1ncc([N+](=O)[O-])s1,pyruvate ferredoxin oxidoreductase inhibitor
+90,O=C1NC(=O)c2cc(Nc3ccc(F)cc3)c(Nc3ccc(F)cc3)cc21,EGFR inhibitor|PKC inhibitor
+25,CO[C@H]1C[C@@H]2CC[C@@H](C)[C@@](O)(O2)C(=O)C(=O)N2CCCC[C@H]2C(=O)O[C@H]([C@H](C)C[C@@H]2CC[C@@H](O)[C@H](OC)C2)CC(=O)[C@H](C)C=C(C)[C@@H](O)[C@@H](OC)C(=O)[C@H](C)C[C@H](C)C=CC=CC=C1C,mTOR inhibitor
+86,CC(C)C[C@H](NC(=O)[C@H](Cc1ccccc1)NC(=O)c1cnccn1)B(O)O,NFkB pathway inhibitor|proteasome inhibitor
+1,Cc1ccc2cc3c(ccc4ccccc43)c3c2c1CC3,None
+115,CC(C)C1(NC(=O)C2CC3c4cccc5[nH]cc(c45)CC3N(C)C2)OC2(O)C3CCCN3C(=O)C(Cc3ccccc3)N2C1=O,adrenergic receptor antagonist|prolactin inhibitor
+130,CC[C@@H](C(=O)C(C)[C@@H](O)[C@H](C)CCc1ccc(C)c(O)c1C(=O)O)C1OC(CC)(C2CC[C@](O)(CC)[C@H](C)O2)C[C@@H]1C,bacterial permeability inducer
+67,CC1CC(C)C(=O)C(C(O)CC2CC(=O)NC(=O)C2)C1,protein synthesis inhibitor
+4,COc1ccc(C2Sc3ccccc3N(CCN(C)C)C(=O)C2OC(C)=O)cc1,calcium channel blocker
+2,CCC(C)[C@H]1O[C@]2(CC[C@@H]1C)C[C@@H]1C[C@@H](CC=C(C)[C@@H](OC3C[C@H](OC)C(O[C@H]4C[C@H](OC)[C@@H](O)[C@H](C)O4)[C@H](C)O3)[C@@H](C)C=CC=C3CO[C@@H]4[C@H](O)C(C)=C[C@@H](C(=O)O1)[C@]34O)O2,benzodiazepine receptor agonist
+83,Clc1ccc(CON=C(Cn2ccnc2)c2ccc(Cl)cc2Cl)c(Cl)c1,bacterial cell wall synthesis inhibitor
+21,C[C@]12C[C@H](O)[C@@]3(F)C(CCC4=CC(=O)C=C[C@@]43C)C1C[C@@H](O)[C@]2(O)C(=O)CO,glucocorticoid receptor agonist
+155,C=CC(=O)N1CCCC(n2nc(-c3ccc(Oc4ccccc4)cc3)c3c(N)ncnc32)C1,Bruton's tyrosine kinase (BTK) inhibitor
+71,Cc1cccc(N(C)C(=S)Oc2ccc3ccccc3c2)c1,fungal squalene epoxidase inhibitor
+41,O=c1[nH]c(=O)n([C@H]2C[C@H](O)[C@@H](CO)O2)cc1C(F)(F)F,DNA directed DNA polymerase inhibitor|thymidylate synthase inhibitor
+58,C#CCOC(=O)C1=CCCN(C)C1,acetylcholine receptor agonist
+6,Cc1ccc2c(c1)C1(CCN(CCc3nc(-c4ccccc4)oc3C)CC1)OC(=O)N2,CC chemokine receptor antagonist
+9,C=C1C[C@@H]2[C@H](CC[C@]3(C)C(=O)CC[C@@H]23)[C@@]2(C)C=CC(=O)C=C12,aromatase inhibitor
+112,OCc1cc(C(O)CNCCCCCCOCCCCc2ccccc2)ccc1O,adrenergic receptor agonist
+110,COc1cc(C=CC(=O)CC(=O)C=Cc2ccc(O)c(OC)c2)ccc1O,cyclooxygenase inhibitor|histone acetyltransferase inhibitor|lipoxygenase inhibitor|NFkB pathway inhibitor
+73,COCC(=O)O[C@]1(CCN(C)CCCc2nc3ccccc3[nH]2)CCc2cc(F)ccc2[C@@H]1C(C)C,T-type calcium channel blocker
+97,CCN(CC)C(C)CN1c2ccccc2Sc2ccccc21,butyrylcholinesterase inhibitor|cholinergic receptor antagonist
+43,COc1cc(Nc2ncc(F)c(Nc3ccc4c(n3)NC(=O)C(C)(C)O4)n2)cc(OC)c1OC,SYK inhibitor
+98,Cn1cncc1[C@](N)(c1ccc(Cl)cc1)c1ccc2c(c1)c(-c1cccc(Cl)c1)cc(=O)n2C,farnesyltransferase inhibitor
+37,CCCCCCNC(=O)n1cc(F)c(=O)[nH]c1=O,thymidylate synthase inhibitor
+69,O=C(Nc1c[nH]nc1-c1nc2cc(CN3CCOCC3)ccc2[nH]1)NC1CC1,Aurora kinase inhibitor|JAK inhibitor
+75,Clc1ccccc1C(c1ccccc1)(c1ccccc1)n1ccnc1,cytochrome P450 inhibitor|imidazoline receptor ligand
+85,Oc1cccc(-c2nc(N3CCOCC3)c3oc4ncccc4c3n2)c1,mTOR inhibitor|PI3K inhibitor
+150,CC(=O)NC1=NN(C(C)=O)C(C)(c2ccccc2)S1,kinesin-like spindle protein inhibitor
+149,CCCCCC(O)c1cccc(OCc2ccc3ccccc3n2)c1,leukotriene receptor antagonist|lipoxygenase inhibitor
+78,CN(C)C(=N)NC(=N)N,insulin sensitizer
+160,C[C@H]1CN(CCCn2c3ccccc3c3ccccc32)C[C@@H](C)N1,sigma receptor antagonist
+128,CNC(=O)c1ccccc1Sc1ccc2c(C=Cc3ccccn3)n[nH]c2c1,PDGFR tyrosine kinase receptor inhibitor|VEGFR inhibitor
+129,OC(CN1CCNCC1)Cn1c2ccc(Br)cc2c2cc(Br)ccc21,cytochrome C release inhibitor
+151,Oc1c(Cl)cc(Cl)c(Cl)c1Cc1c(O)c(Cl)cc(Cl)c1Cl,potassium channel activator
+100,COc1ccc(C2=NC(c3ccc(Cl)cc3)C(c3ccc(Cl)cc3)N2C(=O)N2CCNC(=O)C2)c(OC(C)C)c1,MDM inhibitor
+74,O=C(Nc1cccc2cccnc12)c1ccc(N2C(=O)[C@H]3[C@H]4C=C[C@H](C4)[C@H]3C2=O)cc1,PARP inhibitor
+95,COc1cc(Nc2c(C#N)cnc3cc(OCCCN4CCN(C)CC4)c(OC)cc23)c(Cl)cc1Cl,Abl kinase inhibitor|Bcr-Abl kinase inhibitor|src inhibitor
+55,COc1cc(N2CCC(N3CCN(C)CC3)CC2)ccc1Nc1ncc(Cl)c(Nc2ccccc2S(=O)(=O)C(C)C)n1,ALK tyrosine kinase receptor inhibitor
+144,CC(C)C[C@@H](C=O)NC(=O)[C@H](CC(C)C)NC(=O)[C@H](CC(C)C)NC(=O)OCc1ccccc1,proteasome inhibitor
+15,Cc1c(C)c2c(c(C)c1O)CCC(C)(COc1ccc(CC3SC(=O)NC3=O)cc1)O2,insulin sensitizer|PPAR receptor agonist
+33,Cc1ccc(NC(=O)c2cccc(N(C)C)c2)cc1NC(=O)c1ccc(O)cc1,RAF inhibitor
+51,CN(C)CCOc1ccc(C(=C(CCCl)c2ccccc2)c2ccccc2)cc1,estrogen receptor antagonist|selective estrogen receptor modulator (SERM)
+64,Nc1nc(F)nc2c1ncn2[C@@H]1O[C@H](CO)[C@@H](O)[C@@H]1O,ribonucleotide reductase inhibitor
+135,Cc1nc(Nc2ncc(C(=O)Nc3c(C)cccc3Cl)s2)cc(N2CCN(CCO)CC2)n1,Bcr-Abl kinase inhibitor|ephrin inhibitor|KIT inhibitor|PDGFR tyrosine kinase receptor inhibitor|src inhibitor|tyrosine kinase inhibitor
+107,O=c1cc(-c2ccc(O)cc2)oc2cc(O)cc(O)c12,casein kinase inhibitor|cell proliferation inhibitor
+159,CCCOc1ccc(Br)cc1-c1cc(-c2ccc(Cl)cc2)[nH]c1-c1ccncc1,glucagon receptor antagonist
+3,Cc1cccc(C)c1OCC(=O)N[C@@H](Cc1ccccc1)[C@@H](O)C[C@H](Cc1ccccc1)NC(=O)[C@H](C(C)C)N1CCCNC1=O,HIV protease inhibitor
+60,CNC(=O)[C@H](Cc1c[nH]c2ccccc12)NC(=O)[C@@H](CC(=O)NO)CC(C)C,matrix metalloprotease inhibitor
+162,CN(NC(=O)CC(=O)NN(C)C(=S)c1ccccc1)C(=S)c1ccccc1,oxidative stress inducer
+13,O=C(Nc1cc(C(F)(F)F)cc(C(F)(F)F)c1)c1cc(Cl)ccc1O,IKK inhibitor|NFkB pathway inhibitor
+99,O=C1CN2Cc3c(ccc(Cl)c3Cl)N=C2N1,phosphodiesterase inhibitor
+127,COc1cc2c(cc1Cc1cccc(Cl)c1F)c(=O)c(C(=O)O)cn2[C@H](CO)C(C)C,HIV integrase inhibitor
+36,Cc1ccc(Nc2nccc(N(C)c3ccc4c(C)n(C)nc4c3)n2)cc1S(N)(=O)=O,KIT inhibitor|PDGFR tyrosine kinase receptor inhibitor|VEGFR inhibitor
+131,CCCCCCN(CCCCCC)C(=O)Cc1c(-c2ccc(F)cc2)[nH]c2ccccc12,inositol monophosphatase inhibitor
+124,Cc1cc2c(F)c(Oc3ncnn4cc(OC[C@@H](C)O)c(C)c34)ccc2[nH]1,FGFR inhibitor|VEGFR inhibitor
+125,COc1cccc2c1C(=O)c1c(O)c3c(c(O)c1C2=O)C[C@@](O)(C(C)=O)C[C@H]3O[C@H]1C[C@H](N)[C@H](O)[C@H](C)O1,RNA synthesis inhibitor|topoisomerase inhibitor
+26,COc1c(N2C[C@@H]3CCCN[C@@H]3C2)c(F)cc2c(=O)c(C(=O)O)cn(C3CC3)c12,bacterial DNA gyrase inhibitor
+134,Nc1ncnc2[nH]nc(Nc3ccc(F)cc3)c12,MAP kinase inhibitor
+163,Cc1cccc(-c2[nH]c(C(C)(C)C)nc2-c2ccc3nccnc3c2)n1,TGF beta receptor inhibitor
+157,C1CCC(C(CC2CCCCN2)C2CCCCC2)CC1,carnitine palmitoyltransferase inhibitor
+141,C=C1C(=O)O[C@H]2[C@H]1CCC(C)=CCC[C@@]1(C)O[C@@H]21,NFkB pathway inhibitor
+48,CS(=O)c1ccc(-c2nc(-c3ccc(F)cc3)c(-c3ccncc3)[nH]2)cc1,p38 MAPK inhibitor
+88,COc1cc2c(N3CCN(C(=O)Nc4ccc(OC(C)C)cc4)CC3)ncnc2cc1OCCCN1CCCCC1,FLT3 inhibitor|KIT inhibitor|PDGFR tyrosine kinase receptor inhibitor
+161,Cc1ccc(NC(=O)c2ccc(CN3CCN(C)CC3)cc2)cc1Nc1nc(-c2cccnc2)cs1,KIT inhibitor|PDGFR tyrosine kinase receptor inhibitor|src inhibitor
+104,CC(C=CC=C(C)/C=C/C1=C(C)CCCC1(C)C)=CC(=O)O,retinoid receptor agonist|retinoid receptor ligand
+7,CCC(C)n1ncn(-c2ccc(N3CCN(c4ccc(OCC5COC(Cn6cncn6)(c6ccc(Cl)cc6Cl)O5)cc4)CC3)cc2)c1=O,cytochrome P450 inhibitor
+116,COc1c(C)c2c(c(O)c1CC=C(C)CCC(=O)O)C(=O)OC2,dehydrogenase inhibitor|inositol monophosphatase inhibitor
+84,CCC(C)(C)C(=O)O[C@H]1C[C@@H](C)C=C2C=C[C@H](C)[C@H](CC[C@@H]3C[C@@H](O)CC(=O)O3)[C@H]21,HMGCR inhibitor
+118,Cc1ccc(-c2nn(C(C)(C)C)c3ncnc(N)c23)cc1,src inhibitor
+89,CCOc1ccccc1-n1c(C(C)N2CCN(C(=O)COc3ccc(Cl)cc3)CC2)nc2ccccc2c1=O,ion channel antagonist
+139,O=C1CCC(N2C(=O)c3ccccc3C2=O)C(=O)N1,tumor necrosis factor production inhibitor
+109,COc1cc2c(Nc3ccc(NC(=O)c4ccccc4)cc3)ncnc2cc1OCCCN1CCOCC1,Aurora kinase inhibitor
+87,C/C=C/C[C@@H](C)[C@@H](O)C1C(=O)NC(CC)C(=O)N(C)CC(=O)N(C)C(CC(C)C)C(=O)NC(C(C)C)C(=O)N(C)C(CC(C)C)C(=O)NC(C)C(=O)N[C@H](C)C(=O)N(C)C(CC(C)C)C(=O)N(C)C(CC(C)C)C(=O)N(C)C(C(C)C)C(=O)N1C,calcineurin inhibitor
+82,C=CC[C@]1(O)CCC2C3CCC4=CC(=O)CCC4=C3C=C[C@@]21C,progestogen hormone
+152,Cc1cn(-c2cc(NC(=O)c3ccc(C)c(Nc4nccc(-c5cccnc5)n4)c3)cc(C(F)(F)F)c2)cn1,Abl kinase inhibitor|Bcr-Abl kinase inhibitor
+30,C=C1/C(=C\C=C2CCC[C@@]3(C)[C@H]2CC[C@@H]3[C@H](C)CCCC(C)(C)O)C[C@@H](O)C[C@@H]1O,vitamin D receptor agonist
+101,S=C(NCc1ccc2c(c1)OCO2)N1CCN(c2ncnc3c2oc2ccccc23)CC1,FLT3 inhibitor|KIT inhibitor|PDGFR tyrosine kinase receptor inhibitor|RAD51 inhibitor|RET tyrosine kinase inhibitor
+24,Cc1cc2c(C(C)C)c(O)c(O)c(C=O)c2c(O)c1-c1c(C)cc2c(C(C)C)c(O)c(O)c(C=O)c2c1O,BCL inhibitor|MCL1 inhibitor
+32,CN(C)CC=CC(=O)Nc1cc2c(Nc3ccc(F)c(Cl)c3)ncnc2cc1O[C@H]1CCOC1,EGFR inhibitor
+123,CC=CCC=CCCC(=O)[C@H]1O[C@H]1C(N)=O,fatty acid synthase inhibitor
+122,Cc1[nH]c(C=C2C(=O)Nc3ccc(S(=O)(=O)N(C)c4cccc(Cl)c4)cc32)c(C)c1C(=O)N1CCN(C)CC1,hepatocyte growth factor receptor inhibitor|tyrosine kinase inhibitor
+81,Clc1ccc(COC(Cn2ccnc2)c2ccc(Cl)cc2Cl)cc1,lanosterol demethylase inhibitor|sterol demethylase inhibitor
+140,Cc1cc(Nc2cc(N3CCN(C)CC3)nc(C=Cc3ccccc3)n2)n[nH]1,Aurora kinase inhibitor|FLT3 inhibitor|VEGFR inhibitor
+49,O=C1NC(=O)c2c1c1c3ccccc3n3c1c1c2c2ccccc2n1C1CCC3O1,CHK inhibitor
+72,Cc1cc(C)c(N(Cc2ccccc2)S(=O)(=O)c2ccc(OCCNC(=O)c3cc4ccccc4o3)cc2)c(C(=O)NO)c1,metalloproteinase inhibitor
+164,Cc1cc(C2CCCCC2)n(O)c(=O)c1,membrane integrity inhibitor
+102,CC(C)C(=O)Nc1ccc([N+](=O)[O-])c(C(F)(F)F)c1,androgen receptor antagonist
+59,Fc1ccc(C(OCCN2CCN(CCCc3ccccc3)CC2)c2ccc(F)cc2)cc1,dopamine uptake inhibitor
+18,Nc1nc2ccc(Cl)cc2c2nc(-c3ccco3)nn12,adenosine receptor antagonist
+113,COc1cc2c(cc1OC)C(=O)C(CC1CCN(Cc3ccccc3)CC1)C2,acetylcholinesterase inhibitor
+11,Cc1ccc([N+](=O)[O-])cc1S(=O)(=O)N(C)N=Cc1cnc2ccc(Br)cn12,DNA protein kinase inhibitor|PI3K inhibitor
+111,O=c1c(-c2ccc(O)cc2)coc2cc(O)ccc12,estrogen receptor agonist
+5,O=C(C=Cc1cccnc1)NCCCCC1CCN(C(=O)c2ccccc2)CC1,niacinamide phosphoribosyltransferase inhibitor
+93,CN(C)c1ccc2nc3ccc(N(C)C)cc3[s+]c2c1,guanylyl cyclase inhibitor|nitric oxide production inhibitor

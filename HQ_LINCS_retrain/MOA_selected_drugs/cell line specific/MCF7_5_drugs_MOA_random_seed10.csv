@@ -1,0 +1,6 @@
+,drug,MOAs
+59,CN(C)c1ccc(C=C2C(=O)Nc3ccccc32)cc1,PDGFR tyrosine kinase receptor inhibitor|tyrosine kinase inhibitor|VEGFR inhibitor
+64,O=C(O)[C@]1(Cc2cccc(Nc3nccs3)n2)CC[C@@H](Oc2cccc(Cl)c2F)CC1,Aurora kinase inhibitor
+36,CN(C)CCc1c[nH]c2ccc(Cn3cncn3)cc12,serotonin receptor agonist
+20,O=c1c(O)c(-c2ccc(O)c(O)c2)oc2cc(O)cc(O)c12,polar auxin transport inhibitor
+60,COC(=O)Nc1nc2ccc(S(=O)c3ccccc3)cc2[nH]1,anthelmintic agent

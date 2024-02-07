@@ -1,0 +1,31 @@
+,drug,MOAs
+131,Cc1ccccc1C(OCCN(C)C)c1ccccc1,acetylcholine receptor antagonist
+55,O=c1[nH]c(=O)n([C@H]2C[C@H](O)[C@@H](CO)O2)cc1C(F)(F)F,DNA directed DNA polymerase inhibitor|thymidylate synthase inhibitor
+102,Cc1ccc(F)c(NC(=O)Nc2ccc(-c3cccc4[nH]nc(N)c34)cc2)c1,PDGFR tyrosine kinase receptor inhibitor|VEGFR inhibitor
+88,O=C(Nc1cccnc1)N1CCC(Cc2cccc(Oc3ccc(C(F)(F)F)cn3)c2)CC1,FAAH inhibitor
+128,O=c1oc2c(O)c(O)cc3c(=O)oc4c(O)c(O)cc1c4c23,glutathione transferase inhibitor|non-nucleoside reverse transcriptase inhibitor
+51,Cc1cc(N2CCOCC2)cc2[nH]c(-c3c(NC[C@@H](O)c4cccc(Cl)c4)cc[nH]c3=O)nc12,IGF-1 inhibitor
+145,O=C(Oc1cccc2cccnc12)c1ccccc1,antiinfective drug
+112,Cc1ccc(S(=O)(=O)NC(=O)NN2CC3CCCC3C2)cc1,ATP channel blocker|insulin secretagogue
+103,O=C(NCCCNc1nc(Nc2cccc(NC(=O)N3CCCC3)c2)ncc1I)c1cccs1,IKK inhibitor
+27,CC(=O)Nc1cccc(-n2c(=O)n(C3CC3)c(=O)c3c(Nc4ccc(I)cc4F)n(C)c(=O)c(C)c32)c1,MEK inhibitor
+49,CN(C)CCc1c[nH]c2ccc(Cn3cncn3)cc12,serotonin receptor agonist
+162,CNC(=O)c1cc(Oc2ccc(NC(=O)Nc3ccc(Cl)c(C(F)(F)F)c3)cc2)ccn1,FLT3 inhibitor|KIT inhibitor|PDGFR tyrosine kinase receptor inhibitor|RAF inhibitor|RET tyrosine kinase inhibitor|VEGFR inhibitor
+95,Cc1ccc(NCCCc2ccccc2)c(N)c1,NFkB pathway inhibitor
+93,CCN(CC)CCCC(C)Nc1c2ccc(Cl)cc2nc2ccc(OC)cc12,cytokine production inhibitor|NFkB pathway inhibitor|TP53 activator
+193,Cc1cc(-c2ccccc2)nnc1NCCN1CCOCC1,serotonin reuptake inhibitor
+127,COc1cc(NC(C)CCCN)c2ncccc2c1,antimalarial agent|DNA inhibitor
+85,Oc1ccc(C=Cc2cc(O)cc(O)c2)cc1,cytochrome P450 inhibitor|SIRT activator
+9,CCC(C)n1ncn(-c2ccc(N3CCN(c4ccc(OCC5COC(Cn6cncn6)(c6ccc(Cl)cc6Cl)O5)cc4)CC3)cc2)c1=O,cytochrome P450 inhibitor
+214,O=C1N(c2ccccc2)c2ccccc2C1(Cc1ccncc1)Cc1ccncc1,potassium channel blocker
+135,Nc1cccc2c1CN(C1CCC(=O)NC1=O)C2=O,anticancer agent
+97,COc1cc(C)c(C=CC(C)=CC=CC(C)=CC(=O)O)c(C)c1C,retinoid receptor agonist
+220,COc1cc(C(=O)OCCCN2CCCN(CCCOC(=O)c3cc(OC)c(OC)c(OC)c3)CC2)cc(OC)c1OC,adenosine reuptake inhibitor
+181,NC(=O)C1CCCc2c1[nH]c1ccc(Cl)cc21,SIRT inhibitor
+138,CN(C)c1ccc2nc3ccc(N(C)C)cc3[s+]c2c1,guanylyl cyclase inhibitor|nitric oxide production inhibitor
+164,CC1(C)S[C@@H]2[C@H](NC(=O)Cc3ccccc3)C(=O)N2[C@H]1C(=O)O,penicillin binding protein inhibitor
+186,CN(C(Cc1ccc(OS(=O)(=O)c2cccc3cnccc23)cc1)C(=O)N1CCN(c2ccccc2)CC1)S(=O)(=O)c1cccc2cnccc12,calcium/calmodulin dependent protein kinase inhibitor|purinergic receptor antagonist
+210,Cc1cn(-c2cc(NC(=O)c3ccc(C)c(Nc4nccc(-c5cccnc5)n4)c3)cc(C(F)(F)F)c2)cn1,Abl kinase inhibitor|Bcr-Abl kinase inhibitor
+89,CC(N)C1CCC(C(=O)Nc2ccncc2)CC1,rho associated kinase inhibitor
+25,Cc1nc2n(c(=O)c1CCN1CCC(c3noc4cc(F)ccc34)CC1)CCCC2,dopamine receptor antagonist|serotonin receptor antagonist
+58,O=[N+]([O-])c1ccccc1S(=O)(=O)NCC1CCC(CNCC2CCc3ccccc3C2)CC1,neuropeptide receptor antagonist

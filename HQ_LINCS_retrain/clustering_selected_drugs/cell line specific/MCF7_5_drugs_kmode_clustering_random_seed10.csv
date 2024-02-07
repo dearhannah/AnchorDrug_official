@@ -1,0 +1,6 @@
+,drug,cluster
+433,Cc1cc(C2CCCCC2)n(O)c(=O)c1,2
+102,Nc1ccc(-c2cccc3c(=O)cc(N4CCOCC4)oc23)cc1,3
+671,COCC(=O)N1CC2(CCN(Cc3ccccc3)CC2)c2c([nH]c3cc(OC)ccc23)[C@H]1CO,4
+429,COc1cccc(Nc2c(C(N)=O)cnc3c(C)cc(S(=O)(=O)c4cccc(C(=O)N(C)C)c4)cc23)c1,1
+547,C[C@H]1CCCCO[C@H](CN(C)C(=O)Nc2ccc(F)cc2)[C@@H](C)CN([C@@H](C)CO)C(=O)c2cc(NS(=O)(=O)c3ccccc3)ccc2O1,0
