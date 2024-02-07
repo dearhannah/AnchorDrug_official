@@ -1,6 +1,0 @@
-,drug,MOAs
-44,Nc1nc(Nc2ccccc2)nc2c1ncn2C1OC(CO)C(O)C1O,adenosine receptor agonist
-64,Nc1nc(F)nc2c1ncn2[C@@H]1O[C@H](CO)[C@@H](O)[C@@H]1O,ribonucleotide reductase inhibitor
-88,COc1cc2c(N3CCN(C(=O)Nc4ccc(OC(C)C)cc4)CC3)ncnc2cc1OCCCN1CCCCC1,FLT3 inhibitor|KIT inhibitor|PDGFR tyrosine kinase receptor inhibitor
-21,C[C@]12C[C@H](O)C3C(CCC4=CC(=O)CC[C@@]43C)C1CC[C@]2(O)C(=O)CO,glucocorticoid receptor agonist
-131,CCCCCCN(CCCCCC)C(=O)Cc1c(-c2ccc(F)cc2)[nH]c2ccccc12,inositol monophosphatase inhibitor

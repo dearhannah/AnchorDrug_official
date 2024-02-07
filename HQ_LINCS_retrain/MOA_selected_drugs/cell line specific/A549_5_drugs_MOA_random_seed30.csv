@@ -1,6 +1,0 @@
-,drug,MOAs
-119,CC(C)C[C@@H](C(=O)N[C@H](C(=O)OC1CCCC1)c1ccccc1)[C@H](O)C(=O)NO,peptidase inhibitor
-68,O=C(NCCCNc1nc(Nc2cccc(NC(=O)N3CCCC3)c2)ncc1I)c1cccs1,IKK inhibitor
-39,CC12CCC3c4ccc(O)cc4CC(CCCCCCCCCS(=O)CCCC(F)(F)C(F)(F)F)C3C1CCC2O,estrogen receptor antagonist
-22,O=C1NCCN1CCN1CCC(c2cn(-c3ccc(F)cc3)c3ccc(Cl)cc23)CC1,dopamine receptor antagonist|serotonin receptor antagonist
-165,CC1=CC(=O)c2ccccc2C1=O,mitochondrial DNA polymerase inhibitor|phosphatase inhibitor

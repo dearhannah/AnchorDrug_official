@@ -1,6 +1,0 @@
-,drug,MOAs
-134,C[C@@]1(C(=O)Nc2ccc(F)nc2)CCCN1c1nc(Nc2cc(C3CC3)n[nH]2)c2cccn2n1,IGF-1 inhibitor
-6,Cc1cccc(C)c1OCC(=O)N[C@@H](Cc1ccccc1)[C@@H](O)C[C@H](Cc1ccccc1)NC(=O)[C@H](C(C)C)N1CCCNC1=O,HIV protease inhibitor
-14,COc1ccc(S(=O)(=O)N(C(C)=O)c2ccccc2C=Cc2cc[n+]([O-])cc2)cc1,PLK inhibitor
-47,Cn1cnc2c(F)c(Nc3ccc(Br)cc3Cl)c(C(=O)NOCCO)cc21,MEK inhibitor
-63,COc1cc(N2CCC(N3CCN(C)CC3)CC2)ccc1Nc1ncc(Cl)c(Nc2ccccc2S(=O)(=O)C(C)C)n1,ALK tyrosine kinase receptor inhibitor

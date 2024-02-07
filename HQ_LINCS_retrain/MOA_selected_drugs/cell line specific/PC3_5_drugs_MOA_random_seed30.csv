@@ -1,6 +1,0 @@
-,drug,MOAs
-131,Cc1ccccc1C(OCCN(C)C)c1ccccc1,acetylcholine receptor antagonist
-55,O=c1[nH]c(=O)n([C@H]2C[C@H](O)[C@@H](CO)O2)cc1C(F)(F)F,DNA directed DNA polymerase inhibitor|thymidylate synthase inhibitor
-102,Cc1ccc(F)c(NC(=O)Nc2ccc(-c3cccc4[nH]nc(N)c34)cc2)c1,PDGFR tyrosine kinase receptor inhibitor|VEGFR inhibitor
-88,O=C(Nc1cccnc1)N1CCC(Cc2cccc(Oc3ccc(C(F)(F)F)cn3)c2)CC1,FAAH inhibitor
-128,O=c1oc2c(O)c(O)cc3c(=O)oc4c(O)c(O)cc1c4c23,glutathione transferase inhibitor|non-nucleoside reverse transcriptase inhibitor
