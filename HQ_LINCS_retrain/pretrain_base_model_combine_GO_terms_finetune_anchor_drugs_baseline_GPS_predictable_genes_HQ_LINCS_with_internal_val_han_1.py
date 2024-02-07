@@ -485,8 +485,8 @@ if __name__ == '__main__':
     #n_drug_list = [30, 60, 100, 130, 160, 190, 220, 250, 279]
     # n_drug_list = [30, 100]
 
-    anchor_drug_seed_list = [1, 2, 0] 
-    # anchor_drug_seed_list = [10]
+    # anchor_drug_seed_list = [1, 2, 0] 
+    anchor_drug_seed_list = [10, 20, 30]
 
     n_drug = args.n_drug
     for anchor_drug_seed in anchor_drug_seed_list:
@@ -499,16 +499,26 @@ if __name__ == '__main__':
             tmp = tmp.loc[use_HQ_sample_id, :] 
             #tmp = tmp.loc[tmp['cell_iname'] == cell, ['SMILES', g]]
             df_finetune = None
-            anchor_drug_file_name_list = [f for f in os.listdir(f'/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/drug{n_drug}/') if cell in f]
-            anchor_drug_file_name_list = [f for f in anchor_drug_file_name_list if f'{anchor_drug_seed}.pkl' in f]
-            anchor_drug_file_name = [f for f in anchor_drug_file_name_list if args.query in f]
-            anchor_drug_file_pwd = f'/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/drug{n_drug}/{anchor_drug_file_name[0]}'
+            # anchor_drug_file_name_list = [f for f in os.listdir(f'/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/drug{n_drug}/') if cell in f]
+            # anchor_drug_file_name_list = [f for f in anchor_drug_file_name_list if f'{anchor_drug_seed}.pkl' in f]
+            # anchor_drug_file_name = [f for f in anchor_drug_file_name_list if args.query in f]
+            # anchor_drug_file_pwd = f'/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/drug{n_drug}/{anchor_drug_file_name[0]}'
+            # anchor_code = anchor_drug_file_pwd.split('/')[-1].split('.')[0]
+            # out_dir = f'/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/results/drug{n_drug}/{anchor_code}/'
+            # args.out_dir = out_dir
+            # print(f'files save to {out_dir}')
+            # with open(anchor_drug_file_pwd, 'rb') as f:
+            #     anchor_drugs = pickle.load(f)
+
+            anchor_drug_file_name_list = [f for f in os.listdir(f'/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/{args.query}/cell_line_specific') if cell in f]
+            anchor_drug_file_name_list = [f for f in anchor_drug_file_name_list if f'seed{anchor_drug_seed}.csv' in f]
+            anchor_drug_file_name = [f for f in anchor_drug_file_name_list if f'_{n_drug}_' in f]
+            anchor_drug_file_pwd = f'/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/{args.query}/cell_line_specific/{anchor_drug_file_name[0]}'
             anchor_code = anchor_drug_file_pwd.split('/')[-1].split('.')[0]
             out_dir = f'/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/results/drug{n_drug}/{anchor_code}/'
             args.out_dir = out_dir
             print(f'files save to {out_dir}')
-            with open(anchor_drug_file_pwd, 'rb') as f:
-                anchor_drugs = pickle.load(f)
+            anchor_drugs = pd.read_csv(anchor_drug_file_pwd)['drug'].tolist()
             for g in gene:
                 #median = tmp[['SMILES', g,]].groupby(by='SMILES').median().reset_index()
                 median = tmp.loc[tmp['cell_iname'] == cell, ['SMILES', g]][['SMILES', g,]].groupby(by='SMILES').median().reset_index()
@@ -553,16 +563,27 @@ if __name__ == '__main__':
             tmp = tmp.loc[use_HQ_sample_id, :] 
             #tmp = tmp.loc[tmp['cell_iname'] == cell, ['SMILES', g]]
             df_finetune = None
-            anchor_drug_file_name_list = [f for f in os.listdir(f'/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/drug{n_drug}/') if cell in f]
-            anchor_drug_file_name_list = [f for f in anchor_drug_file_name_list if f'{anchor_drug_seed}.pkl' in f]
-            anchor_drug_file_name = [f for f in anchor_drug_file_name_list if args.query in f]
-            anchor_drug_file_pwd = f'/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/drug{n_drug}/{anchor_drug_file_name[0]}'
+            # anchor_drug_file_name_list = [f for f in os.listdir(f'/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/drug{n_drug}/') if cell in f]
+            # anchor_drug_file_name_list = [f for f in anchor_drug_file_name_list if f'{anchor_drug_seed}.pkl' in f]
+            # anchor_drug_file_name = [f for f in anchor_drug_file_name_list if args.query in f]
+            # anchor_drug_file_pwd = f'/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/drug{n_drug}/{anchor_drug_file_name[0]}'
+            # anchor_code = anchor_drug_file_pwd.split('/')[-1].split('.')[0]
+            # out_dir = f'/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/results/drug{n_drug}/{anchor_code}/'
+            # args.out_dir = out_dir
+            # print(f'files save to {out_dir}')
+            # with open(anchor_drug_file_pwd, 'rb') as f:
+            #     anchor_drugs = pickle.load(f)
+
+            anchor_drug_file_name_list = [f for f in os.listdir(f'/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/{args.query}/cell_line_specific') if cell in f]
+            anchor_drug_file_name_list = [f for f in anchor_drug_file_name_list if f'seed{anchor_drug_seed}.csv' in f]
+            anchor_drug_file_name = [f for f in anchor_drug_file_name_list if f'_{n_drug}_' in f]
+            anchor_drug_file_pwd = f'/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/{args.query}/cell_line_specific/{anchor_drug_file_name[0]}'
             anchor_code = anchor_drug_file_pwd.split('/')[-1].split('.')[0]
             out_dir = f'/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/results/drug{n_drug}/{anchor_code}/'
             args.out_dir = out_dir
             print(f'files save to {out_dir}')
-            with open(anchor_drug_file_pwd, 'rb') as f:
-                anchor_drugs = pickle.load(f)
+            anchor_drugs = pd.read_csv(anchor_drug_file_pwd)['drug'].tolist()
+
             for g in gene:
                 #median = tmp[['SMILES', g,]].groupby(by='SMILES').median().reset_index()
                 median = tmp.loc[tmp['cell_iname'] == cell, ['SMILES', g]][['SMILES', g,]].groupby(by='SMILES').median().reset_index()
