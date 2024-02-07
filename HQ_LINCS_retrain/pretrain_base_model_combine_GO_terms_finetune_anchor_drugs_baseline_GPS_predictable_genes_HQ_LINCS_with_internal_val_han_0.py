@@ -124,6 +124,7 @@ for n_drug in n_drug_list:
             df_finetune = None
             anchor_drug_file_name_list = [f for f in os.listdir(f'/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/drug{n_drug}/') if 'A549' in f]
             anchor_drug_file_name = [f for f in anchor_drug_file_name_list if f'{anchor_drug_seed}.pkl' in f]
+            anchor_drug_file_name = [f for f in anchor_drug_file_name_list if 'AdversarialBIM' in f]
             anchor_drug_file_pwd = f'/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/drug30/{anchor_drug_file_name[0]}'
             anchor_code = anchor_drug_file_pwd.split('/')[-1].split('.')[0]
             out_dir = f'/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/results/{anchor_code}/'
