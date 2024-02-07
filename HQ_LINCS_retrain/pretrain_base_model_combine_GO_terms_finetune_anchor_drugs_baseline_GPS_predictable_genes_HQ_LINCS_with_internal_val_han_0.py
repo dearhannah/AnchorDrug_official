@@ -106,7 +106,7 @@ df_test_GO.index = range(0, df_test_GO.shape[0]) #This is the internal val set 2
 df_ext_test_GO.index = range(0, df_ext_test_GO.shape[0]) #This is the test set
 #----------------------------------------------------------------------------------------------------------------  
 #n_drug_list = [30, 60, 100, 130, 160, 190, 220, 250, 279]
-n_drug_list = [100]
+n_drug_list = [30, 100]
 
 anchor_drug_seed_list = [1, 2, 0] 
 # anchor_drug_seed_list = [10]
@@ -122,12 +122,12 @@ for n_drug in n_drug_list:
             tmp = tmp.loc[use_HQ_sample_id, :] 
             #tmp = tmp.loc[tmp['cell_iname'] == cell, ['SMILES', g]]
             df_finetune = None
-            anchor_drug_file_name_list = [f for f in os.listdir(f'/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/drug{n_drug}/') if 'A549' in f]
-            anchor_drug_file_name = [f for f in anchor_drug_file_name_list if f'{anchor_drug_seed}.pkl' in f]
+            anchor_drug_file_name_list = [f for f in os.listdir(f'/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/drug{n_drug}/') if cell in f]
+            anchor_drug_file_name_list = [f for f in anchor_drug_file_name_list if f'{anchor_drug_seed}.pkl' in f]
             anchor_drug_file_name = [f for f in anchor_drug_file_name_list if 'AdversarialBIM' in f]
-            anchor_drug_file_pwd = f'/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/drug30/{anchor_drug_file_name[0]}'
+            anchor_drug_file_pwd = f'/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/drug{n_drug}/{anchor_drug_file_name[0]}'
             anchor_code = anchor_drug_file_pwd.split('/')[-1].split('.')[0]
-            out_dir = f'/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/results/{anchor_code}/'
+            out_dir = f'/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/results/drug{n_drug}_trial/{anchor_code}/'
             print(f'files save to {out_dir}')
             with open(anchor_drug_file_pwd, 'rb') as f:
                 anchor_drugs = pickle.load(f)
