@@ -251,13 +251,13 @@ class MLP(nn.Module):
         h = x
         h = self.fc1(h)
         h = F.leaky_relu(h, negative_slope=0.01)
-        # h = F.dropout(h, p=self.dropout_rate)
+        h = F.dropout(h, p=self.dropout_rate)
         h = self.fc2(h)
         h = F.leaky_relu(h, negative_slope=0.01)
-        # h = F.dropout(h, p=self.dropout_rate)
+        h = F.dropout(h, p=self.dropout_rate)
         h = self.fc3(h)
         h = F.leaky_relu(h, negative_slope=0.01)
-        # h = F.dropout(h, p=self.dropout_rate)
+        h = F.dropout(h, p=self.dropout_rate)
         logit = self.fc4(h)
         return logit, h
 	
