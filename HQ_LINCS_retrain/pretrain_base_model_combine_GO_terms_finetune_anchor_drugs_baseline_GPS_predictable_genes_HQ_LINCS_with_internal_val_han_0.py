@@ -108,8 +108,8 @@ df_ext_test_GO.index = range(0, df_ext_test_GO.shape[0]) #This is the test set
 #n_drug_list = [30, 60, 100, 130, 160, 190, 220, 250, 279]
 n_drug_list = [100]
 
-# anchor_drug_seed_list = [10, 20, 30] 
-anchor_drug_seed_list = [10]
+anchor_drug_seed_list = [1, 2, 0] 
+# anchor_drug_seed_list = [10]
 
 
 for n_drug in n_drug_list:
@@ -122,6 +122,14 @@ for n_drug in n_drug_list:
             tmp = tmp.loc[use_HQ_sample_id, :] 
             #tmp = tmp.loc[tmp['cell_iname'] == cell, ['SMILES', g]]
             df_finetune = None
+            anchor_drug_file_name_list = [f for f in os.listdir(f'/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/drug{n_drug}/') if 'A549' in f]
+            anchor_drug_file_name = [f for f in anchor_drug_file_name_list if f'{anchor_drug_seed}.pkl' in f]
+            anchor_drug_file_pwd = f'/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/drug30/{anchor_drug_file_name[0]}'
+            anchor_code = anchor_drug_file_pwd.split('/')[-1].split('.')[0]
+            out_dir = f'/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/results/{anchor_code}/'
+            print(f'files save to {out_dir}')
+            with open(anchor_drug_file_pwd, 'rb') as f:
+                anchor_drugs = pickle.load(f)
             for g in gene:
                 #median = tmp[['SMILES', g,]].groupby(by='SMILES').median().reset_index()
                 median = tmp.loc[tmp['cell_iname'] == cell, ['SMILES', g]][['SMILES', g,]].groupby(by='SMILES').median().reset_index()
@@ -129,23 +137,6 @@ for n_drug in n_drug_list:
                 median['test_gene'] = g
                 median = median.rename(columns={g: 'label', 'SMILES': 'smiles'})
                 #----------------------------------------------------------------------------------------------------------------
-                anchor_drug_file_name = '/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/drug30/LINCS_A549_AdversarialBIM_5_0_100_20240206_043552_0.pkl'
-                anchor_code = anchor_drug_file_name.split('/')[-1].split('.')[0]
-                out_dir = f'/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/results/{anchor_code}/'
-                print(f'files save to {out_dir}')
-                
-                #anchor_drugs = pd.read_csv('/egr/research-aidd/chenruo4/AnchorDrug/anchor_drug_selection_HQ_LINCS/common_' + str(n_drug) + '_drugs_random_seed' + str(anchor_drug_seed) + '.csv')['common_drugs'].tolist()
-                #anchor_drugs = pd.read_csv('/egr/research-aidd/chenruo4/AnchorDrug/anchor_drug_selection_HQ_LINCS/common_' + str(n_drug) + '_drugs_kmode_clustering_random_seed' + str(anchor_drug_seed) + '.csv')['drug'].tolist()
-                #anchor_drugs = pd.read_csv('/egr/research-aidd/chenruo4/AnchorDrug/anchor_drug_selection_HQ_LINCS/common_' + str(n_drug) + '_drugs_MOA_random_seed' + str(anchor_drug_seed) + '.csv')['drug'].tolist()
-                #with open('/egr/research-aidd/chenruo4/AnchorDrug/anchor_drug_selection_HQ_LINCS/active_learning_base/LINCS_MarginSampling_' + str(n_drug) + '_' + str(anchor_drug_seed) + '.pkl', 'rb') as f:
-                #with open('/egr/research-aidd/chenruo4/AnchorDrug/anchor_drug_selection_HQ_LINCS/active_learning_base/LINCS_BALDDropout_' + str(n_drug) + '_' + str(anchor_drug_seed) + '.pkl', 'rb') as f:
-                #with open('/egr/research-aidd/chenruo4/AnchorDrug/anchor_drug_selection_HQ_LINCS/active_learning_base/LINCS_LeastConfidence_' + str(n_drug) + '_' + str(anchor_drug_seed) + '.pkl', 'rb') as f:
-                # with open('/egr/research-aidd/chenruo4/AnchorDrug/anchor_drug_selection_HQ_LINCS/active_learning_base/LINCS_KMeansSampling_' + str(n_drug) + '_' + str(anchor_drug_seed) + '.pkl', 'rb') as f:
-                with open('/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/drug30/LINCS_A549_AdversarialBIM_5_0_100_20240206_043552_0.pkl', 'rb') as f:
-                #with open('/egr/research-aidd/chenruo4/AnchorDrug/anchor_drug_selection_HQ_LINCS/active_learning_base/LINCS_KCenterGreedy_' + str(n_drug) + '_' + str(anchor_drug_seed) + '.pkl', 'rb') as f:
-                #with open('/egr/research-aidd/chenruo4/AnchorDrug/anchor_drug_selection_HQ_LINCS/active_learning_base/LINCS_BadgeSampling_' + str(n_drug) + '_' + str(anchor_drug_seed) + '.pkl', 'rb') as f:
-                #with open('/egr/research-aidd/chenruo4/AnchorDrug/anchor_drug_selection_HQ_LINCS/active_learning_base/LINCS_AdversarialBIM_' + str(n_drug) + '_' + str(anchor_drug_seed) + '.pkl', 'rb') as f:
-                    anchor_drugs = pickle.load(f)
                 median.index = median['smiles']
         #----------------------------------------------------------------------------------------------------------------
                 #Opt: Fine-tune using all drugs as anchor drugs:
