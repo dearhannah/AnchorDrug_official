@@ -28,13 +28,13 @@ import copy
 #----------------------------------------------------------------------------------------------------------------
 #Changeable parameters:
 #Import HQ LINCS data:
-x = pd.read_csv('/egr/research-aidd/chenruo4/AnchorDrug/data/pretrainData/resourceCelllines.csv', index_col = 'Unnamed: 0')
-use_HQ_sample_id = pd.read_csv('/egr/research-aidd/chenruo4/AnchorDrug/data/revise_use_LINCS_HQ_data_pretrain_sample_id.csv')['x']
+x = pd.read_csv('/egr/research-aidd/menghan1/AnchorDrug/data/pretrainData/resourceCelllines.csv', index_col = 'Unnamed: 0')
+use_HQ_sample_id = pd.read_csv('/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/revise_use_LINCS_HQ_data_pretrain_sample_id.csv')['x']            
 x.index = x['sig_id']
 x = x.loc[use_HQ_sample_id, :] #12300 * 982 
 train_cellline = x['cell_iname'].unique().tolist()
-cellline_map_train = pd.read_csv('/egr/research-aidd/chenruo4/AnchorDrug/data/CellLineEncode/training_cell_line_expression_features_128_encoded_20240111.csv', index_col = 'Unnamed: 0')
-cellline_map_val = pd.read_csv('/egr/research-aidd/chenruo4/AnchorDrug/data/CellLineEncode/val_cell_line_expression_features_128_encoded_20240111.csv', index_col = 'Unnamed: 0')
+cellline_map_train = pd.read_csv('/egr/research-aidd/menghan1/AnchorDrug/data/CellLineEncode/training_cell_line_expression_features_128_encoded_20240111.csv', index_col = 'Unnamed: 0')
+cellline_map_val = pd.read_csv('/egr/research-aidd/menghan1/AnchorDrug/data/CellLineEncode/val_cell_line_expression_features_128_encoded_20240111.csv', index_col = 'Unnamed: 0')
 cellline_map = pd.concat([cellline_map_train, cellline_map_val])
 use_shared_cellline = list(set(train_cellline) & set(cellline_map.index)) #In the training data, 51 cell lines have CCLE expression features, 63 cell lines do not have them and cannot be trained
 use_cellline_map = cellline_map.loc[use_shared_cellline, :] #51 x 128
@@ -42,7 +42,7 @@ cell_list = use_shared_cellline #45 cell lines
 df_data = x[x['cell_iname'].isin(cell_list)] #7258 * 982
 
 #Import drug pool data:
-gene = pd.read_csv('/egr/research-aidd/chenruo4/AnchorDrug/GPS_predictable_genes.csv')['x'].tolist()
+gene = pd.read_csv('/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/GPS_predictable_genes.csv')['x'].tolist()
 c = ['A549', 'MCF7', 'PC3'] #The tested cell line
 
 
@@ -54,14 +54,14 @@ for g in gene:
     #Import test data:
 #----------------------------------------------------------------------------------------------------------------
     cell_list = use_shared_cellline
-    df_data = pd.read_csv('/egr/research-aidd/chenruo4/AnchorDrug/data/pretrainData/resourceCelllines.csv', index_col = 'Unnamed: 0')
+    df_data = pd.read_csv('/egr/research-aidd/menghan1/AnchorDrug/data/pretrainData/resourceCelllines.csv', index_col = 'Unnamed: 0')
     df_data = df_data[df_data['cell_iname'].isin(cell_list)] #17624 rows x 982 columns
     #For replicates, use the median values:
     df_test = None
     df_ext_test = None
     for cell in c:
-        tmp = pd.read_csv('/egr/research-aidd/chenruo4/AnchorDrug/data/target_cellline_data/' + cell + '_data.csv', index_col = 'Unnamed: 0')
-        use_HQ_sample_id = pd.read_csv('/egr/research-aidd/chenruo4/AnchorDrug/data/revise_use_LINCS_HQ_data_target_cellline_' + cell + '_sample_id.csv')['x']
+        tmp = pd.read_csv('/egr/research-aidd/menghan1/AnchorDrug/data/target_cellline_data/' + cell + '_data.csv', index_col = 'Unnamed: 0')
+        use_HQ_sample_id = pd.read_csv('/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/revise_use_LINCS_HQ_data_target_cellline_' + cell + '_sample_id.csv')['x']
         tmp.index = tmp['sig_id']
         tmp = tmp.loc[use_HQ_sample_id, :] 
         tmp = tmp.loc[tmp['cell_iname'] == cell, ['SMILES', g]]
@@ -108,15 +108,16 @@ df_ext_test_GO.index = range(0, df_ext_test_GO.shape[0]) #This is the test set
 #n_drug_list = [30, 60, 100, 130, 160, 190, 220, 250, 279]
 n_drug_list = [100]
 
-anchor_drug_seed_list = [10, 20, 30] 
+# anchor_drug_seed_list = [10, 20, 30] 
+anchor_drug_seed_list = [10]
 
 
 for n_drug in n_drug_list:
     for anchor_drug_seed in anchor_drug_seed_list:
         #Import finetune data (anchor drugs):
         for cell in c: #Each cell line fine-tune one model:
-            tmp = pd.read_csv('/egr/research-aidd/chenruo4/AnchorDrug/data/target_cellline_data/' + cell + '_data.csv', index_col = 'Unnamed: 0')
-            use_HQ_sample_id = pd.read_csv('/egr/research-aidd/chenruo4/AnchorDrug/data/revise_use_LINCS_HQ_data_target_cellline_' + cell + '_sample_id.csv')['x']
+            tmp = pd.read_csv('/egr/research-aidd/menghan1/AnchorDrug/data/target_cellline_data/' + cell + '_data.csv', index_col = 'Unnamed: 0')
+            use_HQ_sample_id = pd.read_csv('/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/revise_use_LINCS_HQ_data_target_cellline_' + cell + '_sample_id.csv')['x']
             tmp.index = tmp['sig_id']
             tmp = tmp.loc[use_HQ_sample_id, :] 
             #tmp = tmp.loc[tmp['cell_iname'] == cell, ['SMILES', g]]
@@ -128,13 +129,19 @@ for n_drug in n_drug_list:
                 median['test_gene'] = g
                 median = median.rename(columns={g: 'label', 'SMILES': 'smiles'})
                 #----------------------------------------------------------------------------------------------------------------
+                anchor_drug_file_name = '/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/drug30/LINCS_A549_AdversarialBIM_5_0_100_20240206_043552_0.pkl'
+                anchor_code = anchor_drug_file_name.split('/')[-1].split('.')[0]
+                out_dir = f'/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/results/{anchor_code}/'
+                print(f'files save to {out_dir}')
+                
                 #anchor_drugs = pd.read_csv('/egr/research-aidd/chenruo4/AnchorDrug/anchor_drug_selection_HQ_LINCS/common_' + str(n_drug) + '_drugs_random_seed' + str(anchor_drug_seed) + '.csv')['common_drugs'].tolist()
                 #anchor_drugs = pd.read_csv('/egr/research-aidd/chenruo4/AnchorDrug/anchor_drug_selection_HQ_LINCS/common_' + str(n_drug) + '_drugs_kmode_clustering_random_seed' + str(anchor_drug_seed) + '.csv')['drug'].tolist()
                 #anchor_drugs = pd.read_csv('/egr/research-aidd/chenruo4/AnchorDrug/anchor_drug_selection_HQ_LINCS/common_' + str(n_drug) + '_drugs_MOA_random_seed' + str(anchor_drug_seed) + '.csv')['drug'].tolist()
                 #with open('/egr/research-aidd/chenruo4/AnchorDrug/anchor_drug_selection_HQ_LINCS/active_learning_base/LINCS_MarginSampling_' + str(n_drug) + '_' + str(anchor_drug_seed) + '.pkl', 'rb') as f:
                 #with open('/egr/research-aidd/chenruo4/AnchorDrug/anchor_drug_selection_HQ_LINCS/active_learning_base/LINCS_BALDDropout_' + str(n_drug) + '_' + str(anchor_drug_seed) + '.pkl', 'rb') as f:
                 #with open('/egr/research-aidd/chenruo4/AnchorDrug/anchor_drug_selection_HQ_LINCS/active_learning_base/LINCS_LeastConfidence_' + str(n_drug) + '_' + str(anchor_drug_seed) + '.pkl', 'rb') as f:
-                with open('/egr/research-aidd/chenruo4/AnchorDrug/anchor_drug_selection_HQ_LINCS/active_learning_base/LINCS_KMeansSampling_' + str(n_drug) + '_' + str(anchor_drug_seed) + '.pkl', 'rb') as f:
+                # with open('/egr/research-aidd/chenruo4/AnchorDrug/anchor_drug_selection_HQ_LINCS/active_learning_base/LINCS_KMeansSampling_' + str(n_drug) + '_' + str(anchor_drug_seed) + '.pkl', 'rb') as f:
+                with open('/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/drug30/LINCS_A549_AdversarialBIM_5_0_100_20240206_043552_0.pkl', 'rb') as f:
                 #with open('/egr/research-aidd/chenruo4/AnchorDrug/anchor_drug_selection_HQ_LINCS/active_learning_base/LINCS_KCenterGreedy_' + str(n_drug) + '_' + str(anchor_drug_seed) + '.pkl', 'rb') as f:
                 #with open('/egr/research-aidd/chenruo4/AnchorDrug/anchor_drug_selection_HQ_LINCS/active_learning_base/LINCS_BadgeSampling_' + str(n_drug) + '_' + str(anchor_drug_seed) + '.pkl', 'rb') as f:
                 #with open('/egr/research-aidd/chenruo4/AnchorDrug/anchor_drug_selection_HQ_LINCS/active_learning_base/LINCS_AdversarialBIM_' + str(n_drug) + '_' + str(anchor_drug_seed) + '.pkl', 'rb') as f:
@@ -182,11 +189,11 @@ for n_drug in n_drug_list:
                     use_cellline_map = pd.DataFrame(transformer.transform(use_cellline_map), index = use_cellline_map.index, columns = use_cellline_map.columns)
                     #-------------------------------------------------
                     self.use_cellline_map = use_cellline_map.to_numpy()
-                    fn = '/egr/research-aidd/chenruo4/AnchorDrug/drug_fingerprints-1024.csv'
+                    fn = '/egr/research-aidd/menghan1/AnchorDrug/data/drug_fingerprints-1024.csv'
                     fp_map = pd.read_csv(fn, header=None, index_col=0)
                     self.fp_name = fp_map.index
                     self.fp_map = fp_map.to_numpy()
-                    GO = '/egr/research-aidd/chenruo4/AnchorDrug/go_fingerprints_2020.csv'
+                    GO = '/egr/research-aidd/menghan1/AnchorDrug/data/go_fingerprints_2020.csv'
                     GO_map = pd.read_csv(GO, index_col=0, header = 0)
                     self.GO_name = GO_map.index
                     self.GO_map = GO_map.to_numpy()
@@ -447,13 +454,13 @@ for n_drug in n_drug_list:
                     #
                     if args.input == 'drugcellline':
                         finetune_dataset = DrugCellline(df=df_finetune, type = 'train', 
-                                                    fn_file = '/egr/research-aidd/chenruo4/AnchorDrug/cellline_embeddings/test_cell_line_expression_features_128_encoded_20240111.csv', 
+                                                    fn_file = '/egr/research-aidd/menghan1/AnchorDrug/data/CellLineEncode/test_cell_line_expression_features_128_encoded_20240111.csv', 
                                                     down_sample=True)
                         test_dataset = DrugCellline(df=df_ext_test_GO_cellline, type = 'test', 
-                                                fn_file = '/egr/research-aidd/chenruo4/AnchorDrug/cellline_embeddings/test_cell_line_expression_features_128_encoded_20240111.csv', 
+                                                fn_file = '/egr/research-aidd/menghan1/AnchorDrug/data/CellLineEncode/test_cell_line_expression_features_128_encoded_20240111.csv', 
                                                 down_sample=False)
                         val_dataset = DrugCellline(df= df_test_GO_cellline, type = 'test', 
-                                                fn_file = '/egr/research-aidd/chenruo4/AnchorDrug/cellline_embeddings/test_cell_line_expression_features_128_encoded_20240111.csv', 
+                                                fn_file = '/egr/research-aidd/menghan1/AnchorDrug/data/CellLineEncode/test_cell_line_expression_features_128_encoded_20240111.csv', 
                                                 down_sample=False)
                         #input_size = args.len_fp
                         input_size = finetune_dataset.data.shape[1]
@@ -489,7 +496,7 @@ for n_drug in n_drug_list:
                     net.fc2.weight.requires_grad = False
                     net.fc2.bias.requires_grad = False
                     #
-                    net.load_state_dict(torch.load('/egr/research-aidd/chenruo4/AnchorDrug/base_model/revise_downsampling_MLP_1000_128_64_normalized_cell_line_embeddings_ECFP_GO_terms_GPS_predictable_307_genes_HQ_LINCS/internal_val_10%_random_holdout_earlystop/pretrain_GPS_predictable_307_genes_seed_10_31_final.pth').state_dict())
+                    net.load_state_dict(torch.load('/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/pretrain_GPS_predictable_307_genes_seed_10_31_final.pth').state_dict())
                     optimizer = torch.optim.Adam(filter(lambda m: m.requires_grad, net.parameters()), lr=args.lr, amsgrad=True, weight_decay=0.001)
                     #
                     summary_train_loss = []
@@ -522,11 +529,8 @@ for n_drug in n_drug_list:
                     pd.DataFrame({'test_acc': test_acc_per_gene, 'test_f1': test_f1_per_gene, 'gene': gene}).to_csv(out_dir + cell + '_f1_acc_per_test_set_cellline_final.csv')
         #----------------------------------------------------------------------------------------------------------------
             if __name__ == '__main__':
-                argparser = argparse.ArgumentParser()
-                #argparser.add_argument('--out_dir', type=str, help='dir to output', default='/egr/research-aidd/chenruo4/AnchorDrug/base_model/MLP_downsampling_1000_128_64_normalized_cellline_embeddings_ECFP_GO_terms_GPS_predictable_307_genes_finetune_baseline_anchor_drugs_epoch5/internal_val_set2_freeze_layer_1_2/random_selection/drugs_' + str(n_drug) + '_seed_' + str(anchor_drug_seed) + '/')   
-                argparser.add_argument('--out_dir', type=str, help='dir to output', default='/egr/research-aidd/chenruo4/AnchorDrug/base_model/MLP_downsampling_1000_128_64_normalized_cellline_embeddings_ECFP_GO_terms_GPS_predictable_307_genes_finetune_baseline_anchor_drugs_epoch5/internal_val_set2_freeze_layer_1_2/active_learning_based/KMeansSampling/drugs_' + str(n_drug) + '_seed_' + str(anchor_drug_seed) + '/')   
-                #argparser.add_argument('--out_dir', type=str, help='dir to output', default='/egr/research-aidd/chenruo4/AnchorDrug/base_model/MLP_downsampling_1000_128_64_normalized_cellline_embeddings_ECFP_GO_terms_GPS_predictable_307_genes_finetune_baseline_anchor_drugs_epoch5_20230204/internal_val_set2_freeze_layer_1_2/random_selection/drugs_' + str(n_drug) + '_seed_' + str(anchor_drug_seed) + '/')   
-                #argparser.add_argument('--out_dir', type=str, help='dir to output', default='/egr/research-aidd/chenruo4/AnchorDrug/base_model/MLP_downsampling_1000_128_64_normalized_cellline_embeddings_ECFP_GO_terms_GPS_predictable_307_genes_finetune_baseline_anchor_drugs_epoch5/internal_val_set2_freeze_layer_1_2/pretrained_base_model/')   
+                argparser = argparse.ArgumentParser()  
+                argparser.add_argument('--out_dir', type=str, help='dir to output', default=out_dir) 
                 argparser.add_argument('--input', type=str, help='input dataset', default='drugcellline')
                 argparser.add_argument('--lr', type=float, help='task-level inner update learning rate', default=0.001)
                 argparser.add_argument('--n_epoch', type=int, help='update steps for finetunning', default=5)
