@@ -1,6 +1,6 @@
 data
 *.pyc
-*.txt
+# *.txt
 # *.pkl
 *.params
 wandb
@@ -11,3 +11,6 @@ ActiveLearning/deprecated/
 AnchorDrugPrediction/results/
 resultBaseLine/
 ActiveLearning_one_cellline/results
+*.pth
+*.csv
+ActiveLearning_one_cellline/logfile/
