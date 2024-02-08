@@ -518,7 +518,10 @@ if __name__ == '__main__':
             out_dir = f'/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/results/drug{n_drug}/{anchor_code}/'
             args.out_dir = out_dir
             print(f'files save to {out_dir}')
-            anchor_drugs = pd.read_csv(anchor_drug_file_pwd)['drug'].tolist()
+            try:
+                anchor_drugs = pd.read_csv(anchor_drug_file_pwd)['drug'].tolist()
+            except:
+                anchor_drugs = pd.read_csv(anchor_drug_file_pwd)['common_drugs'].tolist()
             for g in gene:
                 #median = tmp[['SMILES', g,]].groupby(by='SMILES').median().reset_index()
                 median = tmp.loc[tmp['cell_iname'] == cell, ['SMILES', g]][['SMILES', g,]].groupby(by='SMILES').median().reset_index()
@@ -582,8 +585,11 @@ if __name__ == '__main__':
             out_dir = f'/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/results/drug{n_drug}/{anchor_code}/'
             args.out_dir = out_dir
             print(f'files save to {out_dir}')
-            anchor_drugs = pd.read_csv(anchor_drug_file_pwd)['drug'].tolist()
-
+            # anchor_drugs = pd.read_csv(anchor_drug_file_pwd)['drug'].tolist()
+            try:
+                anchor_drugs = pd.read_csv(anchor_drug_file_pwd)['drug'].tolist()
+            except:
+                anchor_drugs = pd.read_csv(anchor_drug_file_pwd)['common_drugs'].tolist()
             for g in gene:
                 #median = tmp[['SMILES', g,]].groupby(by='SMILES').median().reset_index()
                 median = tmp.loc[tmp['cell_iname'] == cell, ['SMILES', g]][['SMILES', g,]].groupby(by='SMILES').median().reset_index()

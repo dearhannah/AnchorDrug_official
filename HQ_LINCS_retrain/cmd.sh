@@ -10,6 +10,7 @@
 python pretrain_base_model_combine_GO_terms_finetune_anchor_drugs_baseline_GPS_predictable_genes_HQ_LINCS_with_internal_val_han_1.py --n_drug 30 --query clustering_selected_drugs
 python pretrain_base_model_combine_GO_terms_finetune_anchor_drugs_baseline_GPS_predictable_genes_HQ_LINCS_with_internal_val_han_1.py --n_drug 30 --query MOA_selected_drugs
 python pretrain_base_model_combine_GO_terms_finetune_anchor_drugs_baseline_GPS_predictable_genes_HQ_LINCS_with_internal_val_han_1.py --n_drug 30 --query random_selection
+python pretrain_base_model_combine_GO_terms_finetune_anchor_drugs_baseline_GPS_predictable_genes_HQ_LINCS_with_internal_val_han_1.py --n_drug 100 --query random_selection
 
 
 # python ActiveLearning.py -a=LeastConfidence -b=5 -g=3
