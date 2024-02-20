@@ -471,7 +471,7 @@ for g in gene:
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser() 
     argparser.add_argument('--out_dir', type=str, help='dir to output', default='defalut') 
-    argparser.add_argument('--query', type=str, help='query', default='defalut')
+    argparser.add_argument('--query', type=str, help='query', default='AdversarialBIM')
     argparser.add_argument('--n_drug', type=str, help='int', default=30)
     argparser.add_argument('--input', type=str, help='input dataset', default='drugcellline')
     argparser.add_argument('--lr', type=float, help='task-level inner update learning rate', default=0.001)
@@ -485,8 +485,8 @@ if __name__ == '__main__':
     #n_drug_list = [30, 60, 100, 130, 160, 190, 220, 250, 279]
     # n_drug_list = [30, 100]
 
-    # anchor_drug_seed_list = [1, 2, 0] 
-    anchor_drug_seed_list = [10, 20, 30]
+    anchor_drug_seed_list = [1, 2, 0] 
+    # anchor_drug_seed_list = [10, 20, 30]
 
     n_drug = args.n_drug
     for anchor_drug_seed in anchor_drug_seed_list:
@@ -510,18 +510,29 @@ if __name__ == '__main__':
             # with open(anchor_drug_file_pwd, 'rb') as f:
             #     anchor_drugs = pickle.load(f)
 
-            anchor_drug_file_name_list = [f for f in os.listdir(f'/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/{args.query}/cell_line_specific') if cell in f]
-            anchor_drug_file_name_list = [f for f in anchor_drug_file_name_list if f'seed{anchor_drug_seed}.csv' in f]
-            anchor_drug_file_name = [f for f in anchor_drug_file_name_list if f'_{n_drug}_' in f]
-            anchor_drug_file_pwd = f'/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/{args.query}/cell_line_specific/{anchor_drug_file_name[0]}'
+            rootpwd = f'/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning/druglist/druglist_{n_drug}/'
+            anchor_drug_file_name_list = [f for f in os.listdir(rootpwd) if f'{anchor_drug_seed}.pkl' in f]
+            anchor_drug_file_name = [f for f in anchor_drug_file_name_list if args.query in f]
+            anchor_drug_file_pwd = f'{rootpwd}/{anchor_drug_file_name[0]}'
             anchor_code = anchor_drug_file_pwd.split('/')[-1].split('.')[0]
-            out_dir = f'/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/results/drug{n_drug}/{anchor_code}/'
+            out_dir = f'/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/results_common/drug{n_drug}/{anchor_code}/'
             args.out_dir = out_dir
             print(f'files save to {out_dir}')
-            try:
-                anchor_drugs = pd.read_csv(anchor_drug_file_pwd)['drug'].tolist()
-            except:
-                anchor_drugs = pd.read_csv(anchor_drug_file_pwd)['common_drugs'].tolist()
+            with open(anchor_drug_file_pwd, 'rb') as f:
+                anchor_drugs = pickle.load(f)
+
+            # anchor_drug_file_name_list = [f for f in os.listdir(f'/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/{args.query}/cell_line_specific') if cell in f]
+            # anchor_drug_file_name_list = [f for f in anchor_drug_file_name_list if f'seed{anchor_drug_seed}.csv' in f]
+            # anchor_drug_file_name = [f for f in anchor_drug_file_name_list if f'_{n_drug}_' in f]
+            # anchor_drug_file_pwd = f'/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/{args.query}/cell_line_specific/{anchor_drug_file_name[0]}'
+            # anchor_code = anchor_drug_file_pwd.split('/')[-1].split('.')[0]
+            # out_dir = f'/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/results/drug{n_drug}/{anchor_code}/'
+            # args.out_dir = out_dir
+            # print(f'files save to {out_dir}')
+            # try:
+            #     anchor_drugs = pd.read_csv(anchor_drug_file_pwd)['drug'].tolist()
+            # except:
+            #     anchor_drugs = pd.read_csv(anchor_drug_file_pwd)['common_drugs'].tolist()
             for g in gene:
                 #median = tmp[['SMILES', g,]].groupby(by='SMILES').median().reset_index()
                 median = tmp.loc[tmp['cell_iname'] == cell, ['SMILES', g]][['SMILES', g,]].groupby(by='SMILES').median().reset_index()
@@ -577,19 +588,29 @@ if __name__ == '__main__':
             # with open(anchor_drug_file_pwd, 'rb') as f:
             #     anchor_drugs = pickle.load(f)
 
-            anchor_drug_file_name_list = [f for f in os.listdir(f'/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/{args.query}/cell_line_specific') if cell in f]
-            anchor_drug_file_name_list = [f for f in anchor_drug_file_name_list if f'seed{anchor_drug_seed}.csv' in f]
-            anchor_drug_file_name = [f for f in anchor_drug_file_name_list if f'_{n_drug}_' in f]
-            anchor_drug_file_pwd = f'/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/{args.query}/cell_line_specific/{anchor_drug_file_name[0]}'
+            rootpwd = f'/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning/druglist/druglist_{n_drug}/'
+            anchor_drug_file_name_list = [f for f in os.listdir(rootpwd) if f'{anchor_drug_seed}.pkl' in f]
+            anchor_drug_file_name = [f for f in anchor_drug_file_name_list if args.query in f]
+            anchor_drug_file_pwd = f'{rootpwd}/{anchor_drug_file_name[0]}'
             anchor_code = anchor_drug_file_pwd.split('/')[-1].split('.')[0]
-            out_dir = f'/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/results/drug{n_drug}/{anchor_code}/'
+            out_dir = f'/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/results_common/drug{n_drug}/{anchor_code}/'
             args.out_dir = out_dir
             print(f'files save to {out_dir}')
-            # anchor_drugs = pd.read_csv(anchor_drug_file_pwd)['drug'].tolist()
-            try:
-                anchor_drugs = pd.read_csv(anchor_drug_file_pwd)['drug'].tolist()
-            except:
-                anchor_drugs = pd.read_csv(anchor_drug_file_pwd)['common_drugs'].tolist()
+            with open(anchor_drug_file_pwd, 'rb') as f:
+                anchor_drugs = pickle.load(f)
+
+            # anchor_drug_file_name_list = [f for f in os.listdir(f'/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/{args.query}/cell_line_specific') if cell in f]
+            # anchor_drug_file_name_list = [f for f in anchor_drug_file_name_list if f'seed{anchor_drug_seed}.csv' in f]
+            # anchor_drug_file_name = [f for f in anchor_drug_file_name_list if f'_{n_drug}_' in f]
+            # anchor_drug_file_pwd = f'/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/{args.query}/cell_line_specific/{anchor_drug_file_name[0]}'
+            # anchor_code = anchor_drug_file_pwd.split('/')[-1].split('.')[0]
+            # out_dir = f'/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/results/drug{n_drug}/{anchor_code}/'
+            # args.out_dir = out_dir
+            # print(f'files save to {out_dir}')
+            # try:
+            #     anchor_drugs = pd.read_csv(anchor_drug_file_pwd)['drug'].tolist()
+            # except:
+            #     anchor_drugs = pd.read_csv(anchor_drug_file_pwd)['common_drugs'].tolist()
             for g in gene:
                 #median = tmp[['SMILES', g,]].groupby(by='SMILES').median().reset_index()
                 median = tmp.loc[tmp['cell_iname'] == cell, ['SMILES', g]][['SMILES', g,]].groupby(by='SMILES').median().reset_index()
@@ -622,23 +643,3 @@ if __name__ == '__main__':
             #----------------------------------------------------------------------------------------------------------------
             #----------------------------------------------------------------------------------------------------------------
             main(args)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
