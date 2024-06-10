@@ -39,14 +39,16 @@ class Net:
         loader = DataLoader(data, shuffle=True, **self.params['loader_tr_args'])
         loss_record = []
         for epoch in tqdm(range(1, n_epoch+1)):
+            loss_epoch = []
             for batch_idx, (x, y, idxs) in enumerate(loader):
                 x, y = x.to(self.device), y.to(self.device)
                 optimizer.zero_grad()
                 out, e1 = self.clf(x)
                 loss = F.cross_entropy(out, y)
-                loss_record.append(loss.cpu().item())
+                loss_epoch.append(loss.cpu().item())
                 loss.backward()
                 optimizer.step()
+            loss_record.append(np.mean(loss_epoch))
         print(loss_record)
 
     def predict(self, data):

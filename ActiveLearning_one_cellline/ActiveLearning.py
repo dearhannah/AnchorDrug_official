@@ -61,10 +61,12 @@ while (iteration > 0):
 	start = datetime.datetime.now()
 	# generate initial labeled pool
 	dataset.initialize_labels(args_input.initseed)
-	#record acc performance
+	# record acc performance
 	acc = np.zeros((NUM_ROUND+1, 1))
 	f1 = np.zeros((NUM_ROUND+1, 1))
-		
+	# recored prediction and label
+	YandPred = {}
+	YandPred['label'] = dataset.Y_val
 	# print info
 	print(DATA_NAME)
 	# print('RANDOM SEED {}'.format(SEED))
@@ -78,10 +80,11 @@ while (iteration > 0):
 		print('testing accuracy {}'.format(acc[0][i]))
 		f1[0][i] = dataset.cal_test_f1(preds, i)
 		print('testing F1 {}'.format(f1[0][i]))
+		YandPred[0] = preds
 	
 	# round 1 to rd
 	for rd in range(1, NUM_ROUND+1):
-		print('Round {}'.format(rd))
+		print('Round {}:'.format(rd))
 		# query
 		q_idxs = strategy.query(NUM_QUERY)
 		# update
@@ -96,8 +99,9 @@ while (iteration > 0):
 			print('testing accuracy {}'.format(acc[rd][i]))
 			f1[rd][i] = dataset.cal_test_f1(preds, i)
 			print('testing F1 {}'.format(f1[rd][i]))
+			YandPred[rd] = preds
 		idx, smiles = dataset.get_labeled_drugs()
-		print(idx)
+		# print(idx)
 		[print(s) for s in smiles]
 	
 	# print results
@@ -112,6 +116,10 @@ while (iteration > 0):
 	drug_path = f'./druglist/{DATA_NAME}_{args_input.cell}_{STRATEGY_NAME}_{str(NUM_QUERY)}_{str(NUM_INIT_LB)}_{str(args_input.quota)}_{timestamp}_{iteration}.pkl'
 	with open(drug_path, 'wb') as f:
 		pickle.dump(smiles, f)
+	#save preds
+	preds_path = f'./preds/{DATA_NAME}_{args_input.cell}_{STRATEGY_NAME}_{str(NUM_QUERY)}_{str(NUM_INIT_LB)}_{str(args_input.quota)}_{timestamp}_{iteration}.pkl'
+	with open(preds_path, 'wb') as f:
+		pickle.dump(YandPred, f)
 		
 #save F1,acc
 res_path = f'./results/{DATA_NAME}_{args_input.cell}_{STRATEGY_NAME}_{str(NUM_QUERY)}_{str(NUM_INIT_LB)}_{str(args_input.quota)}_{timestamp}.pkl'

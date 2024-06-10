@@ -72,7 +72,7 @@ class Data:
         return 1.0 * (self.Y_test==preds).sum().item() / self.n_test
     
     def cal_test_f1(self, preds):
-        return f1_score(self.Y_test, preds, average='weighted')
+        return f1_score(self.Y_test, preds, average='macro')
 
 
 class lincsData:

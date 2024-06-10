@@ -70,7 +70,7 @@ while (iteration > 0):
 	# print('RANDOM SEED {}'.format(SEED))
 	print(type(strategy).__name__)
 
-	print('Round 0:')
+	print('Round 0')
 	for i in range(len(dataset.cell_list)):
 		print(dataset.cell_list[i])
 		preds = strategy.predict(i, dataset.get_test_data(dataID=i))
