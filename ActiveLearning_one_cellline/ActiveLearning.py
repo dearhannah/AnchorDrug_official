@@ -1,5 +1,6 @@
-import sys, os, re, argparse, warnings, datetime, random, math, pickle
+import sys, os, re, argparse, warnings, datetime, random, math, pickle, time
 import numpy as np
+import pandas as pd
 import torch
 from utils import get_dataset, get_net, get_strategy
 
@@ -44,6 +45,8 @@ all_f1 = []
 acq_time = []
 
 # repeate # iteration trials
+
+start = time.time()
 while (iteration > 0): 
 	iteration = iteration - 1
 	# data, network, strategy
@@ -58,7 +61,6 @@ while (iteration > 0):
 	args_task['cell'] = dataset.cell_list
 	strategy = get_strategy(args_input.ALstrategy, dataset, net_all, args_input, args_task)  # load strategy
 
-	start = datetime.datetime.now()
 	# generate initial labeled pool
 	dataset.initialize_labels(args_input.initseed)
 	# record acc performance
@@ -66,7 +68,7 @@ while (iteration > 0):
 	f1 = np.zeros((NUM_ROUND+1, 1))
 	# recored prediction and label
 	YandPred = {}
-	YandPred['label'] = dataset.Y_val
+	YandPred['label'] = dataset.Y_val[0]
 	# print info
 	print(DATA_NAME)
 	# print('RANDOM SEED {}'.format(SEED))
@@ -80,6 +82,10 @@ while (iteration > 0):
 		print('testing accuracy {}'.format(acc[0][i]))
 		f1[0][i] = dataset.cal_test_f1(preds, i)
 		print('testing F1 {}'.format(f1[0][i]))
+		print('comfusin matrix')
+		cm = dataset.cal_test_confusion(preds, i)
+		print(cm)
+		print(*cm.reshape(9), sep = ", ")
 		YandPred[0] = preds
 	
 	# round 1 to rd
@@ -99,6 +105,10 @@ while (iteration > 0):
 			print('testing accuracy {}'.format(acc[rd][i]))
 			f1[rd][i] = dataset.cal_test_f1(preds, i)
 			print('testing F1 {}'.format(f1[rd][i]))
+			print('comfusin matrix')
+			cm = dataset.cal_test_confusion(preds, i)
+			print(cm)
+			print(*cm.reshape(9), sep = ", ")
 			YandPred[rd] = preds
 		idx, smiles = dataset.get_labeled_drugs()
 		# print(idx)
@@ -116,11 +126,14 @@ while (iteration > 0):
 	drug_path = f'./druglist/{DATA_NAME}_{args_input.cell}_{STRATEGY_NAME}_{str(NUM_QUERY)}_{str(NUM_INIT_LB)}_{str(args_input.quota)}_{timestamp}_{iteration}.pkl'
 	with open(drug_path, 'wb') as f:
 		pickle.dump(smiles, f)
-	#save preds
+	# save preds
 	preds_path = f'./preds/{DATA_NAME}_{args_input.cell}_{STRATEGY_NAME}_{str(NUM_QUERY)}_{str(NUM_INIT_LB)}_{str(args_input.quota)}_{timestamp}_{iteration}.pkl'
 	with open(preds_path, 'wb') as f:
 		pickle.dump(YandPred, f)
-		
+	preds_csv_path = f'./preds/{DATA_NAME}_{args_input.cell}_{STRATEGY_NAME}_{str(NUM_QUERY)}_{str(NUM_INIT_LB)}_{str(args_input.quota)}_{timestamp}_{iteration}.csv'
+	pd.DataFrame.from_dict(YandPred).to_csv(preds_csv_path,index=False)
+
+print(f'!!!!!total used time: {time.time() - start}')
 #save F1,acc
 res_path = f'./results/{DATA_NAME}_{args_input.cell}_{STRATEGY_NAME}_{str(NUM_QUERY)}_{str(NUM_INIT_LB)}_{str(args_input.quota)}_{timestamp}.pkl'
 with open(res_path, 'wb') as f:
