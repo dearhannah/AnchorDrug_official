@@ -85,7 +85,7 @@ class lincsData:
         self.handler = handler
         # self.args_task = args_task
         tmp = pd.read_csv('/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/GPS_predictable_genes.csv')
-        self.genelist = tmp.x.to_list()
+        self.genelist = tmp.x.to_list()#[:10]
         # with open('HQ_pool_drug.pkl', 'rb') as f:
         #     trainDrugs = pickle.load(f)
         df_data = pd.read_csv('/egr/research-aidd/menghan1/AnchorDrug/data/level5_beta_trt_cp_24h_10uM.csv')

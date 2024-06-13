@@ -48,6 +48,7 @@ acq_time = []
 
 start = time.time()
 while (iteration > 0): 
+	print(f'------------------iteration:{iteration}------------------')
 	iteration = iteration - 1
 	# data, network, strategy
 	args_task = args_pool[DATA_NAME]
@@ -72,11 +73,11 @@ while (iteration > 0):
 	# print info
 	print(DATA_NAME)
 	# print('RANDOM SEED {}'.format(SEED))
-	print(type(strategy).__name__)
+	# print(type(strategy).__name__)
 
 	print('Round 0:')
 	for i in range(len(dataset.cell_list)):
-		print(dataset.cell_list[i])
+		# print(dataset.cell_list[i])
 		preds = strategy.predict(i, dataset.get_test_data(dataID=i))
 		acc[0][i] = dataset.cal_test_acc(preds, i)
 		print('testing accuracy {}'.format(acc[0][i]))
@@ -91,6 +92,7 @@ while (iteration > 0):
 	# round 1 to rd
 	for rd in range(1, NUM_ROUND+1):
 		print('Round {}:'.format(rd))
+		print(f'current used time: {time.time() - start}')
 		# query
 		q_idxs = strategy.query(NUM_QUERY)
 		# update
@@ -99,7 +101,7 @@ while (iteration > 0):
 		strategy.train()
 		# round rd accuracy
 		for i in range(len(dataset.cell_list)):
-			print(dataset.cell_list[i])
+			# print(dataset.cell_list[i])
 			preds = strategy.predict(i, dataset.get_test_data(dataID=i))
 			acc[rd][i] = dataset.cal_test_acc(preds, i)
 			print('testing accuracy {}'.format(acc[rd][i]))
@@ -110,9 +112,8 @@ while (iteration > 0):
 			print(cm)
 			print(*cm.reshape(9), sep = ", ")
 			YandPred[rd] = preds
-		idx, smiles = dataset.get_labeled_drugs()
-		# print(idx)
-		[print(s) for s in smiles]
+	idx, smiles = dataset.get_labeled_drugs()
+	# [print(s) for s in smiles]
 	
 	# print results
 	# print('SEED {}'.format(SEED))

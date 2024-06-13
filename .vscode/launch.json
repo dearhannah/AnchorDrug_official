@@ -34,11 +34,11 @@
             "args": [
                 "-a=RandomSampling",
                 "-s=0",
-                "-q=30",
-                "-b=10",
+                "-q=810",
+                "-b=30",
                 "-d=LINCS",
                 "--seed=4666",
-                "-t=1",
+                "-t=3",
                 "-g=0"
             ],
         },
@@ -193,12 +193,13 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "justMyCode": false,
-            "args": [
-                "-c=MCF7",
-                "--pretrain"
+            "args":[
+                "-c=MCF7", 
+                "--pretrain", 
+                "--finetune", 
+                "--balancesample",
+                // "-q=naiveUncertainty1",
             ],
-            // "args":["-c=MCF7", "--pretrain", "--finetune"],
-            // "args":["-c=MCF7", "-q=naiveUncertainty1", "--pretrain", "--finetune"],
         },
         {
             "name": "PreTrain",

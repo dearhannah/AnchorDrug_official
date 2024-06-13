@@ -22,7 +22,6 @@ class Net:
         
     def train(self, data):
         n_epoch = self.params['n_epoch']
-
         dim = data.X.shape[1:]
         self.clf = self.net(dim = dim, pretrained = self.params['pretrained'], num_classes = self.params['num_class']).to(self.device)
         # cell = self.cell
@@ -49,6 +48,7 @@ class Net:
                 loss.backward()
                 optimizer.step()
             loss_record.append(np.mean(loss_epoch))
+        print('finished training')
         print(loss_record)
 
     def predict(self, data):
@@ -234,7 +234,7 @@ class waterbirds_Net(nn.Module):
 		return self.dim
 
 class MLP(nn.Module):
-    def __init__(self, dim=(2259,), embSize=64, pretrained=False, num_classes=3, dropout_rate=0.2):
+    def __init__(self, dim=(2259,), embSize=64, pretrained=False, num_classes=3, dropout_rate=0.5):
         super(MLP, self).__init__()
         self.dim = embSize
         self.dropout_rate = dropout_rate
