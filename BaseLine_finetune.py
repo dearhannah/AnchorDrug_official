@@ -217,7 +217,7 @@ def evaluate(model, loader):
         labels_list.append(labels.cpu().numpy())
     acc = float(correct) / float(total)
     f1, precision, recall, cm = eval_metrics(labels_list, pred_list)
-    return acc, f1, precision, recall, cm
+    return acc, f1, precision, recall, cm, labels_list, pred_list
 
 
 def train(model, optimizer, loader):
@@ -263,16 +263,16 @@ def baselineEXP(args, df_train, df_test, verbose):
         drop_last=False, shuffle=False)
     net = MLP()
     net.cuda()
+    metric_history = {}
     
     if args.pretrain:
         net.load_state_dict(torch.load(PretrainModelPath).state_dict())  
     if args.finetune:
         ## set optimizer
-        metric_history = {}
         optimizer = torch.optim.Adam(net.parameters(), lr=args.lr)
         for e in tqdm(range(args.n_epoch)):
             accX, f1X, precisionX, recallX, cmX = train(net, optimizer, train_loader)
-            accY, f1Y, precisionY, recallY, cmY = evaluate(net, test_loader)
+            accY, f1Y, precisionY, recallY, cmY, labels_list, pred_list = evaluate(net, test_loader)
             if verbose:
                 wandb.log({
                     f"train acc": accX,
@@ -310,18 +310,18 @@ def baselineEXP(args, df_train, df_test, verbose):
                 f"test recall label 1": recallY[1],
                 f"test recall label 2": recallY[2],
                 }
-        acc, f1, precision, recall, cm = evaluate(net, test_loader)
-        ResultData = {
-            f"acc": acc,
-            f"f1": f1,
-            f"precision label 0": precision[0],
-            f"precision label 1": precision[1],
-            f"precision label 2": precision[2],
-            f"recall label 0": recall[0],
-            f"recall label 1": recall[1],
-            f"recall label 2": recall[2],
-            }
-    return ResultData, cm, metric_history
+    acc, f1, precision, recall, cm, labels_list, pred_list = evaluate(net, test_loader)
+    ResultData = {
+        f"acc": acc,
+        f"f1": f1,
+        f"precision label 0": precision[0],
+        f"precision label 1": precision[1],
+        f"precision label 2": precision[2],
+        f"recall label 0": recall[0],
+        f"recall label 1": recall[1],
+        f"recall label 2": recall[2],
+        }
+    return ResultData, cm, metric_history, labels_list, pred_list
 
 
 def main(args):
@@ -373,9 +373,9 @@ def main(args):
             verbose = False
     else:
         for i in range(5):
-            ResultDatai, cmi, metric_historyi = baselineEXP(args, df_train, df_test, verbose)
+            ResultDatai, cmi, metric_historyi, labels_list, pred_list = baselineEXP(args, df_train, df_test, verbose)
             ResultData[i] = ResultDatai
-            ResultPKG[i] = (ResultDatai, cmi, metric_historyi)
+            ResultPKG[i] = (ResultDatai, cmi, metric_historyi, labels_list, pred_list)
             verbose = False
     
     wandb.finish()
@@ -383,6 +383,7 @@ def main(args):
         pickle.dump(ResultPKG, f)
     
     pd.DataFrame.from_dict(ResultData).to_csv(f'{ResultRoot}/{ResultName}.csv')
+
 
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser()    
