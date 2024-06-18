@@ -13,7 +13,8 @@ class BALDDropout(jointStrategy):
         probs = [p.reshape(self.n_drop, len(unlabeled_idxs), -1) for p in probs]
         probs = torch.concatenate(probs,-1)
         pb = probs.mean(0)
+        eps = 10e-7
         entropy1 = (-pb*torch.log(pb)).sum(1)
-        entropy2 = (-probs*torch.log(probs)).sum(2).mean(0)
+        entropy2 = (-probs*torch.log(probs+eps)).sum(2).mean(0)
         uncertainties = entropy2 - entropy1
         return unlabeled_idxs[uncertainties.sort()[1][:n]]
