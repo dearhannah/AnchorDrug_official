@@ -16,7 +16,10 @@ NUM_QUERY = args_input.batch
 NUM_INIT_LB = args_input.initseed
 NUM_ROUND = int(args_input.quota / args_input.batch)
 DATA_NAME = args_input.dataset_name
-STRATEGY_NAME = args_input.ALstrategy
+if args_input.ALstrategy=='AdversarialBIM':
+    STRATEGY_NAME = f'{args_input.ALstrategy}-{str(args_input.bimratio)}-{str(args_input.bimdis)}'
+else:
+    STRATEGY_NAME = args_input.ALstrategy
 SEED = args_input.seed
 os.environ['TORCH_HOME']='./basicmodel'
 os.environ["CUDA_VISIBLE_DEVICES"] = str(args_input.gpu)

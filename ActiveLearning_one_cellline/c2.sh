@@ -1,8 +1,5 @@
-# python ActiveLearning.py -a=KMeansSampling -b=5 -q=100 -c MCF7 -g=2
-# python ActiveLearning.py -a=KCenterGreedy -b=5 -q=100 -c MCF7 -g=3
-# python ActiveLearning.py -a=KMeansSampling -b=5 -q=100 -c A549 -g=2
-# python ActiveLearning.py -a=KCenterGreedy -b=5 -q=100 -c A549 -g=3
-# python ActiveLearning.py -a=KMeansSampling -b=5 -q=100 -c PC3 -g=2
-# python ActiveLearning.py -a=KCenterGreedy -b=5 -q=100 -c PC3 -g=3
-
-python ActiveLearning.py -a=BALDDropout -b=5 -q=100 -c A549 -g=4
+python ActiveLearning.py -a=AdversarialBIM -s=0 -q=100 -b=10 -d=LINCS -c PC3 --seed=4996 -t=5 -g=1 --bimratio 0.5
+python ActiveLearning.py -a=AdversarialBIM -s=0 -q=100 -b=10 -d=LINCS -c PC3 --seed=4996 -t=5 -g=1 --bimratio 0.6
+python ActiveLearning.py -a=AdversarialBIM -s=0 -q=100 -b=10 -d=LINCS -c PC3 --seed=4996 -t=5 -g=1 --bimratio 0.7
+python ActiveLearning.py -a=AdversarialBIM -s=0 -q=100 -b=10 -d=LINCS -c PC3 --seed=4996 -t=5 -g=1 --bimratio 0.8
+python ActiveLearning.py -a=AdversarialBIM -s=0 -q=100 -b=10 -d=LINCS -c PC3 --seed=4996 -t=5 -g=1 --bimratio 0.9
