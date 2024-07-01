@@ -14,9 +14,10 @@ class AdversarialBIM(jointStrategy):
         self.ratio = args_input.bimratio
 
     def cal_drug_dis(self, tmp_net, nx):
+        nx = nx.to(torch.device("cuda"))
         nx.requires_grad_()
-        eta = torch.zeros((1,1024))
-        zeros = torch.zeros((1,1235))
+        eta = torch.zeros((1,1024)).to(torch.device("cuda"))
+        zeros = torch.zeros((1,1235)).to(torch.device("cuda"))
 
         out, _ = tmp_net.clf(nx+torch.concatenate((eta,zeros),-1).repeat(nx.shape[0],1))
         py = out.max(1)[1]
@@ -28,7 +29,8 @@ class AdversarialBIM(jointStrategy):
             nx.grad.data.zero_()
             out, _ = tmp_net.clf(nx+torch.concatenate((eta,zeros),-1).repeat(nx.shape[0],1))
             py = out.max(1)[1]
-
+            
+        eta = eta.to(torch.device("cpu"))
         return (eta*eta).sum()
 
     def query(self, n):
@@ -37,7 +39,7 @@ class AdversarialBIM(jointStrategy):
         for i in range(len(self.net)):
             tmp_net = self.net[i]
             unlabeled_data_idxs, unlabeled_data = self.dataset.get_unlabeled_data(dataID=i)
-            tmp_net.clf.cpu()
+            tmp_net.clf.cuda()
             tmp_net.clf.eval()
             dis = torch.zeros(len(unlabeled_idxs))
             n_gene = int(len(unlabeled_data_idxs)/len(unlabeled_idxs))
