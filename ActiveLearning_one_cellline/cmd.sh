@@ -20,22 +20,22 @@
 # python ActiveLearning.py -a=RandomSampling -s=0 -q=957 -b=30 -d=LINCS -c PC3 --seed=4996 -t=5 -g=1
 # python ActiveLearning.py -a=RandomSampling -s=0 -q=642 -b=30 -d=LINCS -c A549 --seed=4786 -t=5 -g=2
 
-python ActiveLearning.py -a=AdversarialBIM -s=0 -q=100 -b=10 -d=LINCS -c MCF7 --seed=4678 -t=5 -g=0 --bimratio 0.5
-python ActiveLearning.py -a=AdversarialBIM -s=0 -q=100 -b=10 -d=LINCS -c PC3 --seed=4996 -t=5 -g=1 --bimratio 0.5
-python ActiveLearning.py -a=AdversarialBIM -s=0 -q=100 -b=10 -d=LINCS -c A549 --seed=4786 -t=5 -g=2 --bimratio 0.5
+# python ActiveLearning.py -a=AdversarialBIM -s=0 -q=100 -b=10 -d=LINCS -c MCF7 --seed=4678 -t=5 -g=0 --bimratio 0.5
+# python ActiveLearning.py -a=AdversarialBIM -s=0 -q=100 -b=10 -d=LINCS -c PC3 --seed=4996 -t=5 -g=1 --bimratio 0.5
+# python ActiveLearning.py -a=AdversarialBIM -s=0 -q=100 -b=10 -d=LINCS -c A549 --seed=4786 -t=5 -g=2 --bimratio 0.5
 
-python ActiveLearning.py -a=AdversarialBIM -s=0 -q=100 -b=10 -d=LINCS -c MCF7 --seed=4678 -t=5 -g=0 --bimratio 0.6
-python ActiveLearning.py -a=AdversarialBIM -s=0 -q=100 -b=10 -d=LINCS -c PC3 --seed=4996 -t=5 -g=1 --bimratio 0.6
-python ActiveLearning.py -a=AdversarialBIM -s=0 -q=100 -b=10 -d=LINCS -c A549 --seed=4786 -t=5 -g=2 --bimratio 0.6
+# python ActiveLearning.py -a=AdversarialBIM -s=0 -q=100 -b=10 -d=LINCS -c MCF7 --seed=4678 -t=5 -g=0 --bimratio 0.6
+# python ActiveLearning.py -a=AdversarialBIM -s=0 -q=100 -b=10 -d=LINCS -c PC3 --seed=4996 -t=5 -g=1 --bimratio 0.6
+# python ActiveLearning.py -a=AdversarialBIM -s=0 -q=100 -b=10 -d=LINCS -c A549 --seed=4786 -t=5 -g=2 --bimratio 0.6
 
-python ActiveLearning.py -a=AdversarialBIM -s=0 -q=100 -b=10 -d=LINCS -c MCF7 --seed=4678 -t=5 -g=0 --bimratio 0.7
-python ActiveLearning.py -a=AdversarialBIM -s=0 -q=100 -b=10 -d=LINCS -c PC3 --seed=4996 -t=5 -g=1 --bimratio 0.7
-python ActiveLearning.py -a=AdversarialBIM -s=0 -q=100 -b=10 -d=LINCS -c A549 --seed=4786 -t=5 -g=2 --bimratio 0.7
+# python ActiveLearning.py -a=AdversarialBIM -s=0 -q=100 -b=10 -d=LINCS -c MCF7 --seed=4678 -t=5 -g=0 --bimratio 0.7
+# python ActiveLearning.py -a=AdversarialBIM -s=0 -q=100 -b=10 -d=LINCS -c PC3 --seed=4996 -t=5 -g=1 --bimratio 0.7
+# python ActiveLearning.py -a=AdversarialBIM -s=0 -q=100 -b=10 -d=LINCS -c A549 --seed=4786 -t=5 -g=2 --bimratio 0.7
 
-python ActiveLearning.py -a=AdversarialBIM -s=0 -q=100 -b=10 -d=LINCS -c MCF7 --seed=4678 -t=5 -g=0 --bimratio 0.8
-python ActiveLearning.py -a=AdversarialBIM -s=0 -q=100 -b=10 -d=LINCS -c PC3 --seed=4996 -t=5 -g=1 --bimratio 0.8
-python ActiveLearning.py -a=AdversarialBIM -s=0 -q=100 -b=10 -d=LINCS -c A549 --seed=4786 -t=5 -g=2 --bimratio 0.8
+# python ActiveLearning.py -a=AdversarialBIM -s=0 -q=100 -b=10 -d=LINCS -c MCF7 --seed=4678 -t=5 -g=0 --bimratio 0.8
+# python ActiveLearning.py -a=AdversarialBIM -s=0 -q=100 -b=10 -d=LINCS -c PC3 --seed=4996 -t=5 -g=1 --bimratio 0.8
+# python ActiveLearning.py -a=AdversarialBIM -s=0 -q=100 -b=10 -d=LINCS -c A549 --seed=4786 -t=5 -g=2 --bimratio 0.8
 
-python ActiveLearning.py -a=AdversarialBIM -s=0 -q=100 -b=10 -d=LINCS -c MCF7 --seed=4678 -t=5 -g=0 --bimratio 0.9
-python ActiveLearning.py -a=AdversarialBIM -s=0 -q=100 -b=10 -d=LINCS -c PC3 --seed=4996 -t=5 -g=1 --bimratio 0.9
-python ActiveLearning.py -a=AdversarialBIM -s=0 -q=100 -b=10 -d=LINCS -c A549 --seed=4786 -t=5 -g=2 --bimratio 0.9
+# python ActiveLearning.py -a=AdversarialBIM -s=0 -q=100 -b=10 -d=LINCS -c MCF7 --seed=4678 -t=5 -g=0 --bimratio 0.9
+# python ActiveLearning.py -a=AdversarialBIM -s=0 -q=100 -b=10 -d=LINCS -c PC3 --seed=4996 -t=5 -g=1 --bimratio 0.9
+# python ActiveLearning.py -a=AdversarialBIM -s=0 -q=100 -b=10 -d=LINCS -c A549 --seed=4786 -t=5 -g=2 --bimratio 0.9

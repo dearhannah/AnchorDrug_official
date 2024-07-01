@@ -17,7 +17,7 @@ NUM_INIT_LB = args_input.initseed
 NUM_ROUND = int(args_input.quota / args_input.batch)
 DATA_NAME = args_input.dataset_name
 if args_input.ALstrategy=='AdversarialBIM':
-    STRATEGY_NAME = f'{args_input.ALstrategy}-{str(args_input.bimratio)}-{str(args_input.bimdis)}'
+    STRATEGY_NAME = f'{args_input.ALstrategy}-{str(args_input.bimratio)}-{str(args_input.bimdis)}-{str(args_input.bimeps)}'
 else:
     STRATEGY_NAME = args_input.ALstrategy
 SEED = args_input.seed

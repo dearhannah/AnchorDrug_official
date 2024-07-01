@@ -1,7 +1,7 @@
 data
 *.pyc
-# *.txt
-# *.pkl
+*.txt
+*.pkl
 *.params
 wandb
 AnchorDrugPrediction/finetune_step1_models/
