@@ -234,7 +234,7 @@ class waterbirds_Net(nn.Module):
 		return self.dim
 
 class MLP(nn.Module):
-    def __init__(self, dim=(2259,), embSize=64, pretrained=False, num_classes=3, dropout_rate=0.5):
+    def __init__(self, dim=(2259,), embSize=64, pretrained=False, num_classes=3, dropout_rate=0.2):
         super(MLP, self).__init__()
         self.dim = embSize
         self.dropout_rate = dropout_rate
