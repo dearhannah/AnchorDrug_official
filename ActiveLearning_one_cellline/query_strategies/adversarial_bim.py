@@ -22,6 +22,7 @@ class AdversarialBIM(jointStrategy):
         out, _ = tmp_net.clf(nx+torch.concatenate((eta,zeros),-1).repeat(nx.shape[0],1))
         py = out.max(1)[1]
         ny = out.max(1)[1]
+        count_iter = 0
         while (sum(py==ny)/len(ny))>=self.ratio and (eta*eta).sum()<=self.threshold:
             loss = F.cross_entropy(out, ny)
             loss.backward()
@@ -29,13 +30,14 @@ class AdversarialBIM(jointStrategy):
             nx.grad.data.zero_()
             out, _ = tmp_net.clf(nx+torch.concatenate((eta,zeros),-1).repeat(nx.shape[0],1))
             py = out.max(1)[1]
-            
+            count_iter +=1
         eta = eta.to(torch.device("cpu"))
-        return (eta*eta).sum()
+        return (eta*eta).sum(), count_iter
 
     def query(self, n):
         unlabeled_idxs, _ = self.dataset.get_unlabeled_drugs()
         dis_all = []
+        iter_number_sum = 0
         for i in range(len(self.net)):
             tmp_net = self.net[i]
             unlabeled_data_idxs, unlabeled_data = self.dataset.get_unlabeled_data(dataID=i)
@@ -46,10 +48,12 @@ class AdversarialBIM(jointStrategy):
             for j in tqdm(range(len(unlabeled_idxs))):
                 idx_j = np.array([j*n_gene + n for n in range(n_gene)])
                 x, y, idx = unlabeled_data[idx_j]
-                dis[j] = self.cal_drug_dis(tmp_net, x)
+                dis[j], count_iter = self.cal_drug_dis(tmp_net, x)
+                iter_number_sum += count_iter
             # dis = dis.reshape(len(unlabeled_idxs), -1)
             dis_all.append(dis)
             tmp_net.clf.cuda()
         dis_all = torch.stack(dis_all, 0).sum(0)
-
+        print(dis_all[dis_all.argsort()[:n]])
+        print('sum of update iteration:', iter_number_sum)
         return unlabeled_idxs[dis_all.argsort()[:n]]
