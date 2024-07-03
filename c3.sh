@@ -17,6 +17,14 @@
 # python BaseLine_finetune.py -c MCF7 --n_epoch 50 --pretrain --finetune
 # python BaseLine_finetune.py -c A549 --n_epoch 50 --pretrain --finetune
 
-python BaseLine_finetune.py -c PC3 --n_epoch 50 --pretrain
-python BaseLine_finetune.py -c MCF7 --n_epoch 50 --pretrain
-python BaseLine_finetune.py -c A549 --n_epoch 50 --pretrain
+# python BaseLine_finetune.py -c PC3 --n_epoch 50 --pretrain
+# python BaseLine_finetune.py -c MCF7 --n_epoch 50 --pretrain
+# python BaseLine_finetune.py -c A549 --n_epoch 50 --pretrain
+
+python BaseLine_finetune.py -c PC3 -q LeastConfidence --pretrain --finetune
+python BaseLine_finetune.py -c PC3 -q MarginSampling --pretrain --finetune
+python BaseLine_finetune.py -c PC3 -q KMeansSampling --pretrain --finetune
+python BaseLine_finetune.py -c PC3 -q KCenterGreedy --pretrain --finetune
+python BaseLine_finetune.py -c PC3 -q BadgeSampling --pretrain --finetune
+python BaseLine_finetune.py -c PC3 -q BALDDropout --pretrain --finetune
+python BaseLine_finetune.py -c PC3 -q RandomSampling --pretrain --finetune

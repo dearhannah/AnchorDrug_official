@@ -161,6 +161,7 @@ class MLP(nn.Module):
         self.fc2 = nn.Linear(1000, 128)
         self.fc3 = nn.Linear(128, embSize)
         self.fc4 = nn.Linear(embSize, num_classes)
+        self.dropout = nn.Dropout(dropout_rate)
         #
     def initial_kaiming_normal(self):
         torch.nn.init.kaiming_normal_(self.fc1.weight)
@@ -172,13 +173,13 @@ class MLP(nn.Module):
         h = x
         h = self.fc1(h)
         h = F.leaky_relu(h, negative_slope=0.01)
-        h = F.dropout(h, p=self.dropout_rate)
+        h = self.dropout(h)
         h = self.fc2(h)
         h = F.leaky_relu(h, negative_slope=0.01)
-        h = F.dropout(h, p=self.dropout_rate)
+        h = self.dropout(h)
         h = self.fc3(h)
         h = F.leaky_relu(h, negative_slope=0.01)
-        h = F.dropout(h, p=self.dropout_rate)
+        h = self.dropout(h)
         logit = self.fc4(h)
         return logit #, h
     
@@ -331,7 +332,7 @@ def main(args):
     else:
         ResultName = f"{args.cell}_{args.n_epoch}_{args.lr}"
         if args.querymethod != 'none':
-            ResultName = f"{ResultName}_finetune_{args.querymethod}_5_0_30"
+            ResultName = f"{ResultName}_finetune_{args.querymethod}_10_0_100"
         else:
             ResultName = f"{ResultName}_finetune_all"
         if args.balancesample:
@@ -340,7 +341,8 @@ def main(args):
     wandb.init(
         project='Anchor Drug Project',
         # tags = ['BaseLine'],
-        tags = ['BaseLine', 'finetune'],
+        # tags = ['BaseLine', 'finetune'],
+        tags = ['ActiveLearn', 'finetune', 'trial'],
         name=ResultName,
         config={
             'cellline': args.cell,
@@ -360,16 +362,23 @@ def main(args):
     ResultPKG = {}
     verbose = True
     if args.querymethod != 'none':
-        drugFilePath = f"/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning/druglist/{args.querymethod}/"
+        # drugFilePath = f"/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning/druglist/{args.querymethod}/"
+        # drugFileList = [f for f in os.listdir(drugFilePath) if args.cell in f]
+        drugFilePath ='/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/batch10_100/'
         drugFileList = [f for f in os.listdir(drugFilePath) if args.cell in f]
+        drugFileList = [f for f in drugFileList if args.querymethod in f]
         ##-------------------------------------- this is active learning parameter filter
-        drugFileList = [f for f in drugFileList if '_5_0_30' in f]
+        drugFileList = np.sort([f for f in drugFileList if '_10_0_100' in f])
         for anchor in drugFileList:
             print(anchor)
+            i = int(anchor[-5])
             with open(drugFilePath+anchor, 'rb') as f:
                 druglist = pickle.load(f)
-            df_train_anchor = df_train[df_train['smiles'].isin(druglist)]
-            # ResultData.append(baselineEXP(args, df_train_anchor, df_test, verbose))
+            # df_train_anchor = df_train[df_train['SMILES'].isin(druglist)]
+            df_train_anchor = df_train.loc[druglist]
+            ResultDatai, cmi, metric_historyi, labels_list, pred_list = baselineEXP(args, df_train_anchor, df_test, verbose)
+            ResultData[i] = ResultDatai
+            ResultPKG[i] = (ResultDatai, cmi, metric_historyi, labels_list, pred_list)
             verbose = False
     else:
         for i in range(5):
@@ -390,7 +399,7 @@ if __name__ == '__main__':
     argparser.add_argument('--cell', '-c', type=str, help='cell line', default='MCF7')
     argparser.add_argument('--querymethod', '-q', type=str, help='query method', default='none')
     argparser.add_argument('--lr', type=float, help='task-level inner update learning rate', default=0.001)
-    argparser.add_argument('--n_epoch', type=int, help='number of epoch', default=50)
+    argparser.add_argument('--n_epoch', type=int, help='number of epoch', default=30)
     argparser.add_argument('--pretrain', action='store_true', help='use pretrained model or not')
     argparser.add_argument('--finetune', action='store_true', help='Finetune or not')
     argparser.add_argument('--balancesample', '-bs', action='store_true', help='balance sample or not')
