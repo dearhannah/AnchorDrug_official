@@ -35,7 +35,7 @@ class Net:
         else:
             raise NotImplementedError
 
-        loader = DataLoader(data, shuffle=True, **self.params['loader_tr_args'])
+        loader = DataLoader(data, shuffle=True, drop_last=False, **self.params['loader_tr_args'])
         loss_record = []
         for epoch in tqdm(range(1, n_epoch+1)):
             loss_epoch = []
@@ -54,7 +54,7 @@ class Net:
     def predict(self, data):
         self.clf.eval()
         preds = torch.zeros(len(data), dtype=data.Y.dtype)
-        loader = DataLoader(data, shuffle=False, **self.params['loader_te_args'])
+        loader = DataLoader(data, shuffle=False, drop_last=False, **self.params['loader_te_args'])
         with torch.no_grad():
             for x, y, idxs in loader:
                 x, y = x.to(self.device), y.to(self.device)
@@ -234,7 +234,7 @@ class waterbirds_Net(nn.Module):
 		return self.dim
 
 class MLP(nn.Module):
-    def __init__(self, dim=(2259,), embSize=64, num_classes=3, dropout_rate=0.4):
+    def __init__(self, dim=(2259,), embSize=64, pretrained=False, num_classes=3, dropout_rate=0.4):
         super(MLP, self).__init__()
         self.dim = embSize
         self.dropout_rate = dropout_rate
@@ -262,7 +262,7 @@ class MLP(nn.Module):
         h = F.leaky_relu(h, negative_slope=0.01)
         h = self.dropout(h)
         logit = self.fc4(h)
-        return logit #, h
+        return logit , h
 	
     def get_embedding_dim(self):
         return self.dim

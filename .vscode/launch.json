@@ -197,8 +197,9 @@
                 "-c=MCF7", 
                 "--pretrain", 
                 "--finetune", 
-                "--balancesample",
-                // "-q=naiveUncertainty1",
+                // "--balancesample",
+                // "-q=LeastConfidence",
+                "-q=AdversarialBIM-0.7-1-0.0005",
             ],
         },
         {

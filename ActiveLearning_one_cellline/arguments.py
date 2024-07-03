@@ -24,7 +24,7 @@ def get_args():
 	parser.add_argument('--seed', default=4666, type=int, help='random seed')
 	#BIM settings
 	parser.add_argument('--bimeps', type=float, default=1e-3, help='learning rate of adv sample')
-	parser.add_argument('--bimdis', type=float, default=0.8, help='distance threshold')
+	parser.add_argument('--bimdis', type=float, default=1, help='distance threshold')
 	parser.add_argument('--bimratio', type=float, default=0.7, help='ratio threshold')
 	args = parser.parse_args()
 	return args

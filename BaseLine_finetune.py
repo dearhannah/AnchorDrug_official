@@ -256,11 +256,11 @@ def train(model, optimizer, loader):
 def baselineEXP(args, df_train, df_test, verbose):
     train_dataset = DrugCelllineGene(df=df_train, cell=args.cell, balancesample=args.balancesample)
     train_loader = torch.utils.data.DataLoader(
-        dataset=train_dataset, batch_size=32, num_workers=0,
+        dataset=train_dataset, batch_size=args.batchsize, num_workers=0,
         drop_last=False, shuffle=True)
     test_dataset = DrugCelllineGene(df=df_test, cell=args.cell, balancesample=False)
     test_loader = torch.utils.data.DataLoader(
-        dataset=test_dataset, batch_size=32, num_workers=0,
+        dataset=test_dataset, batch_size=args.batchsize, num_workers=0,
         drop_last=False, shuffle=False)
     net = MLP()
     net.cuda()
@@ -272,8 +272,8 @@ def baselineEXP(args, df_train, df_test, verbose):
         ## set optimizer
         optimizer = torch.optim.Adam(net.parameters(), lr=args.lr)
         for e in tqdm(range(args.n_epoch)):
-            accX, f1X, precisionX, recallX, cmX = train(net, optimizer, train_loader)
             accY, f1Y, precisionY, recallY, cmY, labels_list, pred_list = evaluate(net, test_loader)
+            accX, f1X, precisionX, recallX, cmX = train(net, optimizer, train_loader)
             if verbose:
                 wandb.log({
                     f"train acc": accX,
@@ -330,7 +330,7 @@ def main(args):
     if not args.finetune:
         ResultName = f"{args.cell}_pretrainOnly"
     else:
-        ResultName = f"{args.cell}_{args.n_epoch}_{args.lr}"
+        ResultName = f"{args.cell}_{args.n_epoch}_{args.lr}_{args.batchsize}"
         if args.querymethod != 'none':
             ResultName = f"{ResultName}_finetune_{args.querymethod}_10_0_100"
         else:
@@ -364,7 +364,8 @@ def main(args):
     if args.querymethod != 'none':
         # drugFilePath = f"/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning/druglist/{args.querymethod}/"
         # drugFileList = [f for f in os.listdir(drugFilePath) if args.cell in f]
-        drugFilePath ='/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/batch10_100/'
+        # drugFilePath ='/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/batch10_100/'
+        drugFilePath ='/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/'
         drugFileList = [f for f in os.listdir(drugFilePath) if args.cell in f]
         drugFileList = [f for f in drugFileList if args.querymethod in f]
         ##-------------------------------------- this is active learning parameter filter
@@ -400,6 +401,7 @@ if __name__ == '__main__':
     argparser.add_argument('--querymethod', '-q', type=str, help='query method', default='none')
     argparser.add_argument('--lr', type=float, help='task-level inner update learning rate', default=0.001)
     argparser.add_argument('--n_epoch', type=int, help='number of epoch', default=30)
+    argparser.add_argument('--batchsize', type=int, help='batch size', default=32)
     argparser.add_argument('--pretrain', action='store_true', help='use pretrained model or not')
     argparser.add_argument('--finetune', action='store_true', help='Finetune or not')
     argparser.add_argument('--balancesample', '-bs', action='store_true', help='balance sample or not')
