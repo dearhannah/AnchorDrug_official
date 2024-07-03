@@ -341,8 +341,8 @@ def main(args):
     wandb.init(
         project='Anchor Drug Project',
         # tags = ['BaseLine'],
-        # tags = ['BaseLine', 'finetune'],
-        tags = ['ActiveLearn', 'finetune', 'trial'],
+        tags = ['BaseLine', 'finetune', 'newMLP'],
+        # tags = ['ActiveLearn', 'finetune', 'trial'],
         name=ResultName,
         config={
             'cellline': args.cell,
