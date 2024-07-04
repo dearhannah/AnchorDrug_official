@@ -82,7 +82,7 @@ class lincsData:
 
     def get_labeled_data(self, dataID):
         labeled_idxs = np.arange(self.n_pool*len(self.genelist))[self.labeled_data_idxs]
-        return labeled_idxs, self.handler(self.X_train[dataID][labeled_idxs], self.Y_train[dataID][labeled_idxs], self.cell_list[dataID])
+        return labeled_idxs, self.handler(self.X_train[dataID][labeled_idxs], self.Y_train[dataID][labeled_idxs], self.cell_list[dataID], balancesample=True)
     
     def get_labeled_drugs(self):
         labeled_idxs = np.arange(self.n_pool)[self.labeled_drug_idxs]
