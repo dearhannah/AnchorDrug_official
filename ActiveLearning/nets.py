@@ -22,7 +22,6 @@ class Net:
         
     def train(self, data):
         n_epoch = self.params['n_epoch']
-
         dim = data.X.shape[1:]
         self.clf = self.net(dim = dim, pretrained = self.params['pretrained'], num_classes = self.params['num_class']).to(self.device)
         # cell = self.cell
@@ -36,23 +35,26 @@ class Net:
         else:
             raise NotImplementedError
 
-        loader = DataLoader(data, shuffle=True, **self.params['loader_tr_args'])
+        loader = DataLoader(data, shuffle=True, drop_last=False, **self.params['loader_tr_args'])
         loss_record = []
         for epoch in tqdm(range(1, n_epoch+1)):
+            loss_epoch = []
             for batch_idx, (x, y, idxs) in enumerate(loader):
                 x, y = x.to(self.device), y.to(self.device)
                 optimizer.zero_grad()
                 out, e1 = self.clf(x)
                 loss = F.cross_entropy(out, y)
-                loss_record.append(loss.cpu().item())
+                loss_epoch.append(loss.cpu().item())
                 loss.backward()
                 optimizer.step()
+            loss_record.append(np.mean(loss_epoch))
+        print('finished training')
         print(loss_record)
 
     def predict(self, data):
         self.clf.eval()
         preds = torch.zeros(len(data), dtype=data.Y.dtype)
-        loader = DataLoader(data, shuffle=False, **self.params['loader_te_args'])
+        loader = DataLoader(data, shuffle=False, drop_last=False, **self.params['loader_te_args'])
         with torch.no_grad():
             for x, y, idxs in loader:
                 x, y = x.to(self.device), y.to(self.device)
@@ -232,7 +234,7 @@ class waterbirds_Net(nn.Module):
 		return self.dim
 
 class MLP(nn.Module):
-    def __init__(self, dim=(2259,), embSize=64, pretrained=False, num_classes=3, dropout_rate=0.2):
+    def __init__(self, dim=(2259,), embSize=64, pretrained=False, num_classes=3, dropout_rate=0.4):
         super(MLP, self).__init__()
         self.dim = embSize
         self.dropout_rate = dropout_rate
@@ -240,6 +242,7 @@ class MLP(nn.Module):
         self.fc2 = nn.Linear(1000, 128)
         self.fc3 = nn.Linear(128, embSize)
         self.fc4 = nn.Linear(embSize, num_classes)
+        self.dropout = nn.Dropout(dropout_rate)
         #
     def initial_kaiming_normal(self):
         torch.nn.init.kaiming_normal_(self.fc1.weight)
@@ -251,13 +254,13 @@ class MLP(nn.Module):
         h = x
         h = self.fc1(h)
         h = F.leaky_relu(h, negative_slope=0.01)
-        # h = F.dropout(h, p=self.dropout_rate)
+        h = self.dropout(h)
         h = self.fc2(h)
         h = F.leaky_relu(h, negative_slope=0.01)
-        # h = F.dropout(h, p=self.dropout_rate)
+        h = self.dropout(h)
         h = self.fc3(h)
         h = F.leaky_relu(h, negative_slope=0.01)
-        # h = F.dropout(h, p=self.dropout_rate)
+        h = self.dropout(h)
         logit = self.fc4(h)
         return logit, h
 	

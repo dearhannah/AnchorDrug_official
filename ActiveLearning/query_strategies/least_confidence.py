@@ -1,6 +1,6 @@
 import numpy as np
 import torch
-from .strategy import Strategy, jointStrategy
+from .strategy import jointStrategy
 
 class LeastConfidence(jointStrategy):
     def __init__(self, dataset, net, args_input, args_task):

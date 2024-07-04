@@ -7,7 +7,7 @@ import os, pickle
 from torchvision import datasets
 import torch.utils.data as data
 from sklearn.preprocessing import Normalizer
-from sklearn.metrics import f1_score
+from sklearn.metrics import f1_score, confusion_matrix
 from PIL import Image
 from rdkit import Chem
 from rdkit.Chem import AllChem
@@ -72,7 +72,10 @@ class Data:
         return 1.0 * (self.Y_test==preds).sum().item() / self.n_test
     
     def cal_test_f1(self, preds):
-        return f1_score(self.Y_test, preds, average='weighted')
+        return f1_score(self.Y_test, preds, average='macro')
+    
+    def cal_test_confusion(self, preds):
+        return confusion_matrix(self.Y_test, preds)
 
 
 class lincsData:
@@ -186,6 +189,9 @@ class lincsData:
     
     def cal_test_f1(self, preds, dataID):
         return f1_score(self.Y_val[dataID], preds, average='macro')
+    
+    def cal_test_confusion(self, preds, dataID):
+        return confusion_matrix(self.Y_val[dataID], preds)
 
 
 def get_morgan_fingerprint(mol, radius, nBits, FCFP=False):
