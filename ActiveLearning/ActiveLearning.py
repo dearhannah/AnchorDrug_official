@@ -68,11 +68,12 @@ while (iteration > 0):
 	# generate initial labeled pool
 	dataset.initialize_labels(args_input.initseed)
 	# record acc performance
-	acc = np.zeros((NUM_ROUND+1, 1))
-	f1 = np.zeros((NUM_ROUND+1, 1))
+	acc = np.zeros((NUM_ROUND+1, 3))
+	f1 = np.zeros((NUM_ROUND+1, 3))
 	# recored prediction and label
-	YandPred = {}
-	YandPred['label'] = dataset.Y_val[0]
+	YandPred = {cell:{} for cell in dataset.cell_list}
+	for i, c in enumerate(dataset.cell_list):
+		YandPred[c]['label'] = dataset.Y_val[i]
 	# print info
 	print(DATA_NAME)
 	# print('RANDOM SEED {}'.format(SEED))
@@ -80,7 +81,7 @@ while (iteration > 0):
 
 	print('Round 0:')
 	for i in range(len(dataset.cell_list)):
-		# print(dataset.cell_list[i])
+		print(dataset.cell_list[i])
 		preds = strategy.predict(i, dataset.get_test_data(dataID=i))
 		acc[0][i] = dataset.cal_test_acc(preds, i)
 		print('testing accuracy {}'.format(acc[0][i]))
@@ -90,7 +91,7 @@ while (iteration > 0):
 		cm = dataset.cal_test_confusion(preds, i)
 		print(cm)
 		print(*cm.reshape(9), sep = ", ")
-		YandPred[0] = preds
+		YandPred[dataset.cell_list[i]][0] = preds
 	
 	# round 1 to rd
 	for rd in range(1, NUM_ROUND+1):
@@ -114,7 +115,8 @@ while (iteration > 0):
 			cm = dataset.cal_test_confusion(preds, i)
 			print(cm)
 			print(*cm.reshape(9), sep = ", ")
-			YandPred[rd] = preds
+			# YandPred[rd] = preds
+			YandPred[dataset.cell_list[i]][rd] = preds
 	idx, smiles = dataset.get_labeled_drugs()
 	# [print(s) for s in smiles]
 	
@@ -134,8 +136,9 @@ while (iteration > 0):
 	preds_path = f'./preds/{DATA_NAME}_{STRATEGY_NAME}_{str(NUM_QUERY)}_{str(NUM_INIT_LB)}_{str(args_input.quota)}_{timestamp}_{iteration}.pkl'
 	with open(preds_path, 'wb') as f:
 		pickle.dump(YandPred, f)
-	preds_csv_path = f'./preds/{DATA_NAME}_{STRATEGY_NAME}_{str(NUM_QUERY)}_{str(NUM_INIT_LB)}_{str(args_input.quota)}_{timestamp}_{iteration}.csv'
-	pd.DataFrame.from_dict(YandPred).to_csv(preds_csv_path,index=False)
+	for cell in dataset.cell_list:
+		preds_csv_path = f'./preds/{DATA_NAME}_{cell}_{STRATEGY_NAME}_{str(NUM_QUERY)}_{str(NUM_INIT_LB)}_{str(args_input.quota)}_{timestamp}_{iteration}.csv'
+		pd.DataFrame.from_dict(YandPred[cell]).to_csv(preds_csv_path,index=False)
 
 print(f'!!!!!total used time: {time.time() - start}')
 #save F1,acc
