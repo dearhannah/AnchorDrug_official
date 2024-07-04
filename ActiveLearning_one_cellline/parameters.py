@@ -6,7 +6,7 @@ SEED = 4666
 
 
 args_pool = {'LINCS':
-				{'n_epoch': 20, 
+				{'n_epoch': 10, 
 				 'name': 'LINCS',
                  'cell': ['MCF7', 'A549', 'PC3'],
                  'transform_train': 'no',

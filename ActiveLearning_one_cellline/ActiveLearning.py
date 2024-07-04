@@ -40,7 +40,7 @@ sys.stdout = Logger(f'./logfile/{DATA_NAME}_{args_input.cell}_{STRATEGY_NAME}_{s
 warnings.filterwarnings('ignore')
 
 # start experiment
-
+print(args_pool[DATA_NAME])
 iteration = args_input.iteration
 
 all_acc = []

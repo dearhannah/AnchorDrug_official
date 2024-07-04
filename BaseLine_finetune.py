@@ -326,7 +326,10 @@ def baselineEXP(args, df_train, df_test, verbose):
 
 
 def main(args):
-    ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine'
+    ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/advbim_tuning'
+    # drugFilePath = f"/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning/druglist/{args.querymethod}/"
+    # drugFilePath ='/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/batch10_100/'
+    drugFilePath ='/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/archive/data_wrongMLP/druglist/advbim_eps_tuning/'
     if not args.finetune:
         ResultName = f"{args.cell}_pretrainOnly"
     else:
@@ -341,7 +344,8 @@ def main(args):
     wandb.init(
         project='Anchor Drug Project',
         # tags = ['BaseLine'],
-        tags = ['BaseLine', 'finetune', 'newMLP'],
+        # tags = ['BaseLine', 'finetune', 'newMLP'],
+        tags = ['advbim', 'finetune', 'wrongMLP'],
         # tags = ['ActiveLearn', 'finetune', 'trial'],
         name=ResultName,
         config={
@@ -355,17 +359,12 @@ def main(args):
         },
         )
     print(args)
-    
     df_train = pd.read_csv(f'/egr/research-aidd/menghan1/AnchorDrug/data/HQdata/{args.cell}_train.csv', index_col=0)#[1:20]
     df_test = pd.read_csv(f'/egr/research-aidd/menghan1/AnchorDrug/data/HQdata/{args.cell}_test.csv', index_col=0)#[1:20]
     ResultData = {}
     ResultPKG = {}
     verbose = True
     if args.querymethod != 'none':
-        # drugFilePath = f"/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning/druglist/{args.querymethod}/"
-        # drugFileList = [f for f in os.listdir(drugFilePath) if args.cell in f]
-        # drugFilePath ='/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/batch10_100/'
-        drugFilePath ='/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/'
         drugFileList = [f for f in os.listdir(drugFilePath) if args.cell in f]
         drugFileList = [f for f in drugFileList if args.querymethod in f]
         ##-------------------------------------- this is active learning parameter filter
@@ -377,6 +376,7 @@ def main(args):
                 druglist = pickle.load(f)
             # df_train_anchor = df_train[df_train['SMILES'].isin(druglist)]
             df_train_anchor = df_train.loc[druglist]
+            print('good')
             ResultDatai, cmi, metric_historyi, labels_list, pred_list = baselineEXP(args, df_train_anchor, df_test, verbose)
             ResultData[i] = ResultDatai
             ResultPKG[i] = (ResultDatai, cmi, metric_historyi, labels_list, pred_list)
@@ -400,10 +400,19 @@ if __name__ == '__main__':
     argparser.add_argument('--cell', '-c', type=str, help='cell line', default='MCF7')
     argparser.add_argument('--querymethod', '-q', type=str, help='query method', default='none')
     argparser.add_argument('--lr', type=float, help='task-level inner update learning rate', default=0.001)
-    argparser.add_argument('--n_epoch', type=int, help='number of epoch', default=30)
+    argparser.add_argument('--n_epoch', type=int, help='number of epoch', default=50)
     argparser.add_argument('--batchsize', type=int, help='batch size', default=32)
     argparser.add_argument('--pretrain', action='store_true', help='use pretrained model or not')
     argparser.add_argument('--finetune', action='store_true', help='Finetune or not')
     argparser.add_argument('--balancesample', '-bs', action='store_true', help='balance sample or not')
+    #BIM settings
+    argparser.add_argument('--bimeps', type=float, default=1e-3, help='learning rate of adv sample')
+    argparser.add_argument('--bimdis', type=float, default=0.8, help='distance threshold')
+    argparser.add_argument('--bimratio', type=float, default=0.7, help='ratio threshold')
     args = argparser.parse_args()
-    main(args)
+    basequery = args.querymethod
+    for eps in [0.0003, 0.0005, 0.0007, 0.0009, 0.0011, 0.0013, 0.0015]:
+        args.bimeps = eps
+        args.querymethod =  f'{basequery}-{str(args.bimratio)}-{str(args.bimdis)}-{str(args.bimeps)}'
+        print(args.querymethod)
+        main(args)

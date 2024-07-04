@@ -41,12 +41,12 @@ class Net:
             loss_epoch = []
             for batch_idx, (x, y, idxs) in enumerate(loader):
                 x, y = x.to(self.device), y.to(self.device)
-                optimizer.zero_grad()
                 out, e1 = self.clf(x)
                 loss = F.cross_entropy(out, y)
-                loss_epoch.append(loss.cpu().item())
+                optimizer.zero_grad()
                 loss.backward()
                 optimizer.step()
+                loss_epoch.append(loss.cpu().item())
             loss_record.append(np.mean(loss_epoch))
         print('finished training')
         print(loss_record)
@@ -59,7 +59,9 @@ class Net:
             for x, y, idxs in loader:
                 x, y = x.to(self.device), y.to(self.device)
                 out, e1 = self.clf(x)
-                pred = out.max(1)[1]
+                # pred = out.max(1)[1]
+                outputs = F.softmax(out, dim=1)
+                _, pred = torch.max(outputs.data, 1)
                 preds[idxs] = pred.cpu()
         return preds
     
@@ -262,7 +264,7 @@ class MLP(nn.Module):
         h = F.leaky_relu(h, negative_slope=0.01)
         h = self.dropout(h)
         logit = self.fc4(h)
-        return logit , h
+        return logit, h
 	
     def get_embedding_dim(self):
         return self.dim
