@@ -326,10 +326,12 @@ def baselineEXP(args, df_train, df_test, verbose):
 
 
 def main(args):
-    ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/advbim_tuning'
+    # ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/advbim_tuning'
+    ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/batch32_epoch20'
     # drugFilePath = f"/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning/druglist/{args.querymethod}/"
     # drugFilePath ='/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/batch10_100/'
-    drugFilePath ='/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/archive/data_wrongMLP/druglist/advbim_eps_tuning/'
+    # drugFilePath = '/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/archive/data_wrongMLP/druglist/advbim_eps_tuning/'
+    drugFilePath = '/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/batch32_epoch20/'
     if not args.finetune:
         ResultName = f"{args.cell}_pretrainOnly"
     else:
@@ -340,24 +342,6 @@ def main(args):
             ResultName = f"{ResultName}_finetune_all"
         if args.balancesample:
             ResultName = f"{ResultName}_balancesample"
-    ## Wandb
-    wandb.init(
-        project='Anchor Drug Project',
-        # tags = ['BaseLine'],
-        # tags = ['BaseLine', 'finetune', 'newMLP'],
-        tags = ['advbim', 'finetune', 'wrongMLP'],
-        # tags = ['ActiveLearn', 'finetune', 'trial'],
-        name=ResultName,
-        config={
-            'cellline': args.cell,
-            'query':args.querymethod,
-            'finetune': args.finetune,
-            'pretrain': args.pretrain,
-            'balancesample': args.balancesample,
-            'epoch': args.n_epoch,
-            'lr': args.lr,
-        },
-        )
     print(args)
     df_train = pd.read_csv(f'/egr/research-aidd/menghan1/AnchorDrug/data/HQdata/{args.cell}_train.csv', index_col=0)#[1:20]
     df_test = pd.read_csv(f'/egr/research-aidd/menghan1/AnchorDrug/data/HQdata/{args.cell}_test.csv', index_col=0)#[1:20]
@@ -370,6 +354,24 @@ def main(args):
         ##-------------------------------------- this is active learning parameter filter
         drugFileList = np.sort([f for f in drugFileList if '_10_0_100' in f])
         for anchor in drugFileList:
+            # Wandb
+            wandb.init(
+                project='Anchor Drug Project',
+                # tags = ['BaseLine'],
+                tags = ['ActiveLearn', 'finetune', 'newMLP'],
+                # tags = ['advbim', 'finetune', 'wrongMLP'],
+                # tags = ['ActiveLearn', 'finetune', 'trial'],
+                name=ResultName,
+                config={
+                    'cellline': args.cell,
+                    'query':args.querymethod,
+                    'finetune': args.finetune,
+                    'pretrain': args.pretrain,
+                    'balancesample': args.balancesample,
+                    'epoch': args.n_epoch,
+                    'lr': args.lr,
+                    },
+                )
             print(anchor)
             i = int(anchor[-5])
             with open(drugFilePath+anchor, 'rb') as f:
@@ -380,15 +382,15 @@ def main(args):
             ResultDatai, cmi, metric_historyi, labels_list, pred_list = baselineEXP(args, df_train_anchor, df_test, verbose)
             ResultData[i] = ResultDatai
             ResultPKG[i] = (ResultDatai, cmi, metric_historyi, labels_list, pred_list)
-            verbose = False
+            # verbose = False
+            wandb.finish()
     else:
         for i in range(5):
             ResultDatai, cmi, metric_historyi, labels_list, pred_list = baselineEXP(args, df_train, df_test, verbose)
             ResultData[i] = ResultDatai
             ResultPKG[i] = (ResultDatai, cmi, metric_historyi, labels_list, pred_list)
             verbose = False
-    
-    wandb.finish()
+
     with open(f'{ResultRoot}/{ResultName}.pkl', 'wb') as f:
         pickle.dump(ResultPKG, f)
     
@@ -411,8 +413,12 @@ if __name__ == '__main__':
     argparser.add_argument('--bimratio', type=float, default=0.7, help='ratio threshold')
     args = argparser.parse_args()
     basequery = args.querymethod
-    for eps in [0.0003, 0.0005, 0.0007, 0.0009, 0.0011, 0.0013, 0.0015]:
-        args.bimeps = eps
-        args.querymethod =  f'{basequery}-{str(args.bimratio)}-{str(args.bimdis)}-{str(args.bimeps)}'
+    # for eps in [0.0003, 0.0005, 0.0007, 0.0009, 0.0011, 0.0013, 0.0015]:
+    #     args.bimeps = eps
+    #     args.querymethod =  f'{basequery}-{str(args.bimratio)}-{str(args.bimdis)}-{str(args.bimeps)}'
+    #     print(args.querymethod)
+    #     main(args)
+    for query in ['LeastConfidence', 'KCenterGreedy', 'BALDDropout', 'BadgeSampling', 'MarginSampling', 'RandomSampling', 'KMeansSampling']:
+        args.querymethod =  query
         print(args.querymethod)
         main(args)
