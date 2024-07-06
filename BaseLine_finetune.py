@@ -20,7 +20,8 @@ from sklearn.metrics import confusion_matrix, f1_score, mean_squared_error, prec
 from sklearn.preprocessing import Normalizer
 torch.multiprocessing.set_sharing_strategy('file_system')
 
-PretrainModelPath = '/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/pretrain_GPS_predictable_307_genes_seed_10_31_final.pth'
+# PretrainModelPath = '/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/pretrain_GPS_predictable_307_genes_seed_10_31_final.pth'
+PretrainModelPath = '/egr/research-aidd/menghan1/AnchorDrug/base_model/internal_val_10%_random_holdout_earlystop/pretrain_GPS_predictable_307_genes_seed_10_33_final.pth'
 
 
 def get_morgan_fingerprint(mol, radius, nBits, FCFP=False):
@@ -326,12 +327,6 @@ def baselineEXP(args, df_train, df_test, verbose):
 
 
 def main(args):
-    # ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/advbim_tuning'
-    ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/batch32_epoch20'
-    # drugFilePath = f"/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning/druglist/{args.querymethod}/"
-    # drugFilePath ='/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/batch10_100/'
-    # drugFilePath = '/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/archive/data_wrongMLP/druglist/advbim_eps_tuning/'
-    drugFilePath = '/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/batch32_epoch20/'
     if not args.finetune:
         ResultName = f"{args.cell}_pretrainOnly"
     else:
@@ -413,12 +408,22 @@ if __name__ == '__main__':
     argparser.add_argument('--bimratio', type=float, default=0.7, help='ratio threshold')
     args = argparser.parse_args()
     basequery = args.querymethod
+    
+    ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine'
+    # ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/advbim_tuning'
+    # ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/batch32_epoch20'
+    # drugFilePath = f"/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning/druglist/{args.querymethod}/"
+    # drugFilePath ='/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/batch10_100/'
+    # drugFilePath = '/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/archive/data_wrongMLP/druglist/advbim_eps_tuning/'
+    # drugFilePath = '/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/batch32_epoch20/'
+    
+    main(args)
     # for eps in [0.0003, 0.0005, 0.0007, 0.0009, 0.0011, 0.0013, 0.0015]:
     #     args.bimeps = eps
     #     args.querymethod =  f'{basequery}-{str(args.bimratio)}-{str(args.bimdis)}-{str(args.bimeps)}'
     #     print(args.querymethod)
     #     main(args)
-    for query in ['LeastConfidence', 'KCenterGreedy', 'BALDDropout', 'BadgeSampling', 'MarginSampling', 'RandomSampling', 'KMeansSampling']:
-        args.querymethod =  query
-        print(args.querymethod)
-        main(args)
+    # for query in ['LeastConfidence', 'KCenterGreedy', 'BALDDropout', 'BadgeSampling', 'MarginSampling', 'RandomSampling', 'KMeansSampling']:
+    #     args.querymethod =  query
+    #     print(args.querymethod)
+    #     main(args)

@@ -90,7 +90,7 @@ for g in gene:
     #
     df_test = None
     for cell in c:
-        tmp = pd.read_csv('/egr/research-aidd/menghan1/AnchorDrug/data/archive/newTestData/' + cell + '_test.csv', index_col = 'Unnamed: 0')
+        tmp = pd.read_csv('/egr/research-aidd/menghan1/AnchorDrug/data/HQdata/' + cell + '_test.csv')
         median = tmp[['SMILES', g,]].groupby(by='SMILES').median().reset_index()
         median['cellline'] = cell
         median['test_gene'] = g
@@ -490,7 +490,7 @@ def main(args):
 #----------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser()
-    argparser.add_argument('--out_dir', type=str, help='dir to output', default='/egr/research-aidd/menghan1/AnchorDrug/base_model/internal_val_10%_random_holdout_earlystop/')
+    argparser.add_argument('--out_dir', type=str, help='dir to output', default='/egr/research-aidd/menghan1/AnchorDrug/base_model/hannewnet/')
     argparser.add_argument('--input', type=str, help='input dataset', default='drugcellline')
     argparser.add_argument('--lr', type=float, help='task-level inner update learning rate', default=0.001)
     argparser.add_argument('--n_epoch', type=int, help='update steps for finetunning', default=200)
