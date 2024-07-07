@@ -21,8 +21,8 @@ from sklearn.preprocessing import Normalizer
 torch.multiprocessing.set_sharing_strategy('file_system')
 
 # PretrainModelPath = '/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/pretrain_GPS_predictable_307_genes_seed_10_31_final.pth'
-PretrainModelPath = '/egr/research-aidd/menghan1/AnchorDrug/base_model/internal_val_10%_random_holdout_earlystop/pretrain_GPS_predictable_307_genes_seed_10_33_final.pth'
-
+# PretrainModelPath = '/egr/research-aidd/menghan1/AnchorDrug/base_model/internal_val_10%_random_holdout_earlystop/pretrain_GPS_predictable_307_genes_seed_10_33_final.pth'
+PretrainModelPath = '/egr/research-aidd/menghan1/AnchorDrug/base_model/hannewnet/pretrain_GPS_predictable_307_genes_seed_10_39_final.pth'
 
 def get_morgan_fingerprint(mol, radius, nBits, FCFP=False):
     m = Chem.MolFromSmiles(mol)
@@ -159,8 +159,8 @@ class MLP(nn.Module):
         self.dim = embSize
         self.dropout_rate = dropout_rate
         self.fc1 = nn.Linear(dim[0], 1000)
-        self.fc2 = nn.Linear(1000, 128)
-        self.fc3 = nn.Linear(128, embSize)
+        self.fc2 = nn.Linear(1000, 256)
+        self.fc3 = nn.Linear(256, embSize)
         self.fc4 = nn.Linear(embSize, num_classes)
         self.dropout = nn.Dropout(dropout_rate)
         #
@@ -380,7 +380,7 @@ def main(args):
             # verbose = False
             wandb.finish()
     else:
-        for i in range(5):
+        for i in range(1):
             ResultDatai, cmi, metric_historyi, labels_list, pred_list = baselineEXP(args, df_train, df_test, verbose)
             ResultData[i] = ResultDatai
             ResultPKG[i] = (ResultDatai, cmi, metric_historyi, labels_list, pred_list)

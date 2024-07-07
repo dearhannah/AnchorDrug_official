@@ -10,6 +10,8 @@ from copy import deepcopy
 from tqdm import tqdm
 import torch.nn.init as init
 
+# pretain_model_pwd = '/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/pretrain_GPS_predictable_307_genes_seed_10_31_final.pth'
+pretain_model_pwd = '/egr/research-aidd/menghan1/AnchorDrug/base_model/hannewnet_1000_256_64/pretrain_GPS_predictable_307_genes_seed_10_39_final.pth'
 class Net:
     def __init__(self, net, params, device):
         self.net = net
@@ -18,15 +20,14 @@ class Net:
         self.device = device
         dim = (2259,)
         self.clf = self.net(dim = dim, pretrained = self.params['pretrained'], num_classes = self.params['num_class']).to(self.device)
-        self.clf.load_state_dict(torch.load('/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/pretrain_GPS_predictable_307_genes_seed_10_31_final.pth').state_dict())
+        self.clf.load_state_dict(torch.load(pretain_model_pwd).state_dict())
         
     def train(self, data):
         n_epoch = self.params['n_epoch']
         dim = data.X.shape[1:]
         self.clf = self.net(dim = dim, pretrained = self.params['pretrained'], num_classes = self.params['num_class']).to(self.device)
         # cell = self.cell
-        self.clf.load_state_dict(
-			torch.load('/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/pretrain_GPS_predictable_307_genes_seed_10_31_final.pth').state_dict())
+        self.clf.load_state_dict(torch.load(pretain_model_pwd).state_dict())
         self.clf.train()
         if self.params['optimizer'] == 'Adam':
             optimizer = optim.Adam(self.clf.parameters(), **self.params['optimizer_args'])
@@ -146,8 +147,8 @@ class MLP(nn.Module):
         self.dim = embSize
         self.dropout_rate = dropout_rate
         self.fc1 = nn.Linear(dim[0], 1000)
-        self.fc2 = nn.Linear(1000, 128)
-        self.fc3 = nn.Linear(128, embSize)
+        self.fc2 = nn.Linear(1000, 256)
+        self.fc3 = nn.Linear(256, embSize)
         self.fc4 = nn.Linear(embSize, num_classes)
         self.dropout = nn.Dropout(dropout_rate)
         #

@@ -243,8 +243,8 @@ class MLP(nn.Module):
         self.embSize = embSize
         self.dropout_rate = dropout_rate
         self.fc1 = nn.Linear(input_size, 1000)
-        self.fc2 = nn.Linear(1000, 128)
-        self.fc3 = nn.Linear(128, embSize)
+        self.fc2 = nn.Linear(1000, 256)
+        self.fc3 = nn.Linear(256, embSize)
         self.fc4 = nn.Linear(embSize, n_outputs)
         self.dropout = nn.Dropout(dropout_rate)
         #
