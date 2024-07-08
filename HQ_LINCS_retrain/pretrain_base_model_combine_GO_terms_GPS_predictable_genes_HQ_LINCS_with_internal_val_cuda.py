@@ -404,7 +404,7 @@ def main(args):
         if args.input == 'drugcellline':
             train_dataset = DrugCellline(df=df_train_GO, type = 'train', 
                                     fn_file ='/egr/research-aidd/menghan1/AnchorDrug/data/CellLineEncode/use_training_cell_line_expression_features_128_encoded_20240111.csv', 
-                                    down_sample=True)
+                                    down_sample=False)
             test_dataset = DrugCellline(df=df_test_GO, type = 'test', 
                                     fn_file = '/egr/research-aidd/menghan1/AnchorDrug/data/CellLineEncode/test_cell_line_expression_features_128_encoded_20240111.csv', 
                                     down_sample=False)
@@ -490,7 +490,7 @@ def main(args):
 #----------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser()
-    argparser.add_argument('--out_dir', type=str, help='dir to output', default='/egr/research-aidd/menghan1/AnchorDrug/base_model/hannewnet/')
+    argparser.add_argument('--out_dir', type=str, help='dir to output', default='/egr/research-aidd/menghan1/AnchorDrug/base_model/hannewnet_1000_256_64_imbalance/')
     argparser.add_argument('--input', type=str, help='input dataset', default='drugcellline')
     argparser.add_argument('--lr', type=float, help='task-level inner update learning rate', default=0.001)
     argparser.add_argument('--n_epoch', type=int, help='update steps for finetunning', default=200)

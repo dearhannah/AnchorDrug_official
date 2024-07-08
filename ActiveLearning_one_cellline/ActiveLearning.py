@@ -41,6 +41,7 @@ warnings.filterwarnings('ignore')
 
 # start experiment
 print(args_pool[DATA_NAME])
+print(args_input)
 iteration = args_input.iteration
 
 all_acc = []
