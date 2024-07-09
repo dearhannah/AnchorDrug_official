@@ -22,7 +22,8 @@ torch.multiprocessing.set_sharing_strategy('file_system')
 
 # PretrainModelPath = '/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/pretrain_GPS_predictable_307_genes_seed_10_31_final.pth'
 # PretrainModelPath = '/egr/research-aidd/menghan1/AnchorDrug/base_model/internal_val_10%_random_holdout_earlystop/pretrain_GPS_predictable_307_genes_seed_10_33_final.pth'
-PretrainModelPath = '/egr/research-aidd/menghan1/AnchorDrug/base_model/hannewnet_1000_256_64/pretrain_GPS_predictable_307_genes_seed_10_39_final.pth'
+# PretrainModelPath = '/egr/research-aidd/menghan1/AnchorDrug/base_model/hannewnet_1000_256_64/pretrain_GPS_predictable_307_genes_seed_10_39_final.pth'
+PretrainModelPath = '/egr/research-aidd/menghan1/AnchorDrug/base_model/hannewnet_1000_256_64_imbalance/pretrain_GPS_predictable_307_genes_seed_10_36_final.pth'
 
 def get_morgan_fingerprint(mol, radius, nBits, FCFP=False):
     m = Chem.MolFromSmiles(mol)
@@ -353,7 +354,7 @@ def main(args):
             wandb.init(
                 project='Anchor Drug Project',
                 # tags = ['BaseLine'],
-                tags = ['ActiveLearn', 'finetune', 'largeMLP'],
+                tags = ['ActiveLearn', 'finetune', 'largeMLP_imbalance'],
                 # tags = ['advbim', 'finetune', 'wrongMLP'],
                 # tags = ['ActiveLearn', 'finetune', 'trial'],
                 name=ResultName,
@@ -412,10 +413,11 @@ if __name__ == '__main__':
     ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine'
     # ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/advbim_tuning'
     # ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/batch32_epoch20'
-    # drugFilePath = f"/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning/druglist/{args.querymethod}/"
+    
+    # drugFilePath = f"/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/"
     # drugFilePath ='/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/batch10_100/'
     # drugFilePath = '/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/archive/data_wrongMLP/druglist/advbim_eps_tuning/'
-    drugFilePath = '/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/'
+    drugFilePath = '/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/hannewnet_1000_256_64_balance/'
     
     main(args)
     # for eps in [0.0003, 0.0005, 0.0007, 0.0009, 0.0011, 0.0013, 0.0015]:
