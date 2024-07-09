@@ -23,8 +23,10 @@ torch.multiprocessing.set_sharing_strategy('file_system')
 # PretrainModelPath = '/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/pretrain_GPS_predictable_307_genes_seed_10_31_final.pth'
 # PretrainModelPath = '/egr/research-aidd/menghan1/AnchorDrug/base_model/internal_val_10%_random_holdout_earlystop/pretrain_GPS_predictable_307_genes_seed_10_33_final.pth'
 # PretrainModelPath = '/egr/research-aidd/menghan1/AnchorDrug/base_model/hannewnet_1000_256_64/pretrain_GPS_predictable_307_genes_seed_10_39_final.pth'
-PretrainModelPath = '/egr/research-aidd/menghan1/AnchorDrug/base_model/hannewnet_1000_256_64_imbalance/pretrain_GPS_predictable_307_genes_seed_10_36_final.pth'
-
+# PretrainModelPath = '/egr/research-aidd/menghan1/AnchorDrug/base_model/hannewnet_1000_256_64_imbalance/pretrain_GPS_predictable_307_genes_seed_10_36_final.pth'
+# PretrainModelPath =  '/egr/research-aidd/menghan1/AnchorDrug/base_model/hannewnet_1024_256_64_imbalance/pretrain_GPS_predictable_307_genes_seed_10_43_final.pth'
+# PretrainModelPath =  '/egr/research-aidd/menghan1/AnchorDrug/base_model/hannewnet_1024_512_64_imbalance/pretrain_GPS_predictable_307_genes_seed_10_37_final.pth'
+PretrainModelPath =  '/egr/research-aidd/menghan1/AnchorDrug/base_model/hannewnet_512_256_64_imbalance/pretrain_GPS_predictable_307_genes_seed_10_43_final.pth'
 def get_morgan_fingerprint(mol, radius, nBits, FCFP=False):
     m = Chem.MolFromSmiles(mol)
     fp = AllChem.GetMorganFingerprintAsBitVect(m, radius=radius, nBits=nBits, useFeatures=FCFP)
@@ -159,8 +161,8 @@ class MLP(nn.Module):
         super(MLP, self).__init__()
         self.dim = embSize
         self.dropout_rate = dropout_rate
-        self.fc1 = nn.Linear(dim[0], 1000)
-        self.fc2 = nn.Linear(1000, 256)
+        self.fc1 = nn.Linear(dim[0], 512)
+        self.fc2 = nn.Linear(512, 256)
         self.fc3 = nn.Linear(256, embSize)
         self.fc4 = nn.Linear(embSize, num_classes)
         self.dropout = nn.Dropout(dropout_rate)
@@ -354,7 +356,7 @@ def main(args):
             wandb.init(
                 project='Anchor Drug Project',
                 # tags = ['BaseLine'],
-                tags = ['ActiveLearn', 'finetune', 'largeMLP_imbalance'],
+                tags = ['ActiveLearn', 'finetune', 'smallMLP_imbalance'],
                 # tags = ['advbim', 'finetune', 'wrongMLP'],
                 # tags = ['ActiveLearn', 'finetune', 'trial'],
                 name=ResultName,
@@ -381,11 +383,27 @@ def main(args):
             # verbose = False
             wandb.finish()
     else:
-        for i in range(1):
+        for i in range(3):
+            wandb.init(
+                project='Anchor Drug Project',
+                # tags = ['BaseLine'],
+                tags = ['BaseLine', 'finetune', 'smallMLP_imbalance'],
+                name=ResultName,
+                config={
+                    'cellline': args.cell,
+                    'query':args.querymethod,
+                    'finetune': args.finetune,
+                    'pretrain': args.pretrain,
+                    'balancesample': args.balancesample,
+                    'epoch': args.n_epoch,
+                    'lr': args.lr,
+                    },
+                )
             ResultDatai, cmi, metric_historyi, labels_list, pred_list = baselineEXP(args, df_train, df_test, verbose)
             ResultData[i] = ResultDatai
             ResultPKG[i] = (ResultDatai, cmi, metric_historyi, labels_list, pred_list)
-            verbose = False
+            # verbose = False
+            wandb.finish()
 
     with open(f'{ResultRoot}/{ResultName}.pkl', 'wb') as f:
         pickle.dump(ResultPKG, f)
@@ -410,14 +428,14 @@ if __name__ == '__main__':
     args = argparser.parse_args()
     basequery = args.querymethod
     
-    ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine'
+    ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/hannewnet_512_256_64_imbalance'
     # ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/advbim_tuning'
     # ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/batch32_epoch20'
     
     # drugFilePath = f"/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/"
     # drugFilePath ='/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/batch10_100/'
     # drugFilePath = '/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/archive/data_wrongMLP/druglist/advbim_eps_tuning/'
-    drugFilePath = '/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/hannewnet_1000_256_64_balance/'
+    # drugFilePath = '/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/hannewnet_1000_256_64_balance/'
     
     main(args)
     # for eps in [0.0003, 0.0005, 0.0007, 0.0009, 0.0011, 0.0013, 0.0015]:
