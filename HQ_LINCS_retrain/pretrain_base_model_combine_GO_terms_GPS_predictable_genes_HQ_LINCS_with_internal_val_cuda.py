@@ -243,8 +243,8 @@ class MLP(nn.Module):
         self.embSize = embSize
         self.dropout_rate = dropout_rate
         self.fc1 = nn.Linear(input_size, 1000)
-        self.fc2 = nn.Linear(1000, 256)
-        self.fc3 = nn.Linear(256, embSize)
+        self.fc2 = nn.Linear(1000, 128)
+        self.fc3 = nn.Linear(128, embSize)
         self.fc4 = nn.Linear(embSize, n_outputs)
         self.dropout = nn.Dropout(dropout_rate)
         #
@@ -490,7 +490,7 @@ def main(args):
 #----------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser()
-    argparser.add_argument('--out_dir', type=str, help='dir to output', default='/egr/research-aidd/menghan1/AnchorDrug/base_model/hannewnet_1000_256_64_imbalance/')
+    argparser.add_argument('--out_dir', type=str, help='dir to output', default='/egr/research-aidd/menghan1/AnchorDrug/base_model/hannewnet_1000_128_64_imbalance/')
     argparser.add_argument('--input', type=str, help='input dataset', default='drugcellline')
     argparser.add_argument('--lr', type=float, help='task-level inner update learning rate', default=0.001)
     argparser.add_argument('--n_epoch', type=int, help='update steps for finetunning', default=200)

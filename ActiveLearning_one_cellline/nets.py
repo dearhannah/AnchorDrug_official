@@ -12,7 +12,8 @@ import torch.nn.init as init
 
 # pretain_model_pwd = '/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/pretrain_GPS_predictable_307_genes_seed_10_31_final.pth'
 # pretain_model_pwd = '/egr/research-aidd/menghan1/AnchorDrug/base_model/hannewnet_1000_256_64/pretrain_GPS_predictable_307_genes_seed_10_39_final.pth'
-pretain_model_pwd = '/egr/research-aidd/menghan1/AnchorDrug/base_model/hannewnet_1000_256_64_imbalance/pretrain_GPS_predictable_307_genes_seed_10_36_final.pth'
+# pretain_model_pwd = '/egr/research-aidd/menghan1/AnchorDrug/base_model/hannewnet_1000_256_64_imbalance/pretrain_GPS_predictable_307_genes_seed_10_36_final.pth'
+pretain_model_pwd = '/egr/research-aidd/menghan1/AnchorDrug/base_model/hannewnet_1000_128_64_imbalance/pretrain_GPS_predictable_307_genes_seed_10_44_final.pth'
 class Net:
     def __init__(self, net, params, device):
         self.net = net
