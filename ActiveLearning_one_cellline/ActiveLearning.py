@@ -132,9 +132,9 @@ while (iteration > 0):
 	with open(drug_path, 'wb') as f:
 		pickle.dump(smiles, f)
 	# save preds
-	preds_path = f'./preds/{DATA_NAME}_{args_input.cell}_{STRATEGY_NAME}_{str(NUM_QUERY)}_{str(NUM_INIT_LB)}_{str(args_input.quota)}_{timestamp}_{iteration}.pkl'
-	with open(preds_path, 'wb') as f:
-		pickle.dump(YandPred, f)
+	# preds_path = f'./preds/{DATA_NAME}_{args_input.cell}_{STRATEGY_NAME}_{str(NUM_QUERY)}_{str(NUM_INIT_LB)}_{str(args_input.quota)}_{timestamp}_{iteration}.pkl'
+	# with open(preds_path, 'wb') as f:
+	# 	pickle.dump(YandPred, f)
 	preds_csv_path = f'./preds/{DATA_NAME}_{args_input.cell}_{STRATEGY_NAME}_{str(NUM_QUERY)}_{str(NUM_INIT_LB)}_{str(args_input.quota)}_{timestamp}_{iteration}.csv'
 	pd.DataFrame.from_dict(YandPred).to_csv(preds_csv_path,index=False)
 

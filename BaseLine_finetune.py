@@ -434,6 +434,7 @@ if __name__ == '__main__':
     ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/hannewnet_1000_128_64_imbalance'
     # ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/advbim_tuning'
     # ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/batch32_epoch20'
+    # ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine'
     
     # drugFilePath = f"/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/"
     # drugFilePath ='/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/batch10_100/'

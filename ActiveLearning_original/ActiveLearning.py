@@ -16,7 +16,10 @@ NUM_QUERY = args_input.batch
 NUM_INIT_LB = args_input.initseed
 NUM_ROUND = int(args_input.quota / args_input.batch)
 DATA_NAME = args_input.dataset_name
-STRATEGY_NAME = args_input.ALstrategy
+if args_input.ALstrategy=='AdversarialBIM':
+    STRATEGY_NAME = f'{args_input.ALstrategy}-{str(args_input.bimratio)}-{str(args_input.bimdis)}-{str(args_input.bimeps)}'
+else:
+    STRATEGY_NAME = args_input.ALstrategy
 SEED = args_input.seed
 os.environ['TORCH_HOME']='./basicmodel'
 os.environ["CUDA_VISIBLE_DEVICES"] = str(args_input.gpu)
@@ -37,7 +40,8 @@ sys.stdout = Logger(f'./logfile/{DATA_NAME}_{args_input.cell}_{STRATEGY_NAME}_{s
 warnings.filterwarnings('ignore')
 
 # start experiment
-
+print(args_pool[DATA_NAME])
+print(args_input)
 iteration = args_input.iteration
 
 all_acc = []
@@ -128,9 +132,9 @@ while (iteration > 0):
 	with open(drug_path, 'wb') as f:
 		pickle.dump(smiles, f)
 	# save preds
-	preds_path = f'./preds/{DATA_NAME}_{args_input.cell}_{STRATEGY_NAME}_{str(NUM_QUERY)}_{str(NUM_INIT_LB)}_{str(args_input.quota)}_{timestamp}_{iteration}.pkl'
-	with open(preds_path, 'wb') as f:
-		pickle.dump(YandPred, f)
+	# preds_path = f'./preds/{DATA_NAME}_{args_input.cell}_{STRATEGY_NAME}_{str(NUM_QUERY)}_{str(NUM_INIT_LB)}_{str(args_input.quota)}_{timestamp}_{iteration}.pkl'
+	# with open(preds_path, 'wb') as f:
+	# 	pickle.dump(YandPred, f)
 	preds_csv_path = f'./preds/{DATA_NAME}_{args_input.cell}_{STRATEGY_NAME}_{str(NUM_QUERY)}_{str(NUM_INIT_LB)}_{str(args_input.quota)}_{timestamp}_{iteration}.csv'
 	pd.DataFrame.from_dict(YandPred).to_csv(preds_csv_path,index=False)
 
