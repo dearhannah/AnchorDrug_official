@@ -57,6 +57,7 @@ while (iteration > 0):
 	# data, network, strategy
 	args_task = args_pool[DATA_NAME]
 	args_task['cell'] = [args_input.cell]
+	args_task['balancesample'] = args_input.balancesample
 	dataset = get_dataset(args_input.dataset_name, args_task)				# load dataset
 	net_all = []
 	for cell in dataset.cell_list:

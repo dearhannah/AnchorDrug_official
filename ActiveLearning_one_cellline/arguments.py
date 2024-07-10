@@ -22,6 +22,7 @@ def get_args():
 	parser.add_argument('--initseed', '-s', default = 0, type = int, help = 'Initial pool of labeled data')
 	parser.add_argument('--gpu', '-g', default = 0, type = str, help = 'which gpu')
 	parser.add_argument('--seed', default=4666, type=int, help='random seed')
+	parser.add_argument('--balancesample', '-bs', action='store_true', help='balance sample or not')
 	#BIM settings
 	parser.add_argument('--bimeps', type=float, default=1e-3, help='learning rate of adv sample')
 	parser.add_argument('--bimdis', type=float, default=1, help='distance threshold')

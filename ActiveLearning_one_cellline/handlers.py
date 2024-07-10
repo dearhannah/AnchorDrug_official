@@ -6,7 +6,7 @@ from PIL import Image
 
 
 class LINCS_Handler(Dataset):
-    def __init__(self, X, Y, cell, balancesample=False, random_seed=6789):
+    def __init__(self, X, Y, cell, balancesample=False, random_seed=727):
         self.cell = cell
         self.random_seed = random_seed
         if balancesample:
