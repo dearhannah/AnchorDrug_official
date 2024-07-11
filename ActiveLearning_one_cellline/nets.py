@@ -23,6 +23,7 @@ class Net:
         dim = (2259,)
         self.clf = self.net(dim = dim, pretrained = self.params['pretrained'], num_classes = self.params['num_class']).to(self.device)
         self.clf.load_state_dict(torch.load(pretain_model_pwd).state_dict())
+        print(pretain_model_pwd)
         
     def train(self, data):
         n_epoch = self.params['n_epoch']
