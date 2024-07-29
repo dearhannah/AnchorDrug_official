@@ -25,7 +25,7 @@ def get_args():
 	parser.add_argument('--balancesample', '-bs', action='store_true', help='balance sample or not')
 	#BIM settings
 	parser.add_argument('--bimeps', type=float, default=1e-3, help='learning rate of adv sample')
-	parser.add_argument('--bimdis', type=float, default=1, help='distance threshold')
+	parser.add_argument('--bimdis', type=float, default=0.1, help='distance threshold')
 	parser.add_argument('--bimratio', type=float, default=0.85, help='ratio threshold')
 	args = parser.parse_args()
 	return args

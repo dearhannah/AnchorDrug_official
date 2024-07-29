@@ -4,6 +4,8 @@ data
 *.txt
 *.pkl
 *.params
+*.pdf
+*.jpg
 wandb
 AnchorDrugPrediction/finetune_step1_models/
 ActiveLearning/logfile/

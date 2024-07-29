@@ -34,12 +34,13 @@
             "args": [
                 "-a=RandomSampling",
                 "-s=0",
-                "-q=30",
+                "-q=100",
                 "-b=10",
                 "-d=LINCS",
                 "--seed=4666",
-                "-t=3",
-                "-g=0"
+                "-t=1",
+                "-g=0",
+                "-bs"
             ],
         },
         {
@@ -58,6 +59,25 @@
                 "--seed=4666",
                 "-t=1",
                 "-g=0"
+            ],
+        },
+        {
+            "name": "AdversarialBIM2",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "args": [
+                "-a=AdversarialBIM",
+                "-s=0",
+                "-q=100",
+                "-b=10",
+                "-d=LINCS",
+                "--seed=4666",
+                "-t=1",
+                "-g=0",
+                "--bimratio=0.9",
             ],
         },
         {
@@ -197,9 +217,9 @@
                 "-c=MCF7", 
                 "--pretrain", 
                 "--finetune", 
-                // "--balancesample",
+                "--balancesample",
                 // "-q=LeastConfidence",
-                "-q=AdversarialBIM-0.7-1-0.0005",
+                "-q=AdversarialBIM",
             ],
         },
         {
@@ -212,7 +232,7 @@
             "args": [
                 // "--lr=0.001",
                 // "--n_epoch=3",
-                "--test",
+                // "--test",
             ],
         }
     ]

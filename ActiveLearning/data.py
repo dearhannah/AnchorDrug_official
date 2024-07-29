@@ -48,7 +48,7 @@ class lincsData:
             raw_val = DrugCelllineGene(df=df_val, cell=cell)
 
             # TODO: add checking the gene_list and the smile_list
-            
+            assert self.SMILE_train==raw_train.smiles.to_list(), 'drugs in differernt cell lines not the same'
             self.X_train.append(raw_train.data)
             self.Y_train.append(raw_train.labels)
 

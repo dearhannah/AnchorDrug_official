@@ -1,5 +1,5 @@
 args_pool = {'LINCS':
-				{'n_epoch': 40, 
+				{'n_epoch': 20, 
 				 'name': 'LINCS',
                  'cell': ['MCF7', 'A549', 'PC3'],
                 #  'balancesample': False,
