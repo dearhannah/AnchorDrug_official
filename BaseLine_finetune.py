@@ -338,7 +338,7 @@ def main(args):
     else:
         ResultName = f"{args.cell}_{args.n_epoch}_{args.lr}_{args.batchsize}"
         if args.querymethod != 'none':
-            ResultName = f"{ResultName}_finetune_{args.querymethod}_10_0_100"
+            ResultName = f"{ResultName}_finetune_{args.querymethod}_{args.albatch}_0_{args.quota}"
         else:
             ResultName = f"{ResultName}_finetune_all"
         if args.balancesample:
@@ -351,15 +351,20 @@ def main(args):
     verbose = True
     if args.querymethod != 'none':
         drugFileList = [f for f in os.listdir(drugFilePath) if args.cell in f]
+        # print('check0')
+        # print(drugFileList)
         drugFileList = [f for f in drugFileList if args.querymethod in f]
-        ##-------------------------------------- this is active learning parameter filter
-        # drugFileList = np.sort([f for f in drugFileList if '_10_0_100' in f])
-        drugFileList = np.sort([f for f in drugFileList if '_10_0_30' in f])
+        # print('check1')
+        # print(drugFileList)
+        drugFileList = np.sort([f for f in drugFileList if f'_{args.albatch}_0_{args.quota}' in f])
+        # print('check2')
+        # print(f'_{args.albatch}_0_{args.quota}')
+        # print(drugFileList)
         for anchor in drugFileList:
             # Wandb
             wandb.init(
                 project='Anchor Drug Project',
-                # tags = ['advbim', 'parameter_tuning'],
+                tags = ['advbim', 'parameter_tuning'],
                 # tags = ['drug_30', 'AL', 'queryscomparison'],
                 name=ResultName,
                 config={
@@ -370,6 +375,7 @@ def main(args):
                     'balancesample': args.balancesample,
                     'epoch': args.n_epoch,
                     'lr': args.lr,
+                    # 'bimratio': args.bimratio,
                     },
                 )
             print(anchor)
@@ -478,36 +484,24 @@ if __name__ == '__main__':
     argparser.add_argument('--pretrain', action='store_true', help='use pretrained model or not')
     argparser.add_argument('--finetune', action='store_true', help='Finetune or not')
     argparser.add_argument('--balancesample', '-bs', action='store_true', help='balance sample or not')
-    #BIM settings
+    # Active learning settings
+    argparser.add_argument('--quota', '-alq', type=int, default=100, help='quota of active learning')
+    argparser.add_argument('--albatch', '-alb', type=int, default=10, help='batch size in one active learning iteration')
+    # BIM settings
     argparser.add_argument('--bimeps', type=float, default=1e-3, help='learning rate of adv sample')
-    argparser.add_argument('--bimdis', type=float, default=1, help='distance threshold')
+    argparser.add_argument('--bimdis', type=float, default=0.1, help='distance threshold')
     argparser.add_argument('--bimratio', type=float, default=0.85, help='ratio threshold')
     args = argparser.parse_args()
+
+    ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/new_advBIM_ratio'
+    drugFilePath = '/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/new_advbim_ratio/'
     
-    # ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/hannewnet_1000_128_64_imbalance'
-    # ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/OriginalAL_1000_128_64_imbalance'
-    # ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/advbim_tuning'
-    # ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/advBIM_ratio'
-    # ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/advbim_dist'
-    # ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/30drug_1000_128_64_imbalancepre'
-    
-    # drugFilePath = f"/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/"
-    # drugFilePath = '/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/batch32_epoch20_imbalance/'
-    # drugFilePath = '/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_original/druglist/batch32_epoch20_imbalance/'
-    # drugFilePath = '/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/batch32_epoch20_imbalance_30drug/'
-    # drugFilePath = '/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/advbim_ratio/'
-    # drugFilePath = '/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/advbim_dist/'
-    
-    # main(args)
+    main(args)
     
     # basequery = args.querymethod
-    # for eps in [0.0003, 0.0005, 0.0007, 0.0009, 0.0011, 0.0013, 0.0015]:
-    #     args.bimeps = eps
     # for ratio in [0.5, 0.6, 0.7, 0.8, 0.9]:
-    # for ratio in [0.75, 0.85]:
+    # # for ratio in [0.75, 0.85]:
     #     args.bimratio = ratio
-    # for dist in [0.5, 0.6, 0.7, 0.8, 0.9]:
-    #     args.bimdis = dist
     #     args.querymethod =  f'{basequery}-{str(args.bimratio)}-{str(args.bimdis)}-{str(args.bimeps)}'
     #     print(args.querymethod)
     #     main(args)
@@ -518,12 +512,12 @@ if __name__ == '__main__':
     #     print(args.querymethod)
     #     main(args)
         
-    # ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/CommonAL_1000_128_64_imbalance'
-    ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/30drug_common_1000_128_64_imbalancepre'
+    # # ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/CommonAL_1000_128_64_imbalance'
+    # ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/30drug_common_1000_128_64_imbalancepre'
     
-    # drugFilePath = '/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning/druglist/'
-    drugFilePath = '/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning/druglist/batch32_epoch20_imbalance_30drug/'
-    for query in ['LeastConfidence', 'KCenterGreedy', 'BALDDropout', 'BadgeSampling', 'MarginSampling', 'KMeansSampling', 'RandomSampling']:
-        args.querymethod =  query
-        print(args.querymethod)
-        main_common_drug_list(args)
+    # # drugFilePath = '/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning/druglist/'
+    # drugFilePath = '/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning/druglist/batch32_epoch20_imbalance_30drug/'
+    # for query in ['LeastConfidence', 'KCenterGreedy', 'BALDDropout', 'BadgeSampling', 'MarginSampling', 'KMeansSampling', 'RandomSampling']:
+    #     args.querymethod =  query
+    #     print(args.querymethod)
+    #     main_common_drug_list(args)
