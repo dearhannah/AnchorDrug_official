@@ -52,7 +52,7 @@ class lincsData:
             raw_val = DrugCelllineGene(df=df_val, cell=cell)
 
             # TODO: add checking the gene_list and the smile_list
-            assert trainDrugs==raw_train.smiles, 'drugs not the same'
+            assert trainDrugs==raw_train.smiles.to_list(), 'drugs not the same'
             self.X_train.append(raw_train.data)
             self.Y_train.append(raw_train.labels)
 
