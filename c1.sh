@@ -1,10 +1,6 @@
-python BaseLine_finetune.py -c MCF7 --n_epoch 50 --pretrain --finetune --balancesample
-# python BaseLine_finetune.py -c MCF7 --n_epoch 50 --pretrain --finetune
-# python BaseLine_finetune.py -c MCF7 --n_epoch 50 --pretrain
+# python BaseLine_finetune.py -c MCF7 --n_epoch 50 --pretrain --finetune --balancesample
 
 # python BaseLine_finetune.py -c MCF7 -q AdversarialBIM --pretrain --finetune --balancesample
-# python BaseLine_finetune.py -c PC3 -q AdversarialBIM --pretrain --finetune --balancesample
-# python BaseLine_finetune.py -c A549 -q AdversarialBIM --pretrain --finetune --balancesample
 
 # python BaseLine_finetune.py -c MCF7 -q LeastConfidence --pretrain --finetune
 # python BaseLine_finetune.py -c MCF7 -q MarginSampling --pretrain --finetune
@@ -20,3 +16,9 @@ python BaseLine_finetune.py -c MCF7 --n_epoch 50 --pretrain --finetune --balance
 # python BaseLine_finetune.py -c MCF7 -q BadgeSampling --pretrain --finetune --balancesample
 # python BaseLine_finetune.py -c MCF7 -q BALDDropout --pretrain --finetune --balancesample
 # python BaseLine_finetune.py -c MCF7 -q RandomSampling --pretrain --finetune --balancesample
+
+python BaseLine_finetune.py -c MCF7 -q AdversarialBIM-0.75-0.1-0.0005 --pretrain --finetune --balancesample
+python BaseLine_finetune.py -c MCF7 -q AdversarialBIM-0.8-0.1-0.0005 --pretrain --finetune --balancesample
+python BaseLine_finetune.py -c MCF7 -q AdversarialBIM-0.85-0.1-0.0005 --pretrain --finetune --balancesample
+python BaseLine_finetune.py -c MCF7 -q AdversarialBIM-0.9-0.1-0.0005 --pretrain --finetune --balancesample
+python BaseLine_finetune.py -c MCF7 -q AdversarialBIM-0.95-0.1-0.0005 --pretrain --finetune --balancesample

@@ -488,7 +488,7 @@ if __name__ == '__main__':
     argparser.add_argument('--quota', '-alq', type=int, default=100, help='quota of active learning')
     argparser.add_argument('--albatch', '-alb', type=int, default=10, help='batch size in one active learning iteration')
     # BIM settings
-    argparser.add_argument('--bimeps', type=float, default=1e-3, help='learning rate of adv sample')
+    argparser.add_argument('--bimeps', type=float, default=5e-4, help='learning rate of adv sample')
     argparser.add_argument('--bimdis', type=float, default=0.1, help='distance threshold')
     argparser.add_argument('--bimratio', type=float, default=0.85, help='ratio threshold')
     args = argparser.parse_args()
