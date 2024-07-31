@@ -336,53 +336,51 @@ def main(args):
     if not args.finetune:
         ResultName = f"{args.cell}_pretrainOnly"
     else:
-        ResultName = f"{args.cell}_{args.n_epoch}_{args.lr}_{args.batchsize}"
-        if args.querymethod != 'none':
-            ResultName = f"{ResultName}_finetune_{args.querymethod}_{args.albatch}_0_{args.quota}"
-        else:
+        ResultName = f"scenario_{str(args.scenario)}_{args.cell}_{args.n_epoch}_{args.lr}_{args.batchsize}"
+        if args.querymethod == 'none':
             ResultName = f"{ResultName}_finetune_all"
+        else:
+            ResultName = f"{ResultName}_finetune_{args.querymethod}_{args.albatch}_0_{args.quota}"
         if args.balancesample:
             ResultName = f"{ResultName}_balancesample"
     print(args)
+    
     df_train = pd.read_csv(f'/egr/research-aidd/menghan1/AnchorDrug/data/HQdata/{args.cell}_train.csv', index_col=0)#[1:20]
     df_test = pd.read_csv(f'/egr/research-aidd/menghan1/AnchorDrug/data/HQdata/{args.cell}_test.csv', index_col=0)#[1:20]
     ResultData = {}
     ResultPKG = {}
     verbose = True
-    if args.querymethod != 'none':
-        drugFileList = [f for f in os.listdir(drugFilePath) if args.cell in f]
-        # print('check0')
-        # print(drugFileList)
+    
+    if args.querymethod != 'none' and args.anchor:
+        if args.scenario == 2:
+            drugFileList = [f for f in os.listdir(drugFilePath) if args.cell in f]
+        elif args.scenario == 1:
+            drugFileList = [f for f in os.listdir(drugFilePath)]
         drugFileList = [f for f in drugFileList if args.querymethod in f]
-        # print('check1')
-        # print(drugFileList)
         drugFileList = np.sort([f for f in drugFileList if f'_{args.albatch}_0_{args.quota}' in f])
-        # print('check2')
-        # print(f'_{args.albatch}_0_{args.quota}')
-        # print(drugFileList)
         for anchor in drugFileList:
             # Wandb
             wandb.init(
                 project='Anchor Drug Project',
-                tags = ['advbim', 'parameter_tuning'],
-                # tags = ['drug_30', 'AL', 'queryscomparison'],
+                # tags = ['advbim', 'parameter_tuning'],
+                tags = ['AL', 'queryscomparison'],
                 name=ResultName,
-                config={
-                    'cellline': args.cell,
-                    'query':args.querymethod,
-                    'finetune': args.finetune,
-                    'pretrain': args.pretrain,
-                    'balancesample': args.balancesample,
-                    'epoch': args.n_epoch,
-                    'lr': args.lr,
-                    # 'bimratio': args.bimratio,
-                    },
+                config=args,
+                # {
+                #     'cellline': args.cell,
+                #     'query':args.querymethod,
+                #     'finetune': args.finetune,
+                #     'pretrain': args.pretrain,
+                #     'balancesample': args.balancesample,
+                #     'epoch': args.n_epoch,
+                #     'lr': args.lr,
+                #     # 'bimratio': args.bimratio,
+                #     },
                 )
             print(anchor)
             i = int(anchor[-5])
             with open(drugFilePath+anchor, 'rb') as f:
                 druglist = pickle.load(f)
-            # df_train_anchor = df_train[df_train['SMILES'].isin(druglist)]
             df_train_anchor = df_train.loc[druglist]
             # print('good')
             ResultDatai, cmi, metric_historyi, labels_list, pred_list = baselineEXP(args, df_train_anchor, df_test, verbose)
@@ -390,7 +388,35 @@ def main(args):
             ResultPKG[i] = (ResultDatai, cmi, metric_historyi, labels_list, pred_list)
             # verbose = False
             wandb.finish()
+    elif args.querymethod != 'none':
+        if args.scenario == 2:
+            drugFileList = [f for f in os.listdir(drugFilePath) if f'{args.cell}_{args.quota}' in f]
+        elif args.scenario == 1:
+            drugFileList = [f for f in os.listdir(drugFilePath) if f'common_{args.quota}' in f]
+        for baseline in drugFileList:
+            # Wandb
+            wandb.init(
+                project='Anchor Drug Project',
+                # tags = ['advbim', 'parameter_tuning'],
+                tags = ['baseline', 'queryscomparison'],
+                name=ResultName,
+                config=args,
+                )
+            print(baseline)
+            i = int(baseline[-6])
+            druglist = pd.read_csv(drugFilePath+baseline)['drug'].to_list()
+            df_train_baseline = df_train.loc[druglist]
+            # print('good')
+            ResultDatai, cmi, metric_historyi, labels_list, pred_list = baselineEXP(args, df_train_baseline, df_test, verbose)
+            ResultData[i] = ResultDatai
+            ResultPKG[i] = (ResultDatai, cmi, metric_historyi, labels_list, pred_list)
+            # verbose = False
+            wandb.finish()
     else:
+        if args.scenario == 1:
+            with open('HQ_pool_drug.pkl', 'rb') as f:
+                trainDrugs = pickle.load(f)
+                df_train = df_train.loc[trainDrugs]
         for i in range(3):
             wandb.init(
                 project='Anchor Drug Project',
@@ -413,71 +439,16 @@ def main(args):
             # verbose = False
             wandb.finish()
 
-    with open(f'{ResultRoot}/{ResultName}.pkl', 'wb') as f:
-        pickle.dump(ResultPKG, f)
-    
-    pd.DataFrame.from_dict(ResultData).to_csv(f'{ResultRoot}/{ResultName}.csv')
-
-
-def main_common_drug_list(args):
-    if not args.finetune:
-        ResultName = f"{args.cell}_pretrainOnly"
-    else:
-        ResultName = f"{args.cell}_{args.n_epoch}_{args.lr}_{args.batchsize}"
-        if args.querymethod != 'none':
-            ResultName = f"{ResultName}_finetune_{args.querymethod}_10_0_100"
-        else:
-            ResultName = f"{ResultName}_finetune_all"
-        if args.balancesample:
-            ResultName = f"{ResultName}_balancesample"
-    print(args)
-    df_train = pd.read_csv(f'/egr/research-aidd/menghan1/AnchorDrug/data/HQdata/{args.cell}_train.csv', index_col=0)#[1:20]
-    df_test = pd.read_csv(f'/egr/research-aidd/menghan1/AnchorDrug/data/HQdata/{args.cell}_test.csv', index_col=0)#[1:20]
-    ResultData = {}
-    ResultPKG = {}
-    verbose = True
-    if args.querymethod != 'none':
-        drugFileList = [f for f in os.listdir(drugFilePath) if args.querymethod in f]
-        drugFileList = np.sort([f for f in drugFileList if '_10_0_30' in f])
-        for anchor in drugFileList:
-            # Wandb
-            wandb.init(
-                project='Anchor Drug Project',
-                # tags = ['originalMLP_imbalance', 'queryscomparison', 'commonlAL'],
-                tags = ['drug_30', 'commonAL', 'queryscomparison'],
-                name=ResultName,
-                config={
-                    'cellline': args.cell,
-                    'query':args.querymethod,
-                    'finetune': args.finetune,
-                    'pretrain': args.pretrain,
-                    'balancesample': args.balancesample,
-                    'epoch': args.n_epoch,
-                    'lr': args.lr,
-                    },
-                )
-            print(anchor)
-            i = int(anchor[-5])
-            with open(drugFilePath+anchor, 'rb') as f:
-                druglist = pickle.load(f)
-            df_train_anchor = df_train.loc[druglist]
-            # print('good')
-            ResultDatai, cmi, metric_historyi, labels_list, pred_list = baselineEXP(args, df_train_anchor, df_test, verbose)
-            ResultData[i] = ResultDatai
-            ResultPKG[i] = (ResultDatai, cmi, metric_historyi, labels_list, pred_list)
-            # verbose = False
-            wandb.finish()
-    else:
-        pass
+    if not os.path.exists(ResultRoot):
+        os.system('mkdir -p %s' % ResultRoot)
+        
     with open(f'{ResultRoot}/{ResultName}.pkl', 'wb') as f:
         pickle.dump(ResultPKG, f)
     pd.DataFrame.from_dict(ResultData).to_csv(f'{ResultRoot}/{ResultName}.csv')
-
 
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser()    
     argparser.add_argument('--cell', '-c', type=str, help='cell line', default='MCF7')
-    argparser.add_argument('--querymethod', '-q', type=str, help='query method', default='none')
     argparser.add_argument('--lr', type=float, help='task-level inner update learning rate', default=0.001)
     argparser.add_argument('--n_epoch', type=int, help='number of epoch', default=50)
     argparser.add_argument('--batchsize', type=int, help='batch size', default=32)
@@ -485,6 +456,9 @@ if __name__ == '__main__':
     argparser.add_argument('--finetune', action='store_true', help='Finetune or not')
     argparser.add_argument('--balancesample', '-bs', action='store_true', help='balance sample or not')
     # Active learning settings
+    argparser.add_argument('--scenario', '-s', type=int, help='scenario 1:common list or 2:cellline specific list', default=2)
+    argparser.add_argument('--anchor', action='store_true', help='anchor drug method or not')
+    argparser.add_argument('--querymethod', '-q', type=str, help='query method', default='none')
     argparser.add_argument('--quota', '-alq', type=int, default=100, help='quota of active learning')
     argparser.add_argument('--albatch', '-alb', type=int, default=10, help='batch size in one active learning iteration')
     # BIM settings
