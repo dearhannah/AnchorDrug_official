@@ -1,7 +1,7 @@
 args_pool = {'LINCS':
 				{'n_epoch': 20, 
 				 'name': 'LINCS',
-                 'cell': ['MCF7', 'A549', 'PC3'],
+                #  'cell': ['MCF7', 'A549', 'PC3'],
                 #  'balancesample': False,
                 #  'balancesample': True,
                 #  'transform_train': 'no',
