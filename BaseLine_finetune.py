@@ -432,12 +432,13 @@ def main(args):
         if args.scenario == 1:
             with open('/egr/research-aidd/menghan1/AnchorDrug/data/HQ_pool_drug.pkl', 'rb') as f:
                 trainDrugs = pickle.load(f)
-                df_train = df_train.loc[trainDrugs]
+            # print(trainDrugs)
+            df_train = df_train.loc[trainDrugs]
         for i in range(3):
             wandb.init(
                 project='Anchor Drug Project',
                 # tags = ['BaseLine'],
-                tags = ['BaseLine', 'finetune', 'originalMLP_imbalance'],
+                tags = ['BaseLine', 'finetune', 'all data'],
                 name=ResultName,
                 config={
                     'cellline': args.cell,
@@ -488,6 +489,9 @@ if __name__ == '__main__':
     # drugFilePath = '/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/new_advbim_ratio/'
     # main(args)
     
+    ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/all_data'
+    main(args)
+    
     # ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/baselines'
     # for q in ['random', 'clustering']:
     #     args.querymethod = q
@@ -503,16 +507,16 @@ if __name__ == '__main__':
     #         args.quota = alq
     #         main(args)
 
-    ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/active_learning'
-    drugFilePath0 = '/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning/druglist/'
-    for c in ['MCF7', 'PC3', 'A549']:
-        args.cell = c
-        drugFilePath = drugFilePath0 + 'batch32_epoch20_imbalance/'
-        args.quota = 100
-        main(args)
-        drugFilePath = drugFilePath0 + 'batch32_epoch20_imbalance_30drug/'
-        args.quota = 30
-        main(args)
+    # ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/active_learning'
+    # drugFilePath0 = '/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning/druglist/'
+    # for c in ['MCF7', 'PC3', 'A549']:
+    #     args.cell = c
+    #     drugFilePath = drugFilePath0 + 'batch32_epoch20_imbalance/'
+    #     args.quota = 100
+    #     main(args)
+    #     drugFilePath = drugFilePath0 + 'batch32_epoch20_imbalance_30drug/'
+    #     args.quota = 30
+    #     main(args)
     
     # for query in ['LeastConfidence', 'KCenterGreedy', 'BALDDropout', 'BadgeSampling', 'MarginSampling', 'KMeansSampling', 'RandomSampling']:
     # # for query in ['LeastConfidence', 'BALDDropout', 'MarginSampling']:
