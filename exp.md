@@ -95,6 +95,13 @@ python ActiveLearning.py -a=RandomSampling -s=0 -q=957 -b=10 -d=LINCS -c PC3 --s
 python ActiveLearning.py -a=RandomSampling -s=0 -q=642 -b=10 -d=LINCS -c A549 --seed=4786 -t=3 -bs
 ```
 
+## advBIM senario 1 30/100
+```
+python ActiveLearning.py -a=AdversarialBIM -b=10 -q=100 -g=6
+```
+/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning/druglist/batch32_epoch20_imbalance
+/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning/druglist/batch32_epoch20_imbalance_30drug
+
 
 ## baseline (MOA, Cluster, Random selction) finetune 30/100
 ```
@@ -104,5 +111,7 @@ python BaseLine_finetune.py -c MCF7 --pretrain --finetune --balancesample
 
 ```
 > /egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/baselines
+
+
 
 ## model size v.s. finetune performance
