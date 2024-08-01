@@ -363,8 +363,14 @@ def main(args):
             drugFileList = [f for f in os.listdir(drugFilePath) if args.cell in f]
         elif args.scenario == 1:
             drugFileList = [f for f in os.listdir(drugFilePath)]
+        print('check0')
+        print(drugFileList)
         drugFileList = [f for f in drugFileList if args.querymethod in f]
+        print('check1')
+        print(drugFileList)
         drugFileList = np.sort([f for f in drugFileList if f'_{args.albatch}_0_{args.quota}' in f])
+        print('check2')
+        print(drugFileList)
         for anchor in drugFileList:
             # Wandb
             wandb.init(
@@ -475,48 +481,36 @@ if __name__ == '__main__':
     # BIM settings
     argparser.add_argument('--bimeps', type=float, default=5e-4, help='learning rate of adv sample')
     argparser.add_argument('--bimdis', type=float, default=0.1, help='distance threshold')
-    argparser.add_argument('--bimratio', type=float, default=0.85, help='ratio threshold')
+    argparser.add_argument('--bimratio', type=float, default=0.9, help='ratio threshold')
     args = argparser.parse_args()
 
     # ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/new_advBIM_ratio'
     # drugFilePath = '/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/new_advbim_ratio/'
     # main(args)
     
-    ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/baselines'
-    for q in ['random', 'clustering']:
-        args.querymethod = q
-        drugFilePath = f'/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/{args.querymethod}_selected_drugs/'
-        args.scenario = 1
-        for alq in [30, 100]:
-            args.quota = alq
-            main(args)
+    # ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/baselines'
+    # for q in ['random', 'clustering']:
+    #     args.querymethod = q
+    #     drugFilePath = f'/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/{args.querymethod}_selected_drugs/'
+    #     args.scenario = 1
+    #     for alq in [30, 100]:
+    #         args.quota = alq
+    #         main(args)
         
-        args.scenario = 2
-        drugFilePath = drugFilePath + 'cell_line_specific/'
-        for alq in [30, 100]:
-            args.quota = alq
-            main(args)
+    #     args.scenario = 2
+    #     drugFilePath = drugFilePath + 'cell_line_specific/'
+    #     for alq in [30, 100]:
+    #         args.quota = alq
+    #         main(args)
 
-    # basequery = args.querymethod
-    # for ratio in [0.5, 0.6, 0.7, 0.8, 0.9]:
-    # # for ratio in [0.75, 0.85]:
-    #     args.bimratio = ratio
-    #     args.querymethod =  f'{basequery}-{str(args.bimratio)}-{str(args.bimdis)}-{str(args.bimeps)}'
-    #     print(args.querymethod)
-    #     main(args)
+    ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/active_learning'
+    drugFilePath = '/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/new_advbim_ratio_30drug/'
+    for c in ['MCF7', 'PC3', 'A549']:
+        args.cell = c
+        main(args)
     
     # for query in ['LeastConfidence', 'KCenterGreedy', 'BALDDropout', 'BadgeSampling', 'MarginSampling', 'KMeansSampling', 'RandomSampling']:
     # # for query in ['LeastConfidence', 'BALDDropout', 'MarginSampling']:
     #     args.querymethod =  query
     #     print(args.querymethod)
     #     main(args)
-        
-    # # ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/CommonAL_1000_128_64_imbalance'
-    # ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/30drug_common_1000_128_64_imbalancepre'
-    
-    # # drugFilePath = '/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning/druglist/'
-    # drugFilePath = '/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning/druglist/batch32_epoch20_imbalance_30drug/'
-    # for query in ['LeastConfidence', 'KCenterGreedy', 'BALDDropout', 'BadgeSampling', 'MarginSampling', 'KMeansSampling', 'RandomSampling']:
-    #     args.querymethod =  query
-    #     print(args.querymethod)
-    #     main_common_drug_list(args)

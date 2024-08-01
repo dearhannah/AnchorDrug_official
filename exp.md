@@ -119,4 +119,10 @@ python BaseLine_finetune.py -c MCF7 --pretrain --finetune --balancesample
 ```
 > /egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/baselines
 
+## advBIM finetune 30
+```
+python BaseLine_finetune.py -c MCF7 -q AdversarialBIM-0.9-0.1-0.0005 -alq 30 --pretrain --finetune --balancesample --anchor
+```
+>/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/active_learning
+
 ## model size v.s. finetune performance
