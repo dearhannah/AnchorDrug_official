@@ -411,7 +411,10 @@ def main(args):
                 )
             print(baseline)
             i = int(baseline[-6])
-            druglist = pd.read_csv(drugFilePath+baseline)['drug'].to_list()
+            try:
+                druglist = pd.read_csv(drugFilePath+baseline)['drug'].to_list()
+            except:
+                druglist = pd.read_csv(drugFilePath+baseline)['common_drugs'].to_list()
             df_train_baseline = df_train.loc[druglist]
             # print('good')
             ResultDatai, cmi, metric_historyi, labels_list, pred_list = baselineEXP(args, df_train_baseline, df_test, verbose)
@@ -480,7 +483,7 @@ if __name__ == '__main__':
     # main(args)
     
     ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/baselines'
-    for q in ['MOA', 'random', 'clustering']:
+    for q in ['random', 'clustering']:
         args.querymethod = q
         drugFilePath = f'/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/{args.querymethod}_selected_drugs/'
         args.scenario = 1
