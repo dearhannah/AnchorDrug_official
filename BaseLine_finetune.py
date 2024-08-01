@@ -504,9 +504,14 @@ if __name__ == '__main__':
     #         main(args)
 
     ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/active_learning'
-    drugFilePath = '/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/new_advbim_ratio_30drug/'
+    drugFilePath0 = '/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning/druglist/'
     for c in ['MCF7', 'PC3', 'A549']:
         args.cell = c
+        drugFilePath = drugFilePath0 + 'batch32_epoch20_imbalance/'
+        args.quota = 100
+        main(args)
+        drugFilePath = drugFilePath0 + 'batch32_epoch20_imbalance_30drug/'
+        args.quota = 30
         main(args)
     
     # for query in ['LeastConfidence', 'KCenterGreedy', 'BALDDropout', 'BadgeSampling', 'MarginSampling', 'KMeansSampling', 'RandomSampling']:

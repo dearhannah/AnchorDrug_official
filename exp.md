@@ -96,14 +96,15 @@ python ActiveLearning.py -a=RandomSampling -s=0 -q=642 -b=10 -d=LINCS -c A549 --
 ```
 > /egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/logfile/all_data_bs
 
-## advBIM senario 1 30/100
+## advBIM active learning
+### advBIM senario 1 30/100
 ```
 python ActiveLearning.py -a=AdversarialBIM -b=10 -q=100 -g=6
 ```
 /egr/research-aidd/menghan1/AnchorDrug/ActiveLearning/druglist/batch32_epoch20_imbalance
 /egr/research-aidd/menghan1/AnchorDrug/ActiveLearning/druglist/batch32_epoch20_imbalance_30drug
 
-## advBIM senario 2 30
+### advBIM senario 2 30
 ```
 /egr/research-aidd/menghan1/AnchorDrug/DataAnalysis/get_drug_list_from_log.ipynb
 ```
@@ -119,9 +120,16 @@ python BaseLine_finetune.py -c MCF7 --pretrain --finetune --balancesample
 ```
 > /egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/baselines
 
-## advBIM finetune 30
+## advBIM finetune
+### advBIM senario 2 finetune 30
 ```
 python BaseLine_finetune.py -c MCF7 -q AdversarialBIM-0.9-0.1-0.0005 -alq 30 --pretrain --finetune --balancesample --anchor
+```
+>/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/active_learning
+
+### advBIM senario 1 finetune 30/100
+```
+python BaseLine_finetune.py -c MCF7 -q AdversarialBIM-0.9-0.1-0.0005 -s 1 --pretrain --finetune --balancesample --anchor
 ```
 >/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/active_learning
 
