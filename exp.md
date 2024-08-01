@@ -102,6 +102,12 @@ python ActiveLearning.py -a=AdversarialBIM -b=10 -q=100 -g=6
 /egr/research-aidd/menghan1/AnchorDrug/ActiveLearning/druglist/batch32_epoch20_imbalance
 /egr/research-aidd/menghan1/AnchorDrug/ActiveLearning/druglist/batch32_epoch20_imbalance_30drug
 
+## advBIM senario 2 30
+```
+/egr/research-aidd/menghan1/AnchorDrug/DataAnalysis/get_drug_list_from_log.ipynb
+```
+/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning/druglist/batch32_epoch20_imbalance
+/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning/druglist/batch32_epoch20_imbalance_30drug
 
 ## baseline (MOA, Cluster, Random selction) finetune 30/100
 ```
