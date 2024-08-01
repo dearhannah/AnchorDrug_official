@@ -88,12 +88,21 @@ wandb link -->
 > /egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/new_advBIM_ratio
 
 
-# active learning converge curve
+## active learning converge curve
 ```
 python ActiveLearning.py -a=RandomSampling -s=0 -q=810 -b=10 -d=LINCS -c MCF7 --seed=4678 -t=3 -bs
 python ActiveLearning.py -a=RandomSampling -s=0 -q=957 -b=10 -d=LINCS -c PC3 --seed=4996 -t=3 -bs
 python ActiveLearning.py -a=RandomSampling -s=0 -q=642 -b=10 -d=LINCS -c A549 --seed=4786 -t=3 -bs
 ```
 
+
+## baseline (MOA, Cluster, Random selction) finetune 30/100
+```
+python BaseLine_finetune.py -c A549 --pretrain --finetune --balancesample
+python BaseLine_finetune.py -c PC3 --pretrain --finetune --balancesample
+python BaseLine_finetune.py -c MCF7 --pretrain --finetune --balancesample
+
+```
+> /egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/baselines
 
 ## model size v.s. finetune performance

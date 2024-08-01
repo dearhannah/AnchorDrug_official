@@ -21,13 +21,12 @@ from sklearn.preprocessing import Normalizer
 torch.multiprocessing.set_sharing_strategy('file_system')
 
 # PretrainModelPath = '/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/pretrain_GPS_predictable_307_genes_seed_10_31_final.pth'
-# PretrainModelPath = '/egr/research-aidd/menghan1/AnchorDrug/base_model/internal_val_10%_random_holdout_earlystop/pretrain_GPS_predictable_307_genes_seed_10_33_final.pth'
 # PretrainModelPath = '/egr/research-aidd/menghan1/AnchorDrug/base_model/hannewnet_1000_256_64/pretrain_GPS_predictable_307_genes_seed_10_39_final.pth'
+# PretrainModelPath = '/egr/research-aidd/menghan1/AnchorDrug/base_model/hannewnet_512_256_64_imbalance/pretrain_GPS_predictable_307_genes_seed_10_43_final.pth'
+PretrainModelPath = '/egr/research-aidd/menghan1/AnchorDrug/base_model/hannewnet_1000_128_64_imbalance/pretrain_GPS_predictable_307_genes_seed_10_44_final.pth'
 # PretrainModelPath = '/egr/research-aidd/menghan1/AnchorDrug/base_model/hannewnet_1000_256_64_imbalance/pretrain_GPS_predictable_307_genes_seed_10_36_final.pth'
 # PretrainModelPath = '/egr/research-aidd/menghan1/AnchorDrug/base_model/hannewnet_1024_256_64_imbalance/pretrain_GPS_predictable_307_genes_seed_10_43_final.pth'
 # PretrainModelPath = '/egr/research-aidd/menghan1/AnchorDrug/base_model/hannewnet_1024_512_64_imbalance/pretrain_GPS_predictable_307_genes_seed_10_37_final.pth'
-# PretrainModelPath = '/egr/research-aidd/menghan1/AnchorDrug/base_model/hannewnet_512_256_64_imbalance/pretrain_GPS_predictable_307_genes_seed_10_43_final.pth'
-PretrainModelPath = '/egr/research-aidd/menghan1/AnchorDrug/base_model/hannewnet_1000_128_64_imbalance/pretrain_GPS_predictable_307_genes_seed_10_44_final.pth'
 
 
 def get_morgan_fingerprint(mol, radius, nBits, FCFP=False):
@@ -189,6 +188,10 @@ class MLP(nn.Module):
         h = self.dropout(h)
         logit = self.fc4(h)
         return logit #, h
+    def size(self):
+        model_parameters = filter(lambda p: p.requires_grad, self.parameters())
+        params = sum([torch.prod(torch.tensor(p.size())) for p in model_parameters])
+        return params.item()
     
 
 def eval_metrics(labels_list, preds_list):
@@ -256,8 +259,8 @@ def train(model, optimizer, loader):
     acc = float(correct) / float(total)
     f1, precision, recall, cm = eval_metrics(labels_list, pred_list)
     avg_loss = np.mean(avg_loss)
-    print(f"avg_loss:{avg_loss}")
-    return acc, f1, precision, recall, cm
+    # print(f"avg_loss:{avg_loss}")
+    return acc, f1, precision, recall, cm, avg_loss
 
 
 def baselineEXP(args, df_train, df_test, verbose):
@@ -270,6 +273,8 @@ def baselineEXP(args, df_train, df_test, verbose):
         dataset=test_dataset, batch_size=args.batchsize, num_workers=0,
         drop_last=False, shuffle=False)
     net = MLP()
+    print("Total number of parameters:", net.size())
+    print(net)
     net.cuda()
     metric_history = {}
     
@@ -280,9 +285,10 @@ def baselineEXP(args, df_train, df_test, verbose):
         optimizer = torch.optim.Adam(net.parameters(), lr=args.lr)
         for e in tqdm(range(args.n_epoch)):
             accY, f1Y, precisionY, recallY, cmY, labels_list, pred_list = evaluate(net, test_loader)
-            accX, f1X, precisionX, recallX, cmX = train(net, optimizer, train_loader)
+            accX, f1X, precisionX, recallX, cmX, avgloss = train(net, optimizer, train_loader)
             if verbose:
                 wandb.log({
+                    f"train loss": avgloss,
                     f"train acc": accX,
                     f"train f1": f1X,
                     f"train precision label 0": precisionX[0],
@@ -301,6 +307,7 @@ def baselineEXP(args, df_train, df_test, verbose):
                     f"test recall label 2": recallY[2],
                     })
             metric_history[e] = {
+                f"train loss": avgloss,
                 f"train acc": accX,
                 f"train f1": f1X,
                 f"train precision label 0": precisionX[0],
@@ -414,7 +421,7 @@ def main(args):
             wandb.finish()
     else:
         if args.scenario == 1:
-            with open('HQ_pool_drug.pkl', 'rb') as f:
+            with open('/egr/research-aidd/menghan1/AnchorDrug/data/HQ_pool_drug.pkl', 'rb') as f:
                 trainDrugs = pickle.load(f)
                 df_train = df_train.loc[trainDrugs]
         for i in range(3):
@@ -446,6 +453,7 @@ def main(args):
         pickle.dump(ResultPKG, f)
     pd.DataFrame.from_dict(ResultData).to_csv(f'{ResultRoot}/{ResultName}.csv')
 
+
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser()    
     argparser.add_argument('--cell', '-c', type=str, help='cell line', default='MCF7')
@@ -456,7 +464,7 @@ if __name__ == '__main__':
     argparser.add_argument('--finetune', action='store_true', help='Finetune or not')
     argparser.add_argument('--balancesample', '-bs', action='store_true', help='balance sample or not')
     # Active learning settings
-    argparser.add_argument('--scenario', '-s', type=int, help='scenario 1:common list or 2:cellline specific list', default=2)
+    argparser.add_argument('--scenario', '-s', type=int, default=2, help='scenario 1:common list or 2:cellline specific list')
     argparser.add_argument('--anchor', action='store_true', help='anchor drug method or not')
     argparser.add_argument('--querymethod', '-q', type=str, help='query method', default='none')
     argparser.add_argument('--quota', '-alq', type=int, default=100, help='quota of active learning')
@@ -467,11 +475,25 @@ if __name__ == '__main__':
     argparser.add_argument('--bimratio', type=float, default=0.85, help='ratio threshold')
     args = argparser.parse_args()
 
-    ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/new_advBIM_ratio'
-    drugFilePath = '/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/new_advbim_ratio/'
+    # ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/new_advBIM_ratio'
+    # drugFilePath = '/egr/research-aidd/menghan1/AnchorDrug/ActiveLearning_one_cellline/druglist/new_advbim_ratio/'
+    # main(args)
     
-    main(args)
-    
+    ResultRoot = '/egr/research-aidd/menghan1/AnchorDrug/resultBaseLine/baselines'
+    for q in ['MOA', 'random', 'clustering']:
+        args.querymethod = q
+        drugFilePath = f'/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/{args.querymethod}_selected_drugs/'
+        args.scenario = 1
+        for alq in [30, 100]:
+            args.quota = alq
+            main(args)
+        
+        args.scenario = 2
+        drugFilePath = drugFilePath + 'cell_line_specific/'
+        for alq in [30, 100]:
+            args.quota = alq
+            main(args)
+
     # basequery = args.querymethod
     # for ratio in [0.5, 0.6, 0.7, 0.8, 0.9]:
     # # for ratio in [0.75, 0.85]:
