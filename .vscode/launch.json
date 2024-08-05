@@ -218,8 +218,9 @@
                 "--pretrain", 
                 "--finetune", 
                 "--balancesample",
+                "-s=1",
                 // "-q=LeastConfidence",
-                "-q=AdversarialBIM",
+                // "-q=AdversarialBIM",
             ],
         },
         {

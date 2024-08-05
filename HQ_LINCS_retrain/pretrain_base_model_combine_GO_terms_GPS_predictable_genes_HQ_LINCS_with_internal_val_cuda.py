@@ -426,6 +426,9 @@ def main(args):
         # if torch.cuda.device_count() > 1:
         #     net = torch.nn.DataParallel(net)
         net.cuda()
+        # calculate size
+        model_parameters = filter(lambda p: p.requires_grad, net.parameters())
+        net_size = sum([torch.prod(torch.tensor(p.size())) for p in model_parameters])
         # net.cpu()
         #
         #if opt.cuda:
@@ -443,6 +446,7 @@ def main(args):
         if os.path.exists(txtfile):
             os.system('mv %s %s' % (txtfile, txtfile + ".bak-%s" % nowTime))
         with open(txtfile, "a") as f:
+            f.write(f'model size = {str(net_size)}')
             f.write('epoch,train_acc,train_f1,test_acc,test_f1\n')
         print('epoch,train_acc,train_f1,test_acc,test_f1')
         #
