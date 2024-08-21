@@ -1,6 +1,0 @@
-,drug,MOAs
-50,Cc1cc(C)c(N(Cc2ccccc2)S(=O)(=O)c2ccc(OCCNC(=O)c3cc4ccccc4o3)cc2)c(C(=O)NO)c1,metalloproteinase inhibitor
-6,OCc1ccc(-c2ccc(-c3ccc(CO)s3)o2)s1,MDM inhibitor
-83,CCN(CC)CCCCNc1ncc2cc(-c3cc(OC)cc(OC)c3)c(NC(=O)NC(C)(C)C)nc2n1,FGFR inhibitor|VEGFR inhibitor
-36,COC1CC2CCC(C)C(O)(O2)C(=O)C(=O)N2CCCCC2C(=O)OC(C(C)CC2CCC(O)C(OC)C2)CC(=O)C(C)C=C(C)C(O)C(OC)C(=O)C(C)CC(C)C=CC=CC=C1C,mTOR inhibitor
-47,Nc1ccn([C@@H]2O[C@H](CO)[C@@H](O)[C@@H]2O)c(=O)n1,ribonucleotide reductase inhibitor

@@ -20,14 +20,7 @@ from sklearn.metrics import confusion_matrix, f1_score, mean_squared_error, prec
 from sklearn.preprocessing import Normalizer
 torch.multiprocessing.set_sharing_strategy('file_system')
 
-# PretrainModelPath = '/egr/research-aidd/menghan1/AnchorDrug/HQ_LINCS_retrain/pretrain_GPS_predictable_307_genes_seed_10_31_final.pth'
-# PretrainModelPath = '/egr/research-aidd/menghan1/AnchorDrug/base_model/hannewnet_1000_256_64/pretrain_GPS_predictable_307_genes_seed_10_39_final.pth'
-# PretrainModelPath = '/egr/research-aidd/menghan1/AnchorDrug/base_model/hannewnet_512_256_64_imbalance/pretrain_GPS_predictable_307_genes_seed_10_43_final.pth'
 PretrainModelPath = '/egr/research-aidd/menghan1/AnchorDrug/base_model/hannewnet_1000_128_64_imbalance/pretrain_GPS_predictable_307_genes_seed_10_44_final.pth'
-# PretrainModelPath = '/egr/research-aidd/menghan1/AnchorDrug/base_model/hannewnet_1000_256_64_imbalance/pretrain_GPS_predictable_307_genes_seed_10_36_final.pth'
-# PretrainModelPath = '/egr/research-aidd/menghan1/AnchorDrug/base_model/hannewnet_1024_256_64_imbalance/pretrain_GPS_predictable_307_genes_seed_10_43_final.pth'
-# PretrainModelPath = '/egr/research-aidd/menghan1/AnchorDrug/base_model/hannewnet_1024_512_64_imbalance/pretrain_GPS_predictable_307_genes_seed_10_37_final.pth'
-
 
 def get_morgan_fingerprint(mol, radius, nBits, FCFP=False):
     m = Chem.MolFromSmiles(mol)
