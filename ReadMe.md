@@ -1,6 +1,9 @@
 # AnchorDrug
 This is the official directory of paper AnchorDrug.
 
+## Conda Environment
+conda create -n <environment-name> --file req.txt
+
 ## Code
 
 ### Active Learning
